@@ -32,7 +32,8 @@ class WhatDidTheySay {
     
     $post = get_post($post_id);
     if (!empty($post)) {
-      $results = $wpdb->get_results(sprintf("SELECT * FROM %s WHERE post_id = %d", $this->table, $post_id));
+      $query = $wpdb->prepare('SELECT * FROM %s WHERE post_id = %d', $this->table, $post_id);
+      $results = $wpdb->get_results($query);
       if (!empty($results)) {
         $valid_results = array();
         foreach ($results as $result) {
@@ -45,6 +46,34 @@ class WhatDidTheySay {
       }
     }
     return false; 
+  }
+  
+  function add_queued_transcription_to_post($post_id, $transcript_info) {
+    global $wpdb;
+    
+    $post = get_post($post_id);
+    if (!empty($post)) {
+      $transcript_info = (array)$transcript_info;
+      if (!empty($transcript_info)) {
+        $ok = true;
+        foreach (array('language', 'transcript') as $field) {
+          if (empty($transcript_info[$field])) { $ok = false; break; }
+        }
+        if ($ok) {
+          extract($transcript_info);
+          $user = get_userdata($user_id);
+          if (!empty($user)) {
+            $query = $wpdb->prepare(
+              "INSERT INTO %s (post_id, user_id, language, transcript) VALUES (%d, %d, %s, %s)",
+              $this->table, $post_id, $user_id, $language, $transcript
+            );
+            
+            return $wpdb->query($query);
+          }
+        }
+      }
+    }
+    return false;
   }
 }
 
