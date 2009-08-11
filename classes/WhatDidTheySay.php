@@ -12,13 +12,29 @@ class WhatDidTheySay {
     $this->table =  $wpdb->prefix . "provided_transcripts";
   }
   
+  /**
+   * Save a transcript to a post.
+   * @param int $post_id The post to attach the transcript to.
+   * @param string $language The language of the transcript.
+   * @param string $transcript The transcript content.
+   * @return bool True if the transcript was saved, false otherwise.
+   */
   function save_transcript($post_id, $language, $transcript) {
-    $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
-    if (!is_array($current_transcripts)) { $current_transcripts = array(); }
-    $current_transcripts[$language] = $transcript;
-    return update_post_meta($post_id, "provided_transcripts", $current_transcripts);
+    $post = get_post($post_id);
+    if (!empty($post)) {
+      $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
+      if (!is_array($current_transcripts)) { $current_transcripts = array(); }
+      $current_transcripts[$language] = $transcript;
+      return update_post_meta($post_id, "provided_transcripts", $current_transcripts);
+    }
+    return false;
   }
   
+  /**
+   * Get the languages that the approved transcripts for the post are written in.
+   * @param int $post_id The post ID to check for transcripts.
+   * @return array|false The languages for the transcripts, or false if none found.
+   */
   function get_transcript_languages($post_id) {
     $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
     if (is_array($current_transcripts)) {
@@ -27,6 +43,11 @@ class WhatDidTheySay {
     return false;
   }
   
+  /**
+   * Get the queued transcriptions for the provided post.
+   * @param int $post_id The post to search for transcripts.
+   * @return array|false The array of transcripts for the post, or false if the post is invalid.
+   */
   function get_queued_transcriptions_for_post($post_id) {
     global $wpdb;
     
@@ -48,6 +69,11 @@ class WhatDidTheySay {
     return false; 
   }
   
+  /**
+   * Queue a transcription to a post.
+   * @param int $post_id The post to attach the transcription to.
+   * @param array $transcript_info The new transcript's info.
+   */
   function add_queued_transcription_to_post($post_id, $transcript_info) {
     global $wpdb;
     
@@ -76,6 +102,10 @@ class WhatDidTheySay {
     return false;
   }
   
+  /**
+   * Update a queued transcript.
+   * @param array $update_info The info on the transcript being updated.
+   */
   function update_queued_transcript($update_info) {
     global $wpdb;
 
