@@ -123,7 +123,7 @@ class WhatDidTheySay {
    * Update a queued transcript.
    * @param array $update_info The info on the transcript being updated.
    */
-  function update_queued_transcript($update_info) {
+  function update_queued_transcription($update_info) {
     global $wpdb;
 
     if ($this->is_user_allowed_to_update()) {
@@ -144,6 +144,21 @@ class WhatDidTheySay {
         } 
       }
     }
+  }
+  
+  function delete_queued_transcription($transcription_id) {
+    global $wpdb;
+    
+    if ($this->is_user_allowed_to_update()) {
+      $query = $wpdb->prepare("SELECT id FROM %s WHERE id = %d", $this->table, $transcription_id);
+      if (!is_null($wpdb->get_var($query))) {
+        $query = $wpdb->prepare("DELETE FROM %s WHERE id = %d", $this->table, $transcription_id);
+        $wpdb->query($query); 
+        
+        return true;
+      }
+    }
+    return false;
   }
 }
 

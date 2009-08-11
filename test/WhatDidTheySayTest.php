@@ -201,12 +201,45 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     
     if ($in_array) {
         $wpdb->expects($this->once())
-            ->method('query');
+             ->method('query');
     }
 
     wp_insert_post(array('ID' => 1)); 
     
-    $what->update_queued_transcript($update_info);
+    $what->update_queued_transcription($update_info);
+  }
+  
+  function providerTestDeleteQueuedTranscription() {
+    return array(
+      array(array(), 1, false),
+      array(array(2), 1, false),
+      array(array(1), 1, true)
+    ); 
+  }
+  
+  /**
+   * @dataProvider providerTestDeleteQueuedTranscription
+   */
+  function testDeleteQueuedTranscription($valid_transcripts, $transcript_id_to_delete, $expected_result) {
+    global $wpdb;
+    
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
+    $what->expects($this->once())
+         ->method('is_user_allowed_to_update')
+         ->will($this->returnValue(true));
+    
+    $wpdb = $this->getMock('wpdb', array('prepare', 'get_var', 'query'));
+    
+    $wpdb->expects($this->once())
+         ->method('get_var')
+         ->will($this->returnValue(in_array($transcript_id_to_delete, $valid_transcripts) ? $transcript_id_to_delete : null));
+         
+    if (in_array($transcript_id_to_delete, $valid_transcripts)) {
+      $wpdb->expects($this->once())
+           ->method('query');
+    }
+    
+    $what->delete_queued_transcription($transcript_id_to_delete);
   }
 }
 
