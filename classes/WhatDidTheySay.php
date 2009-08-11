@@ -102,13 +102,7 @@ class WhatDidTheySay {
     return false;
   }
   
-  /**
-   * Update a queued transcript.
-   * @param array $update_info The info on the transcript being updated.
-   */
-  function update_queued_transcript($update_info) {
-    global $wpdb;
-
+  function is_user_allowed_to_update() {
     $options = get_option('what-did-they-say-options');
     $user_info = wp_get_current_user();
     
@@ -121,8 +115,18 @@ class WhatDidTheySay {
         $ok = in_array($user_info->ID, $options['allowed_users']);
       }
     }
+    
+    return $ok;
+  }
   
-    if ($ok) {
+  /**
+   * Update a queued transcript.
+   * @param array $update_info The info on the transcript being updated.
+   */
+  function update_queued_transcript($update_info) {
+    global $wpdb;
+
+    if ($this->is_user_allowed_to_update()) {
       $query = $wpdb->prepare("SELECT * FROM %s WHERE id = %d", $this->table, $update_info['id']);
       $result = $wpdb->get_results($query);
       
