@@ -122,6 +122,7 @@ class WhatDidTheySay {
   /**
    * Update a queued transcript.
    * @param array $update_info The info on the transcript being updated.
+   * @return boolean True if the transcript was updated.
    */
   function update_queued_transcription($update_info) {
     global $wpdb;
@@ -141,11 +142,18 @@ class WhatDidTheySay {
             $this->table, $result->language, $result->transcript, $result->id
           );
           $wpdb->query($query);
+          return true;
         } 
       }
     }
+    return false;
   }
   
+  /**
+   * Delete a queued transcript.
+   * @param int $transcription_id The transcription to delete.
+   * @return boolean True if the transcript was deleted.
+   */
   function delete_queued_transcription($transcription_id) {
     global $wpdb;
     
