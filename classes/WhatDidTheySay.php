@@ -75,6 +75,42 @@ class WhatDidTheySay {
     }
     return false;
   }
+  
+  function update_queued_transcript($update_info) {
+    global $wpdb;
+
+    $options = get_option('what-did-they-say-options');
+    $user_info = wp_get_current_user();
+    
+    $ok = false;
+    if ($options['only_allowed_users']) {
+      $ok = in_array($user_info->ID, $options['allowed_users']);
+    } else {
+      $ok = true;
+      if (!current_user_can('edit_posts')) {
+        $ok = in_array($user_info->ID, $options['allowed_users']);
+      }
+    }
+  
+    if ($ok) {
+      $query = $wpdb->prepare("SELECT * FROM %s WHERE id = %d", $this->table, $update_info['id']);
+      $result = $wpdb->get_results($query);
+      
+      if (!empty($result)) {
+        if (count($result) == 1) {
+          $result = $result[0];
+          foreach (array('language', 'transcript') as $field) {
+            $result->{$field} = $update_info[$field];
+          }
+          $query = $wpdb->prepare(
+            "UPDATE %s SET language = %s, transcript = %s WHERE id = %d",
+            $this->table, $result->language, $result->transcript, $result->id
+          );
+          $wpdb->query($query);
+        } 
+      }
+    }
+  }
 }
 
 ?>

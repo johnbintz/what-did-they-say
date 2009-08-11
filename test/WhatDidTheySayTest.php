@@ -127,6 +127,80 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
       )
     ));
   }
+  
+  function providerTestUpdateQueuedTranscription() {
+    return array(
+      array(
+        false, array(), array(), array(), 1, array("language" => "en", "transcript" => "This")
+      ),
+      array(
+        false, array('edit_posts'), array(), array(), 1, array("language" => "en", "transcript" => "This")
+      ),      
+      array(
+        false, array('edit_posts'), array(
+          (object)array('ID' => 1)
+        ), array(), 1, array("language" => "en", "transcript" => "This")
+      ),      
+      array(
+        false, array('edit_posts'), array(
+          (object)array('ID' => 1)
+        ), array(), 1, array("language" => "en", "transcript" => "This", 'id' => 1)
+      ),
+      array(
+        true, array(), array(
+          (object)array('ID' => 1)
+        ), array(2), 1, array("language" => "en", "transcript" => "This", 'id' => 1)
+      ),
+      array(
+        true, array(), array(
+          (object)array('ID' => 1)
+        ), array(1), 1, array("language" => "en", "transcript" => "This", 'id' => 1)
+      ),
+    ); 
+  }
+  
+  /**
+   * @dataProvider providerTestUpdateQueuedTranscription
+   */
+  function testUpdateQueuedTranscription($only_allowed_users, $current_user_can, $valid_transcripts, $allowed_users, $current_user_id, $update_info) {
+    global $wpdb;
+
+    $wpdb = $this->getMock('wpdb', array('prepare', 'get_results', 'query'));
+    update_option('what-did-they-say-options', array('allowed_users' => $allowed_users, 'only_allowed_users' => $only_allowed_users)); 
+
+    _set_user_capabilities($current_user_can);
+        
+    if ($only_allowed_users) {
+      $will_search_transcripts = (in_array($current_user_id, $allowed_users));
+    } else {
+      $will_search_transcripts = true;    
+      if (!in_array('edit_posts', $current_user_can)) {
+        $will_search_transcripts = (in_array($current_user_id, $allowed_users));
+      }
+    }
+    
+    if ($will_search_transcripts) {
+      $wpdb->expects($this->once())
+           ->method('get_results')
+           ->will($this->returnValue($valid_transcripts));
+      
+      $in_array = false;
+      foreach ($valid_transcripts as $transcript) {
+        if ($transcript->id == $update_info['id']) { $in_array = true; break; }
+      }
+      
+      if ($in_array) {
+         $wpdb->expects($this->once())
+              ->method('query');
+      }
+    }
+
+    wp_insert_post(array('ID' => 1)); 
+    wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
+    wp_set_current_user($current_user_id);
+    
+    $this->what->update_queued_transcript($update_info);
+  }
 }
 
 ?>
