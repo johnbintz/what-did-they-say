@@ -15,13 +15,18 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
   function testSaveTranscription() {
     wp_insert_post(array('ID' => 1)); 
 
-    $this->what->save_transcript(1, "en", "This is a transcript");
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
+    $what->expects($this->any())
+         ->method('is_user_allowed_to_update')
+         ->will($this->returnValue(true));
+
+    $what->save_transcript(1, "en", "This is a transcript");
     $this->assertEquals(array("en" => "This is a transcript"), get_post_meta(1, "provided_transcripts", true));
     
-    $this->what->save_transcript(1, "en", "this is a new transcript"); 
+    $what->save_transcript(1, "en", "this is a new transcript"); 
     $this->assertEquals(array("en" => "this is a new transcript"), get_post_meta(1, "provided_transcripts", true));
     
-    $this->what->save_transcript(1, "fr", "il s'agit d'une nouvelle transcription"); 
+    $what->save_transcript(1, "fr", "il s'agit d'une nouvelle transcription"); 
     $this->assertEquals(array("en" => "this is a new transcript", "fr" => "il s'agit d'une nouvelle transcription"), get_post_meta(1, "provided_transcripts", true));
   }
   
@@ -37,10 +42,15 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     
     wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
     wp_insert_post(array('ID' => 1));
-    
+
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
+    $what->expects($this->any())
+         ->method('is_user_allowed_to_update')
+         ->will($this->returnValue(true));
+
     $wpdb = $this->getMock('wpdb', array('get_results', 'prepare'));
     
-    $expected_query = sprintf("SELECT * FROM '%s' WHERE post_id = '%d'", $this->what->table, 1);
+    $expected_query = sprintf("SELECT * FROM '%s' WHERE post_id = '%d'", $what->table, 1);
     
     $wpdb->expects($this->once())
          ->method('prepare')
@@ -68,10 +78,10 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
           'transcript' => 'This is a transcript'
         )
       ),
-      $this->what->get_queued_transcriptions_for_post(1)
+      $what->get_queued_transcriptions_for_post(1)
     );
     
-    $this->assertFalse($this->what->get_queued_transcriptions_for_post(2));
+    $this->assertFalse($what->get_queued_transcriptions_for_post(2));
   }
   
   function providerTestAddQueuedTranscriptionToPost() {
@@ -113,6 +123,11 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
          ->method('prepare')
          ->will($this->returnValue($expected_query));    
 
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
+    $what->expects($this->any())
+         ->method('is_user_allowed_to_update')
+         ->will($this->returnValue(true));
+
     if ($expected_result === true) {
       $wpdb->expects($this->once())
            ->method('query')
@@ -120,7 +135,7 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
            ->will($this->returnValue(true));
     }
          
-    $this->assertEquals($expected_result, $this->what->add_queued_transcription_to_post(
+    $this->assertEquals($expected_result, $what->add_queued_transcription_to_post(
       1,
       array(
         'user_id' => 1,
