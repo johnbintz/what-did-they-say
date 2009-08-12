@@ -7,7 +7,6 @@ require_once(dirname(__FILE__) . '/../classes/WhatDidTheySay.php');
 class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
   function setUp() {
     global $wpdb;
-    $this->what = new WhatDidTheySay();
     _reset_wp();
     $wpdb = null;
   }
@@ -31,10 +30,12 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
   }
   
   function testGetListOfLanguagesForPost() {
+    $what = new WhatDidTheySay();
+    
     update_post_meta(1, "provided_transcripts", array('en' => 'this is a new transcript', 'fr' => "il s'agit d'une nouvelle transcription"));    
-    $this->assertEquals(array('en', 'fr'), $this->what->get_transcript_languages(1));
+    $this->assertEquals(array('en', 'fr'), $what->get_transcript_languages(1));
 
-    $this->assertEquals(false, $this->what->get_transcript_languages(2));
+    $this->assertEquals(false, $what->get_transcript_languages(2));
   }
   
   function testGetQueuedTranscriptionsForPost() {
@@ -171,7 +172,9 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
     wp_set_current_user($current_user_id);
     
-    $this->assertEquals($expected_result, $this->what->is_user_allowed_to_update());
+    
+    $what = new WhatDidTheySay();
+    $this->assertEquals($expected_result, $what->is_user_allowed_to_update());
   }
   
   function providerTestUpdateQueuedTranscription() {
@@ -294,6 +297,20 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     }
     
     $what->add_transcription_to_post(1);
+  }
+  
+  function testDeleteTranscript() {
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
+    $what->expects($this->once())
+         ->method('is_user_allowed_to_update')
+         ->will($this->returnValue(true));
+
+    wp_insert_post((object)array('ID' => 1));
+    update_post_meta(1, "provided_transcripts", array("en" => "This is a transcript"));
+    
+    $what->delete_transcript(1, "en");
+    
+    $this->assertEquals(array(), get_post_meta(1, "provided_transcripts", true));
   }
 }
 

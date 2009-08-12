@@ -196,6 +196,17 @@ class WhatDidTheySay {
       } 
     } 
   }
+  
+  function delete_transcript($post_id, $language) {
+    if ($this->is_user_allowed_to_update()) {
+      $post = get_post($post_id);
+      if (!empty($post)) {
+        $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
+        unset($current_transcripts[$language]);
+        update_post_meta($post_id, "provided_transcripts", $current_transcripts);
+      } 
+    }
+  }
 }
 
 ?>
