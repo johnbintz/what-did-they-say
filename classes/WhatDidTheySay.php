@@ -6,10 +6,32 @@
  * other posts as necessary.
  */
 class WhatDidTheySay {
+  var $version = "0.1";
+  
   function WhatDidTheySay() {
     global $wpdb;
     
     $this->table =  $wpdb->prefix . "provided_transcripts";
+  }
+  
+  function install() {
+    global $wpdb;
+    
+    if (get_option('what-did-they-say-version') !== $this->version) {
+      $sql = "CREATE TABLE %s (
+              id int NOT NULL AUTO_INCREMENT,
+              post_id int NOT NULL,
+              user_id int NOT NULL,
+              language char(10) NOT NULL,
+              transcript mediumtext,
+              UNIQUE KEY id (id)
+             );";
+             
+      require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+      dbDelta($sql);
+      
+      update_option('what-did-they-say-version', $version);
+    }
   }
   
   /**
