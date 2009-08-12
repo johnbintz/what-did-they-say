@@ -256,6 +256,45 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     
     $what->delete_queued_transcription($transcript_id_to_delete);
   }
+  
+  function providerTestAddTranscriptionToPost() {
+    return array(
+      array(null, false),
+      array((object)array('id' => 1, 'post_id' => 2), false),
+      array((object)array('id' => 1, 'post_id' => 1, 'language' => 'en', 'transcript' => 'This is a transcript'), true)
+    ); 
+  }
+  
+  /**
+   * @dataProvider providerTestAddTranscriptionToPost
+   */
+  function testAddTranscriptionToPost($get_results_return, $expects_delete) {
+    global $wpdb;
+    
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update', 'save_transcript'));
+    $what->expects($this->once())
+         ->method('is_user_allowed_to_update')
+         ->will($this->returnValue(true));
+    
+    wp_insert_post((object)array('ID' => 1));
+    
+    $wpdb = $this->getMock('wpdb', array('get_results', 'prepare', 'query'));
+    
+    $wpdb->expects($this->once())
+         ->method('get_results')
+         ->will($this->returnValue(array($get_results_return)));
+    
+    if ($expects_delete) {
+      $wpdb->expects($this->at(2))
+           ->method('prepare')
+           ->with(new PHPUnit_Framework_Constraint_PCREMatch('#DELETE FROM .* WHERE id = .*#'));
+      
+      $what->expects($this->once())
+           ->method('save_transcript');
+    }
+    
+    $what->add_transcription_to_post(1);
+  }
 }
 
 ?>

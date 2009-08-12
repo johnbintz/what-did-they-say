@@ -137,7 +137,7 @@ class WhatDidTheySay {
       $query = $wpdb->prepare("SELECT * FROM %s WHERE id = %d", $this->table, $update_info['id']);
       $result = $wpdb->get_results($query);
       
-      if (!empty($result)) {
+      if (is_array($result)) {
         if (count($result) == 1) {
           $result = $result[0];
           foreach (array('language', 'transcript') as $field) {
@@ -173,6 +173,28 @@ class WhatDidTheySay {
       }
     }
     return false;
+  }
+  
+  function add_transcription_to_post($transcription_id) {
+    global $wpdb;
+    
+    if ($this->is_user_allowed_to_update()) {
+      $query = $wpdb->prepare("SELECT * from %s WHERE id = %d", $this->table, $transcription_id);
+      $result = $wpdb->get_results($query);
+      if (is_array($result)) {
+        if (count($result) == 1) {
+          $result = (object)$result[0];
+
+          $post = get_post($result->post_id);
+          if (!empty($post)) {
+            $this->save_transcript($result->post_id, $result->language, $result->transcript);
+            
+            $query = $wpdb->prepare("DELETE FROM %s WHERE id = %d", $this->table, $transcription_id);
+            $result = $wpdb->query($query);
+          } 
+        }
+      } 
+    } 
   }
 }
 
