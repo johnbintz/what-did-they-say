@@ -2,15 +2,18 @@
 
 class WhatDidTheySayAdmin {
   var $default_languages = array(
-    array('name' => 'English', 'default' => true),
-    'French',
-    'Spanish',
-    'Italian',
-    'German'
+    array('code' => 'en', 'default' => true),
+    'fr',
+    'es',
+    'it',
+    'de'
   );
   
+  var $language_file;
+  var $all_languages = array();
+  
   function WhatDidTheySayAdmin() {
-    
+    $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
   }
   
   function init($what_did_they_say) {
@@ -25,6 +28,28 @@ class WhatDidTheySayAdmin {
         }
       } 
     }
+  }
+
+  function handle_update_languages($language_info) {
+    $languages = array();
+    foreach ($language_info as $code => $info) {
+      if (isset($this->all_languages[$code])) {
+        $language = $code;
+        if (isset($info['default'])) { $language = array('code' => $code, 'default' => true); }
+        $languages[] = $language;
+      }
+    }
+    update_option('what-did-they-say-languages', $languages);
+  }
+
+  function read_language_file() {
+    if (file_exists($this->language_file)) {
+      foreach (file($this->language_file, FILE_IGNORE_NEW_LINES) as $language) {
+        list($code, $date_added, $name, $additional) = explode("\t", $language);
+        $this->all_languages[$code] = $name;
+      } 
+    }
+    return $this->all_languages;
   }
 
   function install() {
