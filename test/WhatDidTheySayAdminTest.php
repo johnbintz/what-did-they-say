@@ -23,8 +23,20 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     );
     
     $admin->handle_update_languages(array('en' => array(), 'de' => array('default' => 'yes'), 'meow' => array()));
+
+    $options = get_option('what-did-they-say-options');
+    $this->assertEquals(array('en', array('code' => 'de', 'default' => true)), $options['languages']);
+  }
+
+  function testHandleUpdateAllowedUsers() {
+    $admin = new WhatDidTheySayAdmin();
+
+    wp_insert_user((object)array('ID' => 1));
     
-    $this->assertEquals(array('en', array('code' => 'de', 'default' => true)), get_option('what-did-they-say-languages'));
+    $admin->handle_update_allowed_users(array(1, 2));
+
+    $options = get_option('what-did-they-say-options');
+    $this->assertEquals(array(1), $options['allowed_users']);
   }
 }
 

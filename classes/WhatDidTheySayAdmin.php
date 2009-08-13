@@ -30,6 +30,12 @@ class WhatDidTheySayAdmin {
     }
   }
 
+  function _update_options($which, $value) {
+    $options = get_option('what-did-they-say-options');
+    $options[$which] = $value;
+    update_option('what-did-they-say-options', $options);
+  }
+
   function handle_update_languages($language_info) {
     $languages = array();
     foreach ($language_info as $code => $info) {
@@ -39,7 +45,21 @@ class WhatDidTheySayAdmin {
         $languages[] = $language;
       }
     }
-    update_option('what-did-they-say-languages', $languages);
+    $this->_update_options('languages', $languages);
+  }
+  
+  function handle_update_allowed_users($users) {
+    $allowed_users = array();
+    foreach ($users as $user) {
+      if (is_numeric($user)) {
+        $user_info = get_userdata($user);
+        if (!empty($user_info)) {
+          $allowed_users[] = $user;
+        }
+      }
+    }
+
+    $this->_update_options('allowed_users', $allowed_users);
   }
 
   function read_language_file() {
@@ -82,7 +102,7 @@ class WhatDidTheySayAdmin {
   }
   
   function manage_transcriptions_admin() {
-    $languages = get_option('what-did-they-say-languages');
+    $options = get_option('what-did-they-say-options');
     
     include(dirname(__FILE__) . '/admin.inc');
   }
