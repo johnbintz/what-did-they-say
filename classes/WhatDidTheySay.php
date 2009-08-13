@@ -15,8 +15,6 @@ class WhatDidTheySay {
   }
   
   function install() {
-    global $wpdb;
-    
     if (get_option('what-did-they-say-version') !== $this->version) {
       $sql = "CREATE TABLE %s (
               id int NOT NULL AUTO_INCREMENT,
@@ -28,9 +26,9 @@ class WhatDidTheySay {
              );";
              
       require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-      dbDelta($sql);
+      dbDelta(sprintf($sql, $this->table));
       
-      update_option('what-did-they-say-version', $version);
+      update_option('what-did-they-say-version', $this->version);
     }
   }
   

@@ -1,6 +1,14 @@
 <?php
 
 class WhatDidTheySayAdmin {
+  var $default_languages = array(
+    array('name' => 'English', 'default' => true),
+    'French',
+    'Spanish',
+    'Italian',
+    'German'
+  );
+  
   function WhatDidTheySayAdmin() {
     
   }
@@ -17,6 +25,13 @@ class WhatDidTheySayAdmin {
         }
       } 
     }
+  }
+
+  function install() {
+    $languages = get_option('what-did-they-say-languages');
+    if (empty($languages)) {
+      update_option('what-did-they-say-languages', $this->default_languages); 
+    } 
   }
   
   function admin_menu() {
@@ -42,11 +57,15 @@ class WhatDidTheySayAdmin {
   }
   
   function manage_transcriptions_admin() {
+    $languages = get_option('what-did-they-say-languages');
     
+    include(dirname(__FILE__) . '/admin.inc');
   }
   
   function manage_transcriptions_meta_box() {
+    global $post;
     
+    var_dump($post->ID);
   }
   
   function handle_update($info) {
