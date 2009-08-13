@@ -1,0 +1,491 @@
+aa	2005-10-16	Afar	
+ab	2005-10-16	Abkhazian	Cyrl
+ae	2005-10-16	Avestan	
+af	2005-10-16	Afrikaans	Latn
+ak	2005-10-16	Akan	
+am	2005-10-16	Amharic	Ethi
+an	2005-10-16	Aragonese	
+anp	2006-03-08	Angika	
+ar	2005-10-16	Arabic	Arab
+as	2005-10-16	Assamese	Beng
+av	2005-10-16	Avaric	
+ay	2005-10-16	Aymara	Latn
+az	2005-10-16	Azerbaijani	
+ba	2005-10-16	Bashkir	
+be	2005-10-16	Belarusian	Cyrl
+bg	2005-10-16	Bulgarian	Cyrl
+bh	2005-10-16	Bihari	
+bi	2005-10-16	Bislama	
+bm	2005-10-16	Bambara	
+bn	2005-10-16	Bengali	Beng
+bo	2005-10-16	Tibetan	
+br	2005-10-16	Breton	
+bs	2005-10-16	Bosnian	Latn
+ca	2005-10-16	Catalan / Valencian	Latn
+ce	2005-10-16	Chechen	
+ch	2005-10-16	Chamorro	Latn
+co	2005-10-16	Corsican	
+cr	2005-10-16	Cree	
+cs	2005-10-16	Czech	Latn
+cu	2005-10-16	Church Slavic / Old Slavonic / Church Slavonic / Old Bulgarian / Old Church Slavonic	
+cv	2005-10-16	Chuvash	
+cy	2005-10-16	Welsh	Latn
+da	2005-10-16	Danish	Latn
+de	2005-10-16	German	Latn
+dv	2005-10-16	Divehi / Dhivehi / Maldivian	Thaa
+dz	2005-10-16	Dzongkha	Tibt
+ee	2005-10-16	Ewe	
+el	2005-10-16	Greek, Modern (1453-)	Grek
+en	2005-10-16	English	Latn
+eo	2005-10-16	Esperanto	Latn
+es	2005-10-16	Spanish / Castilian	Latn
+et	2005-10-16	Estonian	Latn
+eu	2005-10-16	Basque	Latn
+fa	2005-10-16	Persian	Arab
+ff	2005-10-16	Fulah	
+fi	2005-10-16	Finnish	Latn
+fj	2005-10-16	Fijian	Latn
+fo	2005-10-16	Faroese	Latn
+fr	2005-10-16	French	Latn
+frr	2006-03-08	Northern Frisian	Latn
+fy	2005-10-16	Western Frisian	Latn
+ga	2005-10-16	Irish	Latn
+gd	2005-10-16	Gaelic / Scottish Gaelic	
+gl	2005-10-16	Galician	Latn
+gn	2005-10-16	Guarani	Latn
+gu	2005-10-16	Gujarati	Gujr
+gv	2005-10-16	Manx	Latn
+ha	2005-10-16	Hausa	
+he	2005-10-16	Hebrew	Hebr
+hi	2005-10-16	Hindi	Deva
+ho	2005-10-16	Hiri Motu	
+hr	2005-10-16	Croatian	Latn
+ht	2005-10-16	Haitian / Haitian Creole	Latn
+hu	2005-10-16	Hungarian	Latn
+hy	2005-10-16	Armenian	Armn
+hz	2005-10-16	Herero	
+ia	2005-10-16	Interlingua (International Auxiliary Language  Association)	
+id	2005-10-16	Indonesian	Latn
+ie	2005-10-16	Interlingue / Occidental	
+ig	2005-10-16	Igbo	
+ii	2005-10-16	Sichuan Yi / Nuosu	
+ik	2005-10-16	Inupiaq	
+in	2005-10-16	Indonesian	Latn
+io	2005-10-16	Ido	
+is	2005-10-16	Icelandic	Latn
+it	2005-10-16	Italian	Latn
+iu	2005-10-16	Inuktitut	
+iw	2005-10-16	Hebrew	Hebr
+ja	2005-10-16	Japanese	Jpan
+ji	2005-10-16	Yiddish	
+jv	2005-10-16	Javanese	
+jw	2005-10-16	Javanese	
+ka	2005-10-16	Georgian	Geor
+kg	2005-10-16	Kongo	
+ki	2005-10-16	Kikuyu / Gikuyu	
+kj	2005-10-16	Kuanyama / Kwanyama	
+kk	2005-10-16	Kazakh	Cyrl
+kl	2005-10-16	Kalaallisut / Greenlandic	Latn
+km	2005-10-16	Central Khmer	Khmr
+kn	2005-10-16	Kannada	Knda
+ko	2005-10-16	Korean	Kore
+kr	2005-10-16	Kanuri	
+ks	2005-10-16	Kashmiri	
+ku	2005-10-16	Kurdish	
+kv	2005-10-16	Komi	
+kw	2005-10-16	Cornish	
+ky	2005-10-16	Kyrgyz / Kirghiz	
+la	2005-10-16	Latin	Latn
+lb	2005-10-16	Luxembourgish / Letzeburgesch	Latn
+lg	2005-10-16	Ganda	
+li	2005-10-16	Limburgan / Limburger / Limburgish	
+ln	2005-10-16	Lingala	Latn
+lo	2005-10-16	Lao	Laoo
+lt	2005-10-16	Lithuanian	Latn
+lu	2005-10-16	Luba-Katanga	
+lv	2005-10-16	Latvian	Latn
+mg	2005-10-16	Malagasy	Latn
+mh	2005-10-16	Marshallese	Latn
+mi	2005-10-16	Maori	
+mk	2005-10-16	Macedonian	Cyrl
+ml	2005-10-16	Malayalam	Mlym
+mn	2005-10-16	Mongolian	
+mo	2005-10-16	Moldavian / Moldovan	Latn
+mr	2005-10-16	Marathi	Deva
+ms	2005-10-16	Malay	Latn
+mt	2005-10-16	Maltese	Latn
+my	2005-10-16	Burmese	Mymr
+na	2005-10-16	Nauru	Latn
+nb	2005-10-16	Norwegian Bokm&#xE5;l	Latn
+nd	2005-10-16	Ndebele, North / North Ndebele	Latn
+ne	2005-10-16	Nepali	Deva
+ng	2005-10-16	Ndonga	
+nl	2005-10-16	Dutch / Flemish	Latn
+nn	2005-10-16	Norwegian Nynorsk	Latn
+no	2005-10-16	Norwegian	Latn
+nr	2005-10-16	Ndebele, South / South Ndebele	Latn
+nv	2005-10-16	Navajo / Navaho	
+ny	2005-10-16	Chichewa / Chewa / Nyanja	Latn
+oc	2005-10-16	Occitan (post 1500)	
+oj	2005-10-16	Ojibwa	
+om	2005-10-16	Oromo	Latn
+or	2005-10-16	Oriya	Orya
+os	2005-10-16	Ossetian / Ossetic	
+pa	2005-10-16	Panjabi / Punjabi	Guru
+pi	2005-10-16	Pali	
+pl	2005-10-16	Polish	Latn
+ps	2005-10-16	Pushto / Pashto	Arab
+pt	2005-10-16	Portuguese	Latn
+qu	2005-10-16	Quechua	Latn
+rm	2005-10-16	Romansh	
+rn	2005-10-16	Rundi	Latn
+ro	2005-10-16	Romanian / Moldavian / Moldovan	Latn
+ru	2005-10-16	Russian	Cyrl
+rw	2005-10-16	Kinyarwanda	Latn
+sa	2005-10-16	Sanskrit	
+sc	2005-10-16	Sardinian	
+sd	2005-10-16	Sindhi	
+se	2005-10-16	Northern Sami	
+sg	2005-10-16	Sango	Latn
+sh	2005-10-16	Serbo-Croatian	
+si	2005-10-16	Sinhala / Sinhalese	Sinh
+sk	2005-10-16	Slovak	Latn
+sl	2005-10-16	Slovenian	Latn
+sm	2005-10-16	Samoan	Latn
+sn	2005-10-16	Shona	
+so	2005-10-16	Somali	Latn
+sq	2005-10-16	Albanian	Latn
+sr	2005-10-16	Serbian	
+ss	2005-10-16	Swati	Latn
+st	2005-10-16	Sotho, Southern	Latn
+su	2005-10-16	Sundanese	
+sv	2005-10-16	Swedish	Latn
+sw	2005-10-16	Swahili	Latn
+ta	2005-10-16	Tamil	Taml
+te	2005-10-16	Telugu	Telu
+tg	2005-10-16	Tajik	
+th	2005-10-16	Thai	Thai
+ti	2005-10-16	Tigrinya	Ethi
+tk	2005-10-16	Turkmen	
+tl	2005-10-16	Tagalog	Latn
+tn	2005-10-16	Tswana	Latn
+to	2005-10-16	Tonga (Tonga Islands)	Latn
+tr	2005-10-16	Turkish	Latn
+ts	2005-10-16	Tsonga	Latn
+tt	2005-10-16	Tatar	
+tw	2005-10-16	Twi	
+ty	2005-10-16	Tahitian	
+ug	2005-10-16	Uighur / Uyghur	
+uk	2005-10-16	Ukrainian	Cyrl
+ur	2005-10-16	Urdu	Arab
+uz	2005-10-16	Uzbek	
+ve	2005-10-16	Venda	Latn
+vi	2005-10-16	Vietnamese	Latn
+vo	2005-10-16	Volap&#xFC;k	
+wa	2005-10-16	Walloon	
+wo	2005-10-16	Wolof	Latn
+xh	2005-10-16	Xhosa	Latn
+yi	2005-10-16	Yiddish	Hebr
+yo	2005-10-16	Yoruba	
+za	2005-10-16	Zhuang / Chuang	
+zh	2005-10-16	Chinese	
+zu	2005-10-16	Zulu	Latn
+ace	2005-10-16	Achinese	
+ach	2005-10-16	Acoli	
+ada	2005-10-16	Adangme	
+ady	2005-10-16	Adyghe / Adygei	
+afa	2005-10-16	Afro-Asiatic languages	
+afh	2005-10-16	Afrihili	
+ain	2005-10-16	Ainu	
+akk	2005-10-16	Akkadian	
+ale	2005-10-16	Aleut	
+alg	2005-10-16	Algonquian languages	
+alt	2005-10-16	Southern Altai	
+ang	2005-10-16	English, Old (ca. 450-1100)	
+apa	2005-10-16	Apache languages	
+arc	2005-10-16	Official Aramaic (700-300 BCE) / Imperial Aramaic (700-300 BCE)	
+arn	2005-10-16	Mapudungun / Mapuche	
+arp	2005-10-16	Arapaho	
+art	2005-10-16	Artificial languages	
+arw	2005-10-16	Arawak	
+ast	2005-10-16	Asturian / Bable / Leonese / Asturleonese	
+ath	2005-10-16	Athapascan languages	
+aus	2005-10-16	Australian languages	
+awa	2005-10-16	Awadhi	
+bad	2005-10-16	Banda languages	
+bai	2005-10-16	Bamileke languages	
+bal	2005-10-16	Baluchi	
+ban	2005-10-16	Balinese	
+bas	2005-10-16	Basa	
+bat	2005-10-16	Baltic languages	
+bej	2005-10-16	Beja / Bedawiyet	
+bem	2005-10-16	Bemba	
+ber	2005-10-16	Berber languages	
+bho	2005-10-16	Bhojpuri	
+bik	2005-10-16	Bikol	
+bin	2005-10-16	Bini / Edo	
+bla	2005-10-16	Siksika	
+bnt	2005-10-16	Bantu languages	
+bra	2005-10-16	Braj	
+btk	2005-10-16	Batak languages	
+bua	2005-10-16	Buriat	
+bug	2005-10-16	Buginese	
+byn	2005-10-16	Blin / Bilin	
+cad	2005-10-16	Caddo	
+cai	2005-10-16	Central American Indian languages	
+car	2005-10-16	Galibi Carib	
+cau	2005-10-16	Caucasian languages	
+ceb	2005-10-16	Cebuano	
+cel	2005-10-16	Celtic languages	
+chb	2005-10-16	Chibcha	
+chg	2005-10-16	Chagatai	
+chk	2005-10-16	Chuukese	
+chm	2005-10-16	Mari	
+chn	2005-10-16	Chinook jargon	
+cho	2005-10-16	Choctaw	
+chp	2005-10-16	Chipewyan / Dene Suline	
+chr	2005-10-16	Cherokee	
+chy	2005-10-16	Cheyenne	
+cmc	2005-10-16	Chamic languages	
+cop	2005-10-16	Coptic	
+cpe	2005-10-16	Creoles and pidgins, English-based	
+cpf	2005-10-16	Creoles and pidgins, French-based	
+cpp	2005-10-16	Creoles and pidgins, Portuguese-based	
+crh	2005-10-16	Crimean Tatar / Crimean Turkish	
+crp	2005-10-16	Creoles and pidgins	
+csb	2005-10-16	Kashubian	
+cus	2005-10-16	Cushitic languages	
+dak	2005-10-16	Dakota	
+dar	2005-10-16	Dargwa	
+day	2005-10-16	Land Dayak languages	
+del	2005-10-16	Delaware	
+den	2005-10-16	Slave (Athapascan)	
+dgr	2005-10-16	Dogrib	
+din	2005-10-16	Dinka	
+doi	2005-10-16	Dogri	
+dra	2005-10-16	Dravidian languages	
+dsb	2005-10-16	Lower Sorbian	Latn
+dua	2005-10-16	Duala	
+dum	2005-10-16	Dutch, Middle (ca. 1050-1350)	
+dyu	2005-10-16	Dyula	
+efi	2005-10-16	Efik	
+egy	2005-10-16	Egyptian (Ancient)	
+eka	2005-10-16	Ekajuk	
+elx	2005-10-16	Elamite	
+enm	2005-10-16	English, Middle (1100-1500)	
+ewo	2005-10-16	Ewondo	
+fan	2005-10-16	Fang	
+fat	2005-10-16	Fanti	
+fil	2005-10-16	Filipino / Pilipino	
+fiu	2005-10-16	Finno-Ugrian languages	
+fon	2005-10-16	Fon	
+frm	2005-10-16	French, Middle (ca. 1400-1600)	
+fro	2005-10-16	French, Old (842-ca. 1400)	
+frs	2006-03-08	Eastern Frisian	Latn
+fur	2005-10-16	Friulian	
+gaa	2005-10-16	Ga	
+gay	2005-10-16	Gayo	
+gba	2005-10-16	Gbaya	
+gem	2005-10-16	Germanic languages	
+gez	2005-10-16	Geez	
+gil	2005-10-16	Gilbertese	
+gmh	2005-10-16	German, Middle High (ca. 1050-1500)	
+goh	2005-10-16	German, Old High (ca. 750-1050)	
+gon	2005-10-16	Gondi	
+gor	2005-10-16	Gorontalo	
+got	2005-10-16	Gothic	
+grb	2005-10-16	Grebo	
+grc	2005-10-16	Greek, Ancient (to 1453)	
+gsw	2006-03-08	Swiss German / Alemannic / Alsatian	Latn
+gwi	2005-10-16	Gwich&#xB4;in	
+hai	2005-10-16	Haida	
+haw	2005-10-16	Hawaiian	
+hil	2005-10-16	Hiligaynon	
+him	2005-10-16	Himachali	
+hit	2005-10-16	Hittite	
+hmn	2005-10-16	Hmong	
+hsb	2005-10-16	Upper Sorbian	Latn
+hup	2005-10-16	Hupa	
+iba	2005-10-16	Iban	
+ijo	2005-10-16	Ijo languages	
+ilo	2005-10-16	Iloko	
+inc	2005-10-16	Indic languages	
+ine	2005-10-16	Indo-European languages	
+inh	2005-10-16	Ingush	
+ira	2005-10-16	Iranian languages	
+iro	2005-10-16	Iroquoian languages	
+jbo	2005-10-16	Lojban	
+jpr	2005-10-16	Judeo-Persian	
+jrb	2005-10-16	Judeo-Arabic	
+kaa	2005-10-16	Kara-Kalpak	
+kab	2005-10-16	Kabyle	
+kac	2005-10-16	Kachin / Jingpho	
+kam	2005-10-16	Kamba	
+kar	2005-10-16	Karen languages	
+kaw	2005-10-16	Kawi	
+kbd	2005-10-16	Kabardian	
+kha	2005-10-16	Khasi	
+khi	2005-10-16	Khoisan languages	
+kho	2005-10-16	Khotanese	
+kmb	2005-10-16	Kimbundu	
+kok	2005-10-16	Konkani	Deva
+kos	2005-10-16	Kosraean	
+kpe	2005-10-16	Kpelle	
+krc	2005-10-16	Karachay-Balkar	
+krl	2006-03-08	Karelian	
+kro	2005-10-16	Kru languages	
+kru	2005-10-16	Kurukh	
+kum	2005-10-16	Kumyk	
+kut	2005-10-16	Kutenai	
+lad	2005-10-16	Ladino	
+lah	2005-10-16	Lahnda	
+lam	2005-10-16	Lamba	
+lez	2005-10-16	Lezghian	
+lol	2005-10-16	Mongo	
+loz	2005-10-16	Lozi	
+lua	2005-10-16	Luba-Lulua	
+lui	2005-10-16	Luiseno	
+lun	2005-10-16	Lunda	
+luo	2005-10-16	Luo (Kenya and Tanzania)	
+lus	2005-10-16	Lushai	
+mad	2005-10-16	Madurese	
+mag	2005-10-16	Magahi	
+mai	2005-10-16	Maithili	Deva
+mak	2005-10-16	Makasar	
+man	2005-10-16	Mandingo	
+map	2005-10-16	Austronesian languages	
+mas	2005-10-16	Masai	
+mdf	2005-10-16	Moksha	
+mdr	2005-10-16	Mandar	
+men	2005-10-16	Mende	Latn
+mga	2005-10-16	Irish, Middle (900-1200)	
+mic	2005-10-16	Mi'kmaq / Micmac	
+min	2005-10-16	Minangkabau	
+mis	2005-10-16	Uncoded languages	
+mkh	2005-10-16	Mon-Khmer languages	
+mnc	2005-10-16	Manchu	
+mni	2005-10-16	Manipuri	
+mno	2005-10-16	Manobo languages	
+moh	2005-10-16	Mohawk	
+mos	2005-10-16	Mossi	
+mul	2005-10-16	Multiple languages	
+mun	2005-10-16	Munda languages	
+mus	2005-10-16	Creek	
+mwl	2005-10-16	Mirandese	
+mwr	2005-10-16	Marwari	
+myn	2005-10-16	Mayan languages	
+myv	2005-10-16	Erzya	
+nah	2005-10-16	Nahuatl languages	
+nai	2005-10-16	North American Indian languages	
+nap	2005-10-16	Neapolitan	
+nds	2005-10-16	Low German / Low Saxon / German, Low / Saxon, Low	Latn
+new	2005-10-16	Nepal Bhasa / Newari	
+nia	2005-10-16	Nias	
+nic	2005-10-16	Niger-Kordofanian languages	
+niu	2005-10-16	Niuean	Latn
+nog	2005-10-16	Nogai	
+non	2005-10-16	Norse, Old	
+nqo	2006-06-05	N&#x2019;Ko	Nkoo
+nso	2005-10-16	Northern Sotho / Pedi / Sepedi	Latn
+nub	2005-10-16	Nubian languages	
+nwc	2005-10-16	Classical Newari / Old Newari / Classical Nepal Bhasa	
+nym	2005-10-16	Nyamwezi	
+nyn	2005-10-16	Nyankole	
+nyo	2005-10-16	Nyoro	
+nzi	2005-10-16	Nzima	
+osa	2005-10-16	Osage	
+ota	2005-10-16	Turkish, Ottoman (1500-1928)	
+oto	2005-10-16	Otomian languages	
+paa	2005-10-16	Papuan languages	
+pag	2005-10-16	Pangasinan	
+pal	2005-10-16	Pahlavi	
+pam	2005-10-16	Pampanga / Kapampangan	
+pap	2005-10-16	Papiamento	
+pau	2005-10-16	Palauan	
+peo	2005-10-16	Persian, Old (ca. 600-400 B.C.)	
+phi	2005-10-16	Philippine languages	
+phn	2005-10-16	Phoenician	
+pon	2005-10-16	Pohnpeian	
+pra	2005-10-16	Prakrit languages	
+pro	2005-10-16	Proven&#xE7;al, Old (to 1500) / Old Occitan (to 1500)	
+qaa..qtz	2005-10-16	PRIVATE USE	
+raj	2005-10-16	Rajasthani	
+rap	2005-10-16	Rapanui	
+rar	2005-10-16	Rarotongan / Cook Islands Maori	
+roa	2005-10-16	Romance languages	
+rom	2005-10-16	Romany	
+rup	2005-10-16	Aromanian / Arumanian / Macedo-Romanian	
+sad	2005-10-16	Sandawe	
+sah	2005-10-16	Yakut	
+sai	2005-10-16	South American Indian languages	
+sal	2005-10-16	Salishan languages	
+sam	2005-10-16	Samaritan Aramaic	
+sas	2005-10-16	Sasak	
+sat	2005-10-16	Santali	
+scn	2005-10-16	Sicilian	
+sco	2005-10-16	Scots	
+sel	2005-10-16	Selkup	
+sem	2005-10-16	Semitic languages	
+sga	2005-10-16	Irish, Old (to 900)	
+sgn	2005-10-16	Sign Languages	
+shn	2005-10-16	Shan	
+sid	2005-10-16	Sidamo	
+sio	2005-10-16	Siouan languages	
+sit	2005-10-16	Sino-Tibetan languages	
+sla	2005-10-16	Slavic languages	
+sma	2005-10-16	Southern Sami	
+smi	2005-10-16	Sami languages	
+smj	2005-10-16	Lule Sami	
+smn	2005-10-16	Inari Sami	
+sms	2005-10-16	Skolt Sami	
+snk	2005-10-16	Soninke	
+sog	2005-10-16	Sogdian	
+son	2005-10-16	Songhai languages	
+srn	2005-10-16	Sranan Tongo	
+srr	2005-10-16	Serer	
+ssa	2005-10-16	Nilo-Saharan languages	
+suk	2005-10-16	Sukuma	
+sus	2005-10-16	Susu	
+sux	2005-10-16	Sumerian	
+syc	2007-04-03	Classical Syriac	
+syr	2005-10-16	Syriac	
+tai	2005-10-16	Tai languages	
+tem	2005-10-16	Timne	Latn
+ter	2005-10-16	Tereno	
+tet	2005-10-16	Tetum	
+tig	2005-10-16	Tigre	
+tiv	2005-10-16	Tiv	
+tkl	2005-10-16	Tokelau	Latn
+tlh	2005-10-16	Klingon / tlhIngan-Hol	
+tli	2005-10-16	Tlingit	
+tmh	2005-10-16	Tamashek	Latn
+tog	2005-10-16	Tonga (Nyasa)	
+tpi	2005-10-16	Tok Pisin	Latn
+tsi	2005-10-16	Tsimshian	
+tum	2005-10-16	Tumbuka	
+tup	2005-10-16	Tupi languages	
+tut	2005-10-16	Altaic languages	
+tvl	2005-10-16	Tuvalu	Latn
+tyv	2005-10-16	Tuvinian	
+udm	2005-10-16	Udmurt	
+uga	2005-10-16	Ugaritic	
+umb	2005-10-16	Umbundu	
+und	2005-10-16	Undetermined	
+vai	2005-10-16	Vai	
+vot	2005-10-16	Votic	
+wak	2005-10-16	Wakashan languages	
+wal	2005-10-16	Wolaytta / Wolaitta	
+war	2005-10-16	Waray	
+was	2005-10-16	Washo	
+wen	2005-10-16	Sorbian languages	
+xal	2005-10-16	Kalmyk / Oirat	
+yao	2005-10-16	Yao	
+yap	2005-10-16	Yapese	
+ypk	2005-10-16	Yupik languages	
+zap	2005-10-16	Zapotec	
+zbl	2007-08-21	Blissymbols / Blissymbolics / Bliss	Blis
+zen	2005-10-16	Zenaga	
+znd	2005-10-16	Zande languages	
+zun	2005-10-16	Zuni	
+zxx	2006-03-08	No linguistic content / Not applicable	
+zza	2006-08-24	Zaza / Dimili / Dimli / Kirdki / Kirmanjki / Zazaki	
