@@ -6,16 +6,15 @@
   <h3>Languages</h3>
 
   <ul id="language-holder">
-    <?php foreach ($options['languages'] as $language) {
-      $default = false;
-      if (is_array($language)) {
-        $default = $language['default'];
-        $code = $language['code'];
-      }
-      if (is_string($language)) { $code = $language; }
+    <?php foreach ($options['languages'] as $code => $info) {
+      $default = isset($info['default']);
+      $name = $info['name'];
       ?>
       <li>
-        <strong><?php echo $this->all_languages[$code] ?></strong>
+        <strong>
+          <?php echo $name ?>
+          <?php if ($
+        </strong>
         | <a class="verify" href="<?php echo add_query_arg(array('wdts[code]' => $code, 'wdts[action]' => 'delete'), $nonce_url) ?>">Delete</a>
       </li>
     <?php } ?>

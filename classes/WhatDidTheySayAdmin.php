@@ -111,12 +111,35 @@ class WhatDidTheySayAdmin {
   }
 
   function install() {
+    $this->read_language_file();
     $options = get_option('what-did-they-say-options');
     if (empty($options)) {
+      $this->default_options['languages'] = $this->build_default_languages();
       update_option('what-did-they-say-options', $this->default_options);
     } 
   }
-  
+
+  function build_default_languages() {
+    $full_default_language_info = array();
+    foreach ($this->default_options['languages'] as $info) {
+      $code = null;
+      if (is_string($info)) {
+        $code = $info;
+        $default = false;
+      }
+      if (is_array($info)) {
+        extract($info);
+      }
+      if (isset($this->all_languages[$code])) {
+        $full_default_language_info[$code] = array('name' => $this->all_languages[$code]);
+        if (!empty($default)) {
+          $full_default_language_info[$code]['default'] = true;
+        }
+      }
+    }
+    return $full_default_language_info;
+  }
+
   function admin_menu() {
     add_submenu_page(
       'edit-comments.php',
