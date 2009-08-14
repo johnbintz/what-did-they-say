@@ -44,17 +44,29 @@ class WhatDidTheySayAdmin {
   }
 
   function handle_update_languages($language_info) {
-    
-  
-    $languages = array();
-    foreach ($language_info as $code => $info) {
-      if (isset($this->all_languages[$code])) {
-        $language = $code;
-        if (isset($info['default'])) { $language = array('code' => $code, 'default' => true); }
-        $languages[] = $language;
-      }
+    $options = get_option('what-did-they-say-options');
+    switch ($language_info['action']) {
+      case "delete":
+        unset($options['languages'][$language_info['code']]);
+        break;
+      case "add":
+        if (isset($this->all_languages[$language_info['code']])) {
+          $options['languages'][$language_info['code']] = array('name' => $this->all_languages[$language_info['code']]);
+        }
+        break;
+      case "default":
+        if (isset($options['languages'][$language_info['code']])) {
+          foreach ($options['languages'] as $code => $info) {
+            if ($code == $language_info['code']) {
+              $options['languages'][$code]['default'] = true;
+            } else {
+              unset($options['languages'][$code]['default']);
+            }
+          }
+        }
+        break;
     }
-    $this->_update_options('languages', $languages);
+    update_option('what-did-they-say-options', $options);
   }
   
   function handle_update_allowed_users($users) {

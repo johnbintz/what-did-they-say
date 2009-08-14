@@ -18,12 +18,20 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
   function providerTestHandleUpdateLanguages() {
     return array(
       array(
-        array(
-          array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
-          array('code' => 'en', 'action' => 'delete'),
-          array('de' => array('name' => 'German'))
-        )
-      )
+        array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
+        array('code' => 'en', 'action' => 'delete'),
+        array('de' => array('name' => 'German'))
+      ),
+      array(
+        array('de' => array('name' => 'German')),
+        array('code' => 'en', 'action' => 'add'),
+        array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
+      ),
+      array(
+        array('en' => array('name' => 'English', 'default' => true), 'de' => array('name' => 'German')),
+        array('code' => 'de', 'action' => 'default'),
+        array('en' => array('name' => 'English'), 'de' => array('name' => 'German', 'default' => true)),
+      ),
     );
   }
 
@@ -38,7 +46,7 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
       'fr' => 'French'
     );
 
-    update_option('what-did-they-say-options', array('languages', $original_options));
+    update_option('what-did-they-say-options', array('languages' => $original_options));
     
     $admin->handle_update_languages($form_submission);
 
