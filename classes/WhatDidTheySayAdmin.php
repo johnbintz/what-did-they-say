@@ -1,12 +1,16 @@
 <?php
 
 class WhatDidTheySayAdmin {
-  var $default_languages = array(
-    array('code' => 'en', 'default' => true),
-    'fr',
-    'es',
-    'it',
-    'de'
+  var $default_options = array(
+    'languages' => array(
+      array('code' => 'en', 'default' => true),
+      'fr',
+      'es',
+      'it',
+      'de'
+    ),
+    'only_allowed_users' => false,
+    'users' => array()
   );
   
   var $language_file;
@@ -20,6 +24,7 @@ class WhatDidTheySayAdmin {
     $this->what_did_they_say = $what_did_they_say;
     
     add_action('admin_menu', array(&$this, 'admin_menu'));
+    wp_enqueue_script('prototype');
     
     if (isset($_POST['wdts'])) {
       if (isset($_POST['wdts']['_nonce'])) {
@@ -28,6 +33,8 @@ class WhatDidTheySayAdmin {
         }
       } 
     }
+
+    $this->read_language_file();
   }
 
   function _update_options($which, $value) {
@@ -37,6 +44,8 @@ class WhatDidTheySayAdmin {
   }
 
   function handle_update_languages($language_info) {
+    
+  
     $languages = array();
     foreach ($language_info as $code => $info) {
       if (isset($this->all_languages[$code])) {
@@ -90,9 +99,9 @@ class WhatDidTheySayAdmin {
   }
 
   function install() {
-    $languages = get_option('what-did-they-say-languages');
-    if (empty($languages)) {
-      update_option('what-did-they-say-languages', $this->default_languages); 
+    $options = get_option('what-did-they-say-options');
+    if (empty($options)) {
+      update_option('what-did-they-say-options', $this->default_options);
     } 
   }
   
@@ -120,6 +129,21 @@ class WhatDidTheySayAdmin {
   
   function manage_transcriptions_admin() {
     $options = get_option('what-did-they-say-options');
+
+    $language_map_pairs = array();
+    $basic_languages = $all_languages = array();
+    foreach ($this->all_languages as $code => $name) {
+      $name = addslashes($name);
+      $language_map_pairs[] = "'${code}': '${name}'";
+      $all_languages[] = "'$code'";
+      if (strlen($code) == 2) {
+        $basic_languages[] = "'$code'";
+      }
+    }
+
+    $nonce = wp_create_nonce('what-did-they-say');
+
+    $nonce_url = add_query_arg('wdts[_nonce]', $nonce);
     
     include(dirname(__FILE__) . '/admin.inc');
   }

@@ -14,18 +14,36 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     
     $this->assertTrue(count($admin->read_language_file()) > 0);
   } 
-  
-  function testHandleUpdateLanguages() {
+
+  function providerTestHandleUpdateLanguages() {
+    return array(
+      array(
+        array(
+          array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
+          array('code' => 'en', 'action' => 'delete'),
+          array('de' => array('name' => 'German'))
+        )
+      )
+    );
+  }
+
+  /**
+   * @dataProvider providerTestHandleUpdateLanguages
+   */
+  function testHandleUpdateLanguages($original_options, $form_submission, $expected_results) {
     $admin = new WhatDidTheySayAdmin();
     $admin->all_languages = array(
       'en' => 'English',
-      'de' => 'German'
+      'de' => 'German',
+      'fr' => 'French'
     );
+
+    update_option('what-did-they-say-options', array('languages', $original_options));
     
-    $admin->handle_update_languages(array('en' => array(), 'de' => array('default' => 'yes'), 'meow' => array()));
+    $admin->handle_update_languages($form_submission);
 
     $options = get_option('what-did-they-say-options');
-    $this->assertEquals(array('en', array('code' => 'de', 'default' => true)), $options['languages']);
+    $this->assertEquals($expected_results, $options['languages']);
   }
 
   function testHandleUpdateAllowedUsers() {
