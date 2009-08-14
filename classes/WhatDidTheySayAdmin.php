@@ -15,6 +15,7 @@ class WhatDidTheySayAdmin {
   
   var $language_file;
   var $all_languages = array();
+  var $notices = array();
   
   function WhatDidTheySayAdmin() {
     $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
@@ -24,12 +25,13 @@ class WhatDidTheySayAdmin {
     $this->what_did_they_say = $what_did_they_say;
     
     add_action('admin_menu', array(&$this, 'admin_menu'));
+    add_action('admin_notices', array(&$this, 'admin_notices'));
     wp_enqueue_script('prototype');
     
-    if (isset($_POST['wdts'])) {
-      if (isset($_POST['wdts']['_nonce'])) {
-        if (wp_verify_nonce('what-did-they-say', $_POST['wdts']['_nonce'])) {
-          $this->handle_update($_POST['wdts']); 
+    if (isset($_REQUEST['wdts'])) {
+      if (isset($_REQUEST['wdts']['_nonce'])) {
+        if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
+          $this->handle_update($_REQUEST['wdts']);
         }
       } 
     }
@@ -43,15 +45,33 @@ class WhatDidTheySayAdmin {
     update_option('what-did-they-say-options', $options);
   }
 
+  function admin_notices() {
+    if (!empty($this->notices)) {
+      echo '<div class="updated fade">';
+        echo implode("<br />", $this->notices);
+      echo '</div>'; 
+    }
+  }
+
+  function handle_update($info) {
+    $result = $this->handle_update_languages($info); 
+    if (!empty($result)) {
+      $this->notices[] = $result;
+    }
+  }
+
   function handle_update_languages($language_info) {
     $options = get_option('what-did-they-say-options');
+    $updated = false;
     switch ($language_info['action']) {
       case "delete":
+        $updated = sprintf(__('%s deleted.', 'what-did-they-say'), $options['languages'][$language_info['code']]['name']);
         unset($options['languages'][$language_info['code']]);
         break;
       case "add":
         if (isset($this->all_languages[$language_info['code']])) {
           $options['languages'][$language_info['code']] = array('name' => $this->all_languages[$language_info['code']]);
+          $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$language_info['code']]);
         }
         break;
       case "default":
@@ -59,6 +79,7 @@ class WhatDidTheySayAdmin {
           foreach ($options['languages'] as $code => $info) {
             if ($code == $language_info['code']) {
               $options['languages'][$code]['default'] = true;
+              $updated = sprintf(__('%s set as default.', 'what-did-they-say'), $info['name']);
             } else {
               unset($options['languages'][$code]['default']);
             }
@@ -68,12 +89,14 @@ class WhatDidTheySayAdmin {
       case "rename":
         if (isset($options['languages'][$language_info['code']])) {
           if (!empty($language_info['name'])) {
+            $updated = sprintf(__('%1$s renamed to %2$s.', 'what-did-they-say'), $options['languages'][$language_info['code']]['name'], $language_info['name']);
             $options['languages'][$language_info['code']]['name'] = $language_info['name'];
           }
         }
         break;
     }
     update_option('what-did-they-say-options', $options);
+    return $updated;
   }
   
   function handle_update_allowed_users($users) {
@@ -184,8 +207,10 @@ class WhatDidTheySayAdmin {
     }
 
     $nonce = wp_create_nonce('what-did-they-say');
-
-    $nonce_url = add_query_arg('wdts[_nonce]', $nonce);
+    
+    $url = 'edit-comments.php?page=manage-transcriptions-wdts';
+    
+    $nonce_url = add_query_arg('wdts[_nonce]', $nonce, $url);
     
     include(dirname(__FILE__) . '/admin.inc');
   }
@@ -194,10 +219,6 @@ class WhatDidTheySayAdmin {
     global $post;
     
     var_dump($post->ID);
-  }
-  
-  function handle_update($info) {
-    
   }
 }
 

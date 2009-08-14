@@ -1,9 +1,9 @@
 <div class="wrap">
-  <h2>Manage Transcripts</h2>
+  <h2><?php _e('Manage Transcripts', 'what-did-they-sahy') ?></h2>
   
-  <h3>Queued Transcripts</h3>
+  <h3><?php _e('Queued Transcripts', 'what-did-they-say') ?></h3>
   
-  <h3>Languages</h3>
+  <h3><?php _e('Languages', 'what-did-they-say') ?></h3>
 
   <ul id="language-holder">
     <?php foreach ($options['languages'] as $code => $info) {
@@ -13,9 +13,10 @@
       <li>
         <strong>
           <?php echo $name ?>
-          <?php if ($
+          <?php if ($default) { _e('(default)', 'what-did-they-say'); } ?>
         </strong>
-        | <a class="verify" href="<?php echo add_query_arg(array('wdts[code]' => $code, 'wdts[action]' => 'delete'), $nonce_url) ?>">Delete</a>
+        | <a href="<?php echo add_query_arg(array('wdts[code]' => $code, 'wdts[action]' => 'default'), $nonce_url) ?>"><?php _e('Default', 'what-did-they-say') ?></a>
+        | <a class="verify" href="<?php echo add_query_arg(array('wdts[code]' => $code, 'wdts[action]' => 'delete'), $nonce_url) ?>"><?php _e('Delete', 'what-did-they-say') ?></a>
       </li>
     <?php } ?>
   </ul>
@@ -28,7 +29,7 @@
 
   $$('a.verify').each(function(a) {
     Event.observe(a, 'click', function(e) {
-      if (!confirm("You are about to delete this language from the available list. Continue?")) {
+      if (!confirm("<?php _e('You are about to delete this language from the available list. Continue?', 'what-did-they-say') ?>")) {
         Event.stop(e);
       }
     });
