@@ -70,6 +70,7 @@ class WhatDidTheySayAdmin {
         unset($options['languages'][$language_info['code']]);
         break;
       case "add":
+        $this->read_language_file();
         if (isset($this->all_languages[$language_info['code']])) {
           $options['languages'][$language_info['code']] = array('name' => $this->all_languages[$language_info['code']]);
           $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$language_info['code']]);
@@ -96,6 +97,7 @@ class WhatDidTheySayAdmin {
         }
         break;
     }
+    ksort($options['languages']);
     update_option('what-did-they-say-options', $options);
     return $updated;
   }
@@ -195,17 +197,6 @@ class WhatDidTheySayAdmin {
   
   function manage_transcriptions_admin() {
     $options = get_option('what-did-they-say-options');
-
-    $language_map_pairs = array();
-    $basic_languages = $all_languages = array();
-    foreach ($this->all_languages as $code => $name) {
-      $name = addslashes($name);
-      $language_map_pairs[] = "'${code}': '${name}'";
-      $all_languages[] = "'$code'";
-      if (strlen($code) == 2) {
-        $basic_languages[] = "'$code'";
-      }
-    }
 
     $nonce = wp_create_nonce('what-did-they-say');
     

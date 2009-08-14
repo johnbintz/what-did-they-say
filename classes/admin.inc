@@ -52,6 +52,22 @@
         </td>
       </tr>
     <?php } ?>
+    <tr>
+      <th scope="row"><?php _e('Add new:', 'what-did-they-say') ?></th>
+      <td colspan="4">
+        <form method="post">
+          <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
+          <input type="hidden" name="wdts[action]" value="add" />
+          <select name="wdts[code]">
+            <option value="">-- select --</option>
+            <?php foreach ($this->all_languages as $code => $language) { ?>
+              <option value="<?php echo $code ?>"><?php echo $language ?></option>
+            <?php } ?>
+          </select>
+          <input type="submit" value="<?php _e('Add New Language', 'what-did-they-say') ?>" class="button" />
+        </form>
+      </td>
+    </tr>
   </table>
   
   <h3><?php _e('Authorized Users', 'what-did-they-say') ?></h3>
@@ -65,11 +81,6 @@
   </ul>
 </div>
 <script type="text/javascript">
-  var basic_languages = [ <?php echo implode(",", $basic_languages) ?> ];
-  var all_languages = [ <?php echo implode(",", $all_languages) ?> ];
-
-  var language_map = { <?php echo implode(",\n", $language_map_pairs) ?> };
-
   $$('form.verify').each(function(f) {
     Event.observe(f, 'submit', function(e) {
       if (!confirm("<?php _e('You are about to delete this language from the available list. Continue?', 'what-did-they-say') ?>")) {
