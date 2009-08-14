@@ -31,6 +31,7 @@ class WhatDidTheySayAdmin {
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
+    
           $this->handle_update($_REQUEST['wdts']);
         }
       } 
