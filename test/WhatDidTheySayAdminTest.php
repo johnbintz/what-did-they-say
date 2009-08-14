@@ -32,6 +32,11 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
         array('code' => 'de', 'action' => 'default'),
         array('en' => array('name' => 'English'), 'de' => array('name' => 'German', 'default' => true)),
       ),
+      array(
+        array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
+        array('code' => 'de', 'action' => 'rename', 'name' => 'Deutsch'),
+        array('en' => array('name' => 'English'), 'de' => array('name' => 'Deutsch')),
+      ),
     );
   }
 

@@ -65,6 +65,13 @@ class WhatDidTheySayAdmin {
           }
         }
         break;
+      case "rename":
+        if (isset($options['languages'][$language_info['code']])) {
+          if (!empty($language_info['name'])) {
+            $options['languages'][$language_info['code']]['name'] = $language_info['name'];
+          }
+        }
+        break;
     }
     update_option('what-did-they-say-options', $options);
   }
