@@ -73,9 +73,11 @@ class WhatDidTheySayAdmin {
   }
 
   function handle_update($info) {
-    $result = $this->handle_update_languages($info); 
-    if (!empty($result)) {
-      $this->notices[] = $result;
+    foreach (array(
+      'languages', 'capabilities'
+    ) as $method) {
+      $result = $this->{"handle_update_${method}"}($info);
+      if (!empty($result)) { $this->notices[] = $result; }
     }
   }
 
@@ -120,26 +122,23 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
   
-  function handle_update_allowed_users($users) {
-    $allowed_users = array();
-    foreach ($users as $user) {
-      if (is_numeric($user)) {
-        $user_info = get_userdata($user);
-        if (!empty($user_info)) {
-          $allowed_users[] = $user;
-        }
-      }
-    }
-
-    $this->_update_options('allowed_users', $allowed_users);
-  }
-  
-  function handle_update_capabilities($capabilities) {
+  function handle_update_capabilities($capabilities_info) {
     $options = get_option('what-did-they-say-options');
     $updated = false;
-    switch ($language_info['action']) {
+    switch ($capabilities_info['action']) {
       case "capabilities":
-    }    
+        if (isset($capabilities_info['capabilities'])) {
+          foreach (array_keys($this->default_options['capabilities']) as $capability) {
+            if (isset($capabilities_info['capabilities'][$capability])) {
+              $options['capabilities'][$capability] = $capabilities_info['capabilities'][$capability];
+            }
+          }
+          $updated = __('User capabilities updated', 'what-did-they-say');
+        }
+        break;
+    }
+    update_option('what-did-they-say-options', $options);
+    return $updated;
   }
 
   function handle_update_options($requested_options) {

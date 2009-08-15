@@ -59,17 +59,6 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($expected_results, $options['languages']);
   }
 
-  function testHandleUpdateAllowedUsers() {
-    $admin = new WhatDidTheySayAdmin();
-
-    wp_insert_user((object)array('ID' => 1));
-    
-    $admin->handle_update_allowed_users(array(1, 2));
-
-    $options = get_option('what-did-they-say-options');
-    $this->assertEquals(array(1), $options['allowed_users']);
-  }
-
   function testHandleUpdateOptions() {
     $admin = new WhatDidTheySayAdmin();
 
@@ -105,6 +94,27 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
         'de' => array('name' => 'German', 'default' => true),
       ), $admin->build_default_languages()
     );
+  }
+
+  function testHandleUpdateCapabilities() {
+    $admin = new WhatDidTheySayAdmin();
+    update_option('what-did-they-say-options', $admin->default_options);
+
+    $admin->handle_update_capabilities(array(
+      'action' => 'capabilities',
+      'capabilities' => array(
+        'submit_transcription' => 'contributor',
+        'approve_transcription' => 'subscriber',
+        'change_languages' => 'reader'
+      )
+    ));
+
+    $result = get_option('what-did-they-say-options');
+    $this->assertEquals(array(
+      'submit_transcription' => 'contributor',
+      'approve_transcription' => 'subscriber',
+      'change_languages' => 'reader'
+    ), $result['capabilities']);
   }
 }
 
