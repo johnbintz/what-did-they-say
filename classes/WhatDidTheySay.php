@@ -51,6 +51,10 @@ class WhatDidTheySay {
       return false;
     }
   }
+
+  function get_transcripts($post_id) {
+    return get_post_meta($post_id, 'provided_transcripts', true);
+  }
   
   /**
    * Get the languages that the approved transcripts for the post are written in.

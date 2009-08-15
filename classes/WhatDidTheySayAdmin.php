@@ -24,13 +24,12 @@ class WhatDidTheySayAdmin {
   var $all_languages = array();
   var $notices = array();
   
-  function WhatDidTheySayAdmin() {
+  function WhatDidTheySayAdmin($what_did_they_say = null) {
+    $this->what_did_they_say = $what_did_they_say;
     $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
   }
   
-  function init($what_did_they_say) {
-    $this->what_did_they_say = $what_did_they_say;
-    
+  function init() {
     $this->capabilities = array(
       'submit_transcriptions'  => __('Submit transcriptions to a post', 'what-did-they-say'),
       'approve_transcriptions' => __('Approve transcriptions to a post', 'what-did-they-say'),
@@ -241,9 +240,7 @@ class WhatDidTheySayAdmin {
   
   function manage_admin() {
     $options = get_option('what-did-they-say-options');
-
     $nonce = wp_create_nonce('what-did-they-say');
-    
     include(dirname(__FILE__) . '/admin.inc');
   }
   
@@ -251,8 +248,9 @@ class WhatDidTheySayAdmin {
     global $post;
 
     $options = get_option('what-did-they-say-options');
-
-    var_dump($post->ID);
+    $transcripts = $this->what_did_they_say->get_transcripts($post->ID);
+    $nonce = wp_create_nonce('what-did-they-say');
+    include(dirname(__FILE__) . '/meta-box.inc');
   }
 }
 

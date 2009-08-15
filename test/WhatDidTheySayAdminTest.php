@@ -103,16 +103,16 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     $admin->handle_update_capabilities(array(
       'action' => 'capabilities',
       'capabilities' => array(
-        'submit_transcription' => 'contributor',
-        'approve_transcription' => 'subscriber',
+        'submit_transcriptions' => 'contributor',
+        'approve_transcriptions' => 'subscriber',
         'change_languages' => 'reader'
       )
     ));
 
     $result = get_option('what-did-they-say-options');
     $this->assertEquals(array(
-      'submit_transcription' => 'contributor',
-      'approve_transcription' => 'subscriber',
+      'submit_transcriptions' => 'contributor',
+      'approve_transcriptions' => 'subscriber',
       'change_languages' => 'reader'
     ), $result['capabilities']);
   }
