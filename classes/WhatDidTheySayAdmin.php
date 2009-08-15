@@ -10,8 +10,15 @@ class WhatDidTheySayAdmin {
       'de'
     ),
     'only_allowed_users' => false,
-    'users' => array()
+    'users' => array(),
+    'capabilities' => array(
+      'submit_transcription' => 'administrator',
+      'approve_transcription' => 'administrator',
+      'change_languages' => 'administrator'
+    )
   );
+  
+  var $capabilities = array();
   
   var $language_file;
   var $all_languages = array();
@@ -24,8 +31,19 @@ class WhatDidTheySayAdmin {
   function init($what_did_they_say) {
     $this->what_did_they_say = $what_did_they_say;
     
+    $this->capabilities = array(
+      'submit_transcription'  => __('Submit transcriptions to a post', 'what-did-they-say'),
+      'approve_transcription' => __('Approve transcriptions to a post', 'what-did-they-say'),
+      'change_languages'      => __('Change the available languages', 'what-did-they-say')
+    );
+    
     add_action('admin_menu', array(&$this, 'admin_menu'));
     add_action('admin_notices', array(&$this, 'admin_notices'));
+    
+    if (current_user_can('edit_users')) {
+      add_action('edit_user_profile', array(&$this, 'edit_user_profile'));
+      add_action('show_user_profile', array(&$this, 'edit_user_profile'));
+    }
     wp_enqueue_script('prototype');
     
     if (isset($_REQUEST['wdts'])) {
@@ -115,6 +133,14 @@ class WhatDidTheySayAdmin {
 
     $this->_update_options('allowed_users', $allowed_users);
   }
+  
+  function handle_update_capabilities($capabilities) {
+    $options = get_option('what-did-they-say-options');
+    $updated = false;
+    switch ($language_info['action']) {
+      case "capabilities":
+    }    
+  }
 
   function handle_update_options($requested_options) {
     $updated_options = array(
@@ -200,10 +226,6 @@ class WhatDidTheySayAdmin {
 
     $nonce = wp_create_nonce('what-did-they-say');
     
-    $url = 'edit-comments.php?page=manage-transcriptions-wdts';
-    
-    $nonce_url = add_query_arg('wdts[_nonce]', $nonce, $url);
-    
     include(dirname(__FILE__) . '/admin.inc');
   }
   
@@ -211,6 +233,23 @@ class WhatDidTheySayAdmin {
     global $post;
     
     var_dump($post->ID);
+  }
+  
+  function edit_user_profile($user) {
+    $options = get_option('what-did-they-say-options');
+
+    if ($options['only_allowed_users']) {
+      $nonce = wp_create_nonce('what-did-they-say');
+      $active = in_array($user->ID, $options['allowed_users']); ?>
+      <h3><?php _e('Transcription Roles', 'whay-did-they-say') ?></h3>
+      
+      <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
+      <input type="hidden" name="wdts[action]" value="change-active" />
+      <div>
+        <input type="checkbox" name="wdts[active]" value="yes" <?php echo $active ? 'checked="checked"' : "" ?> /> <?php _e('Allow this user to submit and approve transcripts', 'what-did-they-say') ?>
+      </div>
+      <?php
+    }
   }
 }
 

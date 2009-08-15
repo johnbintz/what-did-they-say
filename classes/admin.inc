@@ -1,7 +1,36 @@
 <div class="wrap">
-  <h2><?php _e('Manage Transcripts', 'what-did-they-sahy') ?></h2>
+  <h2><?php _e('What Did They Say?!? Settings', 'what-did-they-sahy') ?></h2>
   
-  <h3><?php _e('Queued Transcripts', 'what-did-they-say') ?></h3>
+  <?php if (current_user_can('edit_users')) { ?>
+    <form method="post">
+      <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
+      <input type="hidden" name="wdts[action]" value="capabilities" />
+      <h3><?php _e('Capabilities', 'what-did-they-say') ?></h3>
+      
+      <table class="widefat fixed">
+        <tr class="thead">
+          <th scope="col" class="manage-col"><?php _e('Capability', 'what-did-they-say') ?></th>
+          <th scope="col" class="manage-col"><?php _e('Role Needed', 'what-did-they-say') ?></th>        
+        </tr>
+        <?php foreach ($this->capabilities as $key => $label) { ?>
+          <tr>
+            <th scope="col"><?php echo $label ?></th>
+            <td>
+              <select name="wdts[capabilities][<?php echo $key ?>]">
+                <?php wp_dropdown_roles($options['capabilities'][$key]) ?>
+              </select>
+            </td>
+          </tr>
+        <?php } ?>
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+            <input class="button" type="submit" value="<?php _e('Change capabilities', 'what-did-they-say') ?>" />          
+          </td>
+        </tr>
+      </table>      
+    </form>
+  <?php } ?>
   
   <h3><?php _e('Languages', 'what-did-they-say') ?></h3>
 
@@ -68,17 +97,7 @@
         </form>
       </td>
     </tr>
-  </table>
-  
-  <h3><?php _e('Authorized Users', 'what-did-they-say') ?></h3>
-  
-  <ul>
-    <?php foreach (get_users_of_blog() as $user) { ?>
-      <li>
-        <strong><?php echo $user->display_name ?></strong>
-      </li>
-    <?php } ?>
-  </ul>
+  </table>  
 </div>
 <script type="text/javascript">
   $$('form.verify').each(function(f) {
