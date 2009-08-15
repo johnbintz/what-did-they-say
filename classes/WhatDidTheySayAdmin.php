@@ -199,13 +199,12 @@ class WhatDidTheySayAdmin {
   }
 
   function admin_menu() {
-    add_submenu_page(
-      'edit-comments.php',
-      __('Manage Transcriptions', 'what-did-they-say'),
-      __('Transcripts', 'what-did-they-say'),
-      'edit_posts',
-      'manage-transcriptions-wdts',
-      array(&$this, 'manage_transcriptions_admin')
+    add_options_page(
+      __('What Did They Say?!? Settings', 'what-did-they-say'),
+      __('What Did They Say?!?', 'what-did-they-say'),
+      'manage_options',
+      'manage-wdts',
+      array(&$this, 'manage_admin')
     );
     
     if (current_user_can('edit_posts')) {
@@ -220,7 +219,7 @@ class WhatDidTheySayAdmin {
     }
   }
   
-  function manage_transcriptions_admin() {
+  function manage_admin() {
     $options = get_option('what-did-they-say-options');
 
     $nonce = wp_create_nonce('what-did-they-say');
