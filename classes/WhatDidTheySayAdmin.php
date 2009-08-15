@@ -12,8 +12,8 @@ class WhatDidTheySayAdmin {
     'only_allowed_users' => false,
     'users' => array(),
     'capabilities' => array(
-      'submit_transcription' => 'administrator',
-      'approve_transcription' => 'administrator',
+      'submit_transcriptions' => 'administrator',
+      'approve_transcriptions' => 'administrator',
       'change_languages' => 'administrator'
     )
   );
@@ -32,30 +32,48 @@ class WhatDidTheySayAdmin {
     $this->what_did_they_say = $what_did_they_say;
     
     $this->capabilities = array(
-      'submit_transcription'  => __('Submit transcriptions to a post', 'what-did-they-say'),
-      'approve_transcription' => __('Approve transcriptions to a post', 'what-did-they-say'),
+      'submit_transcriptions'  => __('Submit transcriptions to a post', 'what-did-they-say'),
+      'approve_transcriptions' => __('Approve transcriptions to a post', 'what-did-they-say'),
       'change_languages'      => __('Change the available languages', 'what-did-they-say')
     );
     
     add_action('admin_menu', array(&$this, 'admin_menu'));
     add_action('admin_notices', array(&$this, 'admin_notices'));
     
-    if (current_user_can('edit_users')) {
-      add_action('edit_user_profile', array(&$this, 'edit_user_profile'));
-      add_action('show_user_profile', array(&$this, 'edit_user_profile'));
-    }
     wp_enqueue_script('prototype');
+
+    add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
     
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
-    
           $this->handle_update($_REQUEST['wdts']);
         }
       } 
     }
 
     $this->read_language_file();
+  }
+
+  function user_has_cap($capabilities, $requested_capabilities, $capability_name) {
+    $options = get_option('what-did-they-say-options');
+
+    $role_cascade = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
+    $allowed_roles = array();
+    $capture_roles = false;
+
+    for ($i = 0; $i < count($role_cascade); ++$i) {
+      if (in_array($role_cascade, $capabilities)) { $capture_roles = true; }
+      if ($capture_roles) { $allowed_roles[] = $role_cascade[$i]; }
+    }
+
+    foreach ($requested_capabilities as $requested_capability) {
+      if (in_array($options['capabilities'][$requested_capability], $allowed_roles)) {
+        $capabilities[$requested_capability] = true;
+      }
+    }
+
+    return $capabilities;
   }
 
   function _update_options($which, $value) {
@@ -199,15 +217,17 @@ class WhatDidTheySayAdmin {
   }
 
   function admin_menu() {
-    add_options_page(
-      __('What Did They Say?!? Settings', 'what-did-they-say'),
-      __('What Did They Say?!?', 'what-did-they-say'),
-      'manage_options',
-      'manage-wdts',
-      array(&$this, 'manage_admin')
-    );
+    if (current_user_can('edit_users')) {
+      add_options_page(
+        __('What Did They Say?!? Settings', 'what-did-they-say'),
+        __('What Did They Say?!?', 'what-did-they-say'),
+        'manage_options',
+        'manage-wdts',
+        array(&$this, 'manage_admin')
+      );
+    }
     
-    if (current_user_can('edit_posts')) {
+    if (current_user_can('approve_transcriptions')) {
       add_meta_box(
         'manage-transcriptions',
         __('Manage Transcriptions', 'what-did-they-say'),
@@ -229,25 +249,10 @@ class WhatDidTheySayAdmin {
   
   function manage_transcriptions_meta_box() {
     global $post;
-    
-    var_dump($post->ID);
-  }
-  
-  function edit_user_profile($user) {
+
     $options = get_option('what-did-they-say-options');
 
-    if ($options['only_allowed_users']) {
-      $nonce = wp_create_nonce('what-did-they-say');
-      $active = in_array($user->ID, $options['allowed_users']); ?>
-      <h3><?php _e('Transcription Roles', 'whay-did-they-say') ?></h3>
-      
-      <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
-      <input type="hidden" name="wdts[action]" value="change-active" />
-      <div>
-        <input type="checkbox" name="wdts[active]" value="yes" <?php echo $active ? 'checked="checked"' : "" ?> /> <?php _e('Allow this user to submit and approve transcripts', 'what-did-they-say') ?>
-      </div>
-      <?php
-    }
+    var_dump($post->ID);
   }
 }
 
