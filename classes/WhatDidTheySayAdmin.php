@@ -48,6 +48,8 @@ class WhatDidTheySayAdmin {
     add_filter('the_media_transcript', array(&$this, 'the_media_transcript'));
     add_filter('the_language_name', array(&$this, 'the_language_name'));
     
+    add_filter('wp_footer', array(&$this, 'wp_footer'));
+    
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
@@ -66,7 +68,25 @@ class WhatDidTheySayAdmin {
   function the_language_name($language) {
     return '<h3>' . $language . '</h3>'; 
   }
-
+  
+  function wp_footer() { ?>
+    <script type="text/javascript">
+      $$('.transcript-bundle').each(function(d) {
+        var select = d.select("select");
+        if (select.length == 1) {
+          select = select[0];
+          var toggle_transcripts = function() {
+            d.select(".transcript-holder").each(function(div) {              
+              div.hasClassName($F(select)) ? div.show() : div.hide();
+            }); 
+          };
+          Event.observe(select, 'change', toggle_transcripts);
+          Event.observe(window, 'load', toggle_transcripts)
+        }
+      });
+    </script>
+  <?php }
+  
   /**
    * user_has_cap filter.
    */

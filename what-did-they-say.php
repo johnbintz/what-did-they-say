@@ -63,4 +63,53 @@ function the_language_name($language = null) {
   echo $name; 
 }
 
+function the_media_transcript_select_and_display($dropdown_message = null, $single_language_message = null) {
+  global $post, $what_did_they_say;
+  
+  if (is_null($dropdown_message)) { $dropdown_message = __('Select a language:', 'what-did-they-say'); }
+  if (is_null($single_language_message)) { $single_language_message = __('%s transcript:', 'what-did-they-say'); }
+  
+  $transcripts = array();
+  foreach ($what_did_they_say->get_transcripts($post->ID) as $code => $transcript) {
+    $transcript = trim($transcript);
+    if (!empty($transcript)) {
+      $transcripts[$code] = $transcript; 
+    }
+  }
+  
+  if (count($transcripts) > 0) {
+    $default_language = $what_did_they_say->get_default_language();
+    
+    $output = array();
+    $output[] = '<div class="transcript-bundle">';
+    
+    if (count($transcripts) == 1) {
+      list($code, $transcript) = each($transcripts);
+      $output[] = apply_filters('the_language_name', get_the_language_name($code));
+      $output[] = apply_filters('the_media_transcript', $transcript);
+    } else {    
+      $output[] = $dropdown_message;
+      $output[] = '<select>';
+        foreach($transcripts as $code => $transcript) {
+          $output[] = '<option value="' . $code . '"' . (($code == $default_language) ? ' selected="selected"' : '') . '>'
+                    . get_the_language_name($code)
+                    . '</option>';
+        }
+      $output[] = '</select>';
+      foreach ($transcripts as $code => $transcript) {
+        $language_name = apply_filters('the_language_name', get_the_language_name($code));
+        $transcript    = apply_filters('the_media_transcript', $transcript);
+        
+        $output[] = '<div '
+                  . (($code == $default_language) ? 'style="display:none"' : '')
+                  . ' class="transcript-holder ' . $code . '">' . $language_name . $transcript . '</div>';
+      }
+    }
+    $output[] = '</div>';
+    
+    $output = apply_filters('the_media_transcript_select_and_display', implode("\n", $output));
+    echo $output;
+  }
+}
+
 ?>
