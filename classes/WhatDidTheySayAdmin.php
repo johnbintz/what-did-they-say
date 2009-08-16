@@ -45,6 +45,8 @@ class WhatDidTheySayAdmin {
     wp_enqueue_script('prototype');
 
     add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
+    add_filter('the_media_transcript', array(&$this, 'the_media_transcript'));
+    add_filter('the_language_name', array(&$this, 'the_language_name'));
     
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
@@ -55,6 +57,14 @@ class WhatDidTheySayAdmin {
     }
 
     $this->read_language_file();
+  }
+
+  function the_media_transcript($transcript) {
+    return '<div class="transcript">' . $transcript . '</div>'; 
+  }
+  
+  function the_language_name($language) {
+    return '<h3>' . $language . '</h3>'; 
   }
 
   /**
