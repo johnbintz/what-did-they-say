@@ -158,23 +158,6 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
 
-  function handle_update_options($requested_options) {
-    $updated_options = array(
-      'only_allowed_users' => false
-    );
-
-    foreach ($requested_options as $option => $value) {
-      switch ($option) {
-        case 'only_allowed_users':
-          $updated_options['only_allowed_users'] = true;
-          break;
-      }
-    }
-
-    $options = array_merge(get_option('what-did-they-say-options'), $updated_options);
-    update_option('what-did-they-say-options', $options);
-  }
-
   function read_language_file() {
     if (file_exists($this->language_file)) {
       foreach (file($this->language_file, FILE_IGNORE_NEW_LINES) as $language) {
