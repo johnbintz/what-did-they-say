@@ -33,4 +33,34 @@ add_action('init', array(&$what_did_they_say_admin, 'init'));
 register_activation_hook(__FILE__, array(&$what_did_they_say, 'install'));
 register_activation_hook(__FILE__, array(&$what_did_they_say_admin, 'install'));
 
+function get_the_media_transcript($language = null) {
+  global $post, $what_did_they_say;
+  
+  if (is_null($language)) { $language = $what_did_they_say->get_default_language(); }
+  
+  $transcript = false;
+  $transcripts = $what_did_they_say->get_transcripts($post->ID);
+  if (!empty($transcripts)) {
+    if (isset($transcripts[$language])) { $transcript = $transcripts[$language]; }
+  }
+  return $transcript;
+}
+
+function the_media_transcript($language = null) {
+  $transcript = apply_filters('the_media_transcript', get_the_media_transcript());
+  echo $transcript;
+}
+
+function get_the_language_name($language = null) {
+  global $what_did_they_say;
+  
+  if (is_null($language)) { $language = $what_did_they_say->get_default_language(); }  
+  return $what_did_they_say->get_language_name($language);
+}
+
+function the_language_name($language = null) {
+  $name = apply_filters('the_language_name', get_the_language_name($language));
+  echo $name; 
+}
+
 ?>
