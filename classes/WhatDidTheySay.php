@@ -251,6 +251,12 @@ class WhatDidTheySay {
       return false; 
     }
   }
+  
+  function get_languages() {
+    $options = get_option('what-did-they-say-options');
+
+    return $options['languages'];
+  }
 }
 
 ?>

@@ -133,6 +133,21 @@ class WhatDidTheySayAdmin {
       } 
     }
   }
+  
+  function handle_update_queue_transcript($queue_transcript_info) {
+    $updated = false;
+    if (current_user_can('submit_transcriptions')) {
+      var_dump($queue_transcript_info);
+      switch ($queue_transcript_info['action']) {
+        case 'submit_queued_transcript':
+          $result = $this->what_did_they_say->add_queued_transcription_to_post($queue_transcript_info['post_id'], $queue_transcript_info);
+          if ($result) {
+            $updated = __('Transcript added to queue.', 'what-did-they-say'); 
+          }
+      }
+    } 
+    return $updated;
+  }
 
   function handle_update_post_transcripts($post_transcript_info) {
     $updated = false;
