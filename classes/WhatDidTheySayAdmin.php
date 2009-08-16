@@ -90,11 +90,11 @@ class WhatDidTheySayAdmin {
   }
 
   function handle_update($info) {
-    foreach (array(
-      'languages', 'capabilities'
-    ) as $method) {
-      $result = $this->{"handle_update_${method}"}($info);
-      if (!empty($result)) { $this->notices[] = $result; }
+    foreach (get_class_methods($this) as $method) {
+      if (strpos($method, "handle_update_") === 0) {
+        $result = $this->{$method}($info);
+        if (!empty($result)) { $this->notices[] = $result; }
+      } 
     }
   }
 
