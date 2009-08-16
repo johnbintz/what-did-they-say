@@ -1,5 +1,6 @@
-<iuput type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
-<iuput type="hidden" name="wdts[action]" value="manage_post_transcripts" />
+<input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
+<input type="hidden" name="wdts[action]" value="manage_post_transcripts" />
+<input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 <p>
   <label>
     Edit transcript for:
