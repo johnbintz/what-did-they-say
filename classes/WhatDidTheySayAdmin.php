@@ -29,6 +29,9 @@ class WhatDidTheySayAdmin {
     $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
   }
   
+  /**
+   * Initialize the object.
+   */
   function init() {
     $this->capabilities = array(
       'submit_transcriptions'  => __('Submit transcriptions to a post', 'what-did-they-say'),
@@ -54,6 +57,9 @@ class WhatDidTheySayAdmin {
     $this->read_language_file();
   }
 
+  /**
+   * user_has_cap filter.
+   */
   function user_has_cap($capabilities, $requested_capabilities, $capability_name) {
     $options = get_option('what-did-they-say-options');
 
@@ -75,12 +81,9 @@ class WhatDidTheySayAdmin {
     return $capabilities;
   }
 
-  function _update_options($which, $value) {
-    $options = get_option('what-did-they-say-options');
-    $options[$which] = $value;
-    update_option('what-did-they-say-options', $options);
-  }
-
+  /**
+   * Show admin notices.
+   */
   function admin_notices() {
     if (!empty($this->notices)) {
       echo '<div class="updated fade">';
@@ -89,6 +92,9 @@ class WhatDidTheySayAdmin {
     }
   }
 
+  /**
+   * Handle an update to options.
+   */
   function handle_update($info) {
     foreach (get_class_methods($this) as $method) {
       if (strpos($method, "handle_update_") === 0) {
