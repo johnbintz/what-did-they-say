@@ -114,4 +114,30 @@ function transcripts_display($dropdown_message = null, $single_language_message 
   echo apply_filters('transcripts_display', implode("\n", $output));
 }
 
+function the_media_transcript_queue_editor() {
+  global $post, $what_did_they_say;
+  
+  if (current_user_can('submit_transcriptions')) { ?>
+    <form method="post">
+      <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
+      <input type="hidden" name="wdts[action]" value="submit_queued_transcript" />
+      <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
+      <h3><?php _e('Submit a new transcription:', 'what-did-they-say') ?></h3>
+      <label>
+        <?php _e('Language:', 'what-did-they-say') ?>
+        <select name="wdts[language]">
+          <?php foreach ($what_did_they_say->get_languages() as $code => $info) { ?>
+            <option value="<?php echo $code ?>"><?php echo $info['name'] ?></option>
+          <?php } ?>
+        </select>
+      </label><br />
+      <label>
+        <?php _e('Transcription:', 'what-did-they-say') ?><br />
+        <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
+      </label>
+      <input type="submit" value="<?php _e('Submit New Transcription', 'what-did-they-say') ?>" />        
+    </form>
+  <?php }
+}
+
 ?>
