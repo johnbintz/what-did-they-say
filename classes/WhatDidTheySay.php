@@ -7,13 +7,19 @@
  */
 class WhatDidTheySay {
   var $version = "0.1";
-  
+
+  /**
+   * Constructor.
+   */
   function WhatDidTheySay() {
     global $wpdb;
     
     $this->table =  $wpdb->prefix . "provided_transcripts";
   }
-  
+
+  /**
+   * Handle plugin activation.
+   */
   function install() {
     if (get_option('what-did-they-say-version') !== $this->version) {
       $sql = "CREATE TABLE %s (
@@ -52,6 +58,11 @@ class WhatDidTheySay {
     }
   }
 
+  /**
+   * Get all transcripts for the indicated post.
+   * @param int $post_id The post ID to search.
+   * @return array|false The provided transcripts for the post, or false if no transcripts found.
+   */
   function get_transcripts($post_id) {
     return get_post_meta($post_id, 'provided_transcripts', true);
   }
@@ -176,7 +187,11 @@ class WhatDidTheySay {
     }
     return false;
   }
-  
+
+  /**
+   * Add a queued transcription to its associated post.
+   * @param int $transcription_id The transcription ID to approve.
+   */
   function add_transcription_to_post($transcription_id) {
     global $wpdb;
     
@@ -197,6 +212,12 @@ class WhatDidTheySay {
     } 
   }
 
+  /**
+   * Get all the queued transcriptions for a particular user and post.
+   * @param int $user_id The user ID to search for.
+   * @param int $post_id The post ID to search for.
+   * @return array|false The queued transcriptions for this user, or false if they don't have permissions to see queued transcriptions.
+   */
   function get_queued_transcriptions_for_user_and_post($user_id, $post_id) {
     global $wpdb;
 
@@ -206,7 +227,13 @@ class WhatDidTheySay {
     }
     return false;
   }
-  
+
+  /**
+   * Delete a transcript for a particular language from a post.
+   * @param int $post_id The post to search.
+   * @param string $language The language code to search for.
+   * @return boolean True if the transcript was deleted.
+   */
   function delete_transcript($post_id, $language) {
     if (current_user_can('approve_transcriptions')) {
       $post = get_post($post_id);
@@ -214,10 +241,16 @@ class WhatDidTheySay {
         $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
         unset($current_transcripts[$language]);
         update_post_meta($post_id, "provided_transcripts", $current_transcripts);
-      } 
+        return true;
+      }
     }
+    return false;
   }
-  
+
+  /**
+   * Get the default transcript language for this blog.
+   * @return string The language code representing the default language.
+   */
   function get_default_language() {
     $language = false;
     $options = get_option('what-did-they-say-options');
@@ -227,7 +260,12 @@ class WhatDidTheySay {
     }
     return $language;
   }
-  
+
+  /**
+   * Get the name of a language from the language code.
+   * @param string $language The language code to search for.
+   * @return string|false The name of the language as defined in the options, or false if the language was not found.
+   */
   function get_language_name($language) {
     $options = get_option('what-did-they-say-options');
 
@@ -237,19 +275,32 @@ class WhatDidTheySay {
       return false; 
     }
   }
-  
+
+  /**
+   * Get all available languages.
+   * @return array An array of languages.
+   */
   function get_languages() {
     $options = get_option('what-did-they-say-options');
 
     return $options['languages'];
   }
 
+  /**
+   * Set whether or not the indicated post can accept new queued transcriptions.
+   * @param int $post_id The post ID to affect.
+   * @param boolean $allow True if the post can accept new queued transcriptions.
+   */
   function set_allow_transcripts_for_post($post_id, $allow = true) {
     $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
     $current_transcripts['_allow'] = $allow;
     update_post_meta($post_id, "provided_transcripts", $current_transcripts);
   }
 
+  /**
+   * See if the indicated post is accepting new transcripts.
+   * @return boolean True if the post is acceptin new transcripts.
+   */
   function get_allow_transcripts_for_post($post_id) {
     $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
     return $current_transcripts['_allow'];

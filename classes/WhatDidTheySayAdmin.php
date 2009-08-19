@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Administrative functions for What Did They Say?!?
+ */
 class WhatDidTheySayAdmin {
   var $default_options = array(
     'languages' => array(
@@ -23,7 +26,11 @@ class WhatDidTheySayAdmin {
   var $language_file;
   var $all_languages = array();
   var $notices = array();
-  
+
+  /**
+   * Initialize the admin interface.
+   * @param WhatDidTheySay $what_did_they_say The WhatDidTheySay object to use for all transcript transactions.
+   */
   function WhatDidTheySayAdmin($what_did_they_say = null) {
     $this->what_did_they_say = $what_did_they_say;
     $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
@@ -62,18 +69,34 @@ class WhatDidTheySayAdmin {
     $this->read_language_file();
   }
 
+  /**
+   * Handle admin_init action.
+   */
   function admin_init() {
     wp_enqueue_script('scriptaculous-effects');
   }
 
+  /**
+   * Handle the_media_transcript filter.
+   * @param string $transcript The transcription text.
+   * @return string The processed transcription text.
+   */
   function the_media_transcript($transcript) {
     return '<div class="transcript">' . $transcript . '</div>'; 
   }
-  
+
+  /**
+   * Handle the_language_name filter.
+   * @param string $language The name of the language.
+   * @return string The processed language name.
+   */
   function the_language_name($language) {
-    return '<h3>' . $language . '</h3>'; 
+    return '<h3 class="transcript-language">' . $language . '</h3>';
   }
-  
+
+  /**
+   * Handle the wp_footer action.
+   */
   function wp_footer() { ?>
     <script type="text/javascript">
       $$('.transcript-bundle').each(function(d) {
@@ -93,7 +116,11 @@ class WhatDidTheySayAdmin {
   <?php }
   
   /**
-   * user_has_cap filter.
+   * Handle the user_has_cap filter.
+   * @param array $capabilities The capabilities the user already has.
+   * @param array $requested_capabilities The capabilities requested by current_user_can.
+   * @param object $capability_name
+   * @return array The list of capabilities this user now has.
    */
   function user_has_cap($capabilities, $requested_capabilities, $capability_name) {
     $options = get_option('what-did-they-say-options');
@@ -117,7 +144,7 @@ class WhatDidTheySayAdmin {
   }
 
   /**
-   * Show admin notices.
+   * Handle show_admin action.
    */
   function admin_notices() {
     if (!empty($this->notices)) {
@@ -129,6 +156,7 @@ class WhatDidTheySayAdmin {
 
   /**
    * Handle an update to options.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
    */
   function handle_update($info) {
     foreach (get_class_methods($this) as $method) {
@@ -138,14 +166,19 @@ class WhatDidTheySayAdmin {
       } 
     }
   }
-  
-  function handle_update_queue_transcript($queue_transcript_info) {
+
+  /**
+   * Handle updates to queued transcripts.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * @return string|false A string if a message is to be displayed, or false if no message.
+   */
+  function handle_update_queue_transcript($info) {
     $updated = false;
     if (current_user_can('submit_transcriptions')) {
-      if ($this->what_did_they_say->get_allow_transcripts_for_post($queue_transcript_info['post_id'])) {
-        switch ($queue_transcript_info['action']) {
+      if ($this->what_did_they_say->get_allow_transcripts_for_post($info['post_id'])) {
+        switch ($info['action']) {
           case 'submit_queued_transcript':
-            $result = $this->what_did_they_say->add_queued_transcription_to_post($queue_transcript_info['post_id'], $queue_transcript_info);
+            $result = $this->what_did_they_say->add_queued_transcription_to_post($info['post_id'], $info);
             if ($result) {
               $updated = __('Transcript added to queue.', 'what-did-they-say');
             }
@@ -155,27 +188,32 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
 
-  function handle_update_post_transcripts($post_transcript_info) {
+  /**
+   * Handle updates to post transcripts.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * @return string|false A string if a message is to be displayed, or false if no message.
+   */
+  function handle_update_post_transcripts($info) {
     $updated = false;
     if (current_user_can('approve_transcriptions')) {
       $options = get_option('what-did-they-say-options');
 
-      switch ($post_transcript_info['action']) {
+      switch ($info['action']) {
         case "manage_post_transcripts":
-          foreach ($post_transcript_info['transcripts'] as $language => $transcript) {
+          foreach ($info['transcripts'] as $language => $transcript) {
             switch ($language) {
               case "_allow":
                 $allow = true;
                 break;
               default:
-                $this->what_did_they_say->save_transcript($post_transcript_info['post_id'], $language, $transcript);
+                $this->what_did_they_say->save_transcript($info['post_id'], $language, $transcript);
                 break;
             }
           }
 
-          $this->what_did_they_say->set_allow_transcripts_for_post($post_transcript_info['post_id'], isset($post_transcript_info['allow_on_post']));
+          $this->what_did_they_say->set_allow_transcripts_for_post($info['post_id'], isset($info['allow_on_post']));
 
-          $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($post_transcript_info['post_id']);
+          $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($info['post_id']);
           if (is_array($queued_transcriptions)) {
             $transcriptions_to_delete = array();
 
@@ -196,28 +234,33 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
 
-  function handle_update_languages($language_info) {
+  /**
+   * Handle updates to languages.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * @return string|false A string if a message is to be displayed, or false if no message.
+   */
+  function handle_update_languages($info) {
     $updated = false;
     if (current_user_can('change_languages')) {
       $options = get_option('what-did-they-say-options');
-      switch ($language_info['action']) {
+      switch ($info['action']) {
         case "delete":
-          $updated = sprintf(__('%s deleted.', 'what-did-they-say'), $options['languages'][$language_info['code']]['name']);
-          unset($options['languages'][$language_info['code']]);
+          $updated = sprintf(__('%s deleted.', 'what-did-they-say'), $options['languages'][$info['code']]['name']);
+          unset($options['languages'][$info['code']]);
           break;
         case "add":
           $this->read_language_file();
-          if (isset($this->all_languages[$language_info['code']])) {
-            $options['languages'][$language_info['code']] = array('name' => $this->all_languages[$language_info['code']]);
-            $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$language_info['code']]);
+          if (isset($this->all_languages[$info['code']])) {
+            $options['languages'][$info['code']] = array('name' => $this->all_languages[$info['code']]);
+            $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$info['code']]);
           }
           break;
         case "default":
-          if (isset($options['languages'][$language_info['code']])) {
-            foreach ($options['languages'] as $code => $info) {
-              if ($code == $language_info['code']) {
+          if (isset($options['languages'][$info['code']])) {
+            foreach ($options['languages'] as $code => $lang_info) {
+              if ($code == $info['code']) {
                 $options['languages'][$code]['default'] = true;
-                $updated = sprintf(__('%s set as default.', 'what-did-they-say'), $info['name']);
+                $updated = sprintf(__('%s set as default.', 'what-did-they-say'), $lang_info['name']);
               } else {
                 unset($options['languages'][$code]['default']);
               }
@@ -225,10 +268,10 @@ class WhatDidTheySayAdmin {
           }
           break;
         case "rename":
-          if (isset($options['languages'][$language_info['code']])) {
-            if (!empty($language_info['name'])) {
-              $updated = sprintf(__('%1$s renamed to %2$s.', 'what-did-they-say'), $options['languages'][$language_info['code']]['name'], $language_info['name']);
-              $options['languages'][$language_info['code']]['name'] = $language_info['name'];
+          if (isset($options['languages'][$info['code']])) {
+            if (!empty($info['name'])) {
+              $updated = sprintf(__('%1$s renamed to %2$s.', 'what-did-they-say'), $options['languages'][$info['code']]['name'], $info['name']);
+              $options['languages'][$info['code']]['name'] = $info['name'];
             }
           }
           break;
@@ -237,20 +280,25 @@ class WhatDidTheySayAdmin {
         ksort($options['languages']);
         update_option('what-did-they-say-options', $options);
       }
-      }
+    }
     return $updated;
   }
-  
-  function handle_update_capabilities($capabilities_info) {
+
+  /**
+   * Handle updates to user capabilities.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * @return string|false A string if a message is to be displayed, or false if no message.
+   */
+  function handle_update_capabilities($info) {
     $updated = false;
     if (current_user_can('edit_users')) {
       $options = get_option('what-did-they-say-options');
-      switch ($capabilities_info['action']) {
+      switch ($info['action']) {
         case "capabilities":
-          if (isset($capabilities_info['capabilities'])) {
+          if (isset($info['capabilities'])) {
             foreach (array_keys($this->default_options['capabilities']) as $capability) {
-              if (isset($capabilities_info['capabilities'][$capability])) {
-                $options['capabilities'][$capability] = $capabilities_info['capabilities'][$capability];
+              if (isset($info['capabilities'][$capability])) {
+                $options['capabilities'][$capability] = $info['capabilities'][$capability];
               }
             }
             $updated = __('User capabilities updated', 'what-did-they-say');
@@ -264,6 +312,13 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
 
+  /**
+   * Read a data file containing all the known languages on Earth.
+   * The data originally came from http://www.langtag.net/, specifically http://www.langtag.net/registries/lsr-language.txt.
+   * The data file format is tab-delimited, with the following fields:
+   *   language_code date_added name_of_language additional_information
+   * @return array The list of all known languages on Earth as code => language.
+   */
   function read_language_file() {
     if (file_exists($this->language_file)) {
       foreach (file($this->language_file, FILE_IGNORE_NEW_LINES) as $language) {
@@ -274,6 +329,9 @@ class WhatDidTheySayAdmin {
     return $this->all_languages;
   }
 
+  /**
+   * Handle plugin installation.
+   */
   function install() {
     $this->read_language_file();
     $options = get_option('what-did-they-say-options');
@@ -283,6 +341,10 @@ class WhatDidTheySayAdmin {
     } 
   }
 
+  /**
+   * From $this->default_options, fill in the language details from the language file.
+   * @return array The language info will all details filled in.
+   */
   function build_default_languages() {
     $full_default_language_info = array();
     foreach ($this->default_options['languages'] as $info) {
@@ -304,6 +366,9 @@ class WhatDidTheySayAdmin {
     return $full_default_language_info;
   }
 
+  /**
+   * Handle admin_menu action.
+   */
   function admin_menu() {
     if (current_user_can('edit_users')) {
       add_options_page(
@@ -326,13 +391,19 @@ class WhatDidTheySayAdmin {
       );
     }
   }
-  
+
+  /**
+   * Show the admin page.
+   */
   function manage_admin() {
     $options = get_option('what-did-they-say-options');
     $nonce = wp_create_nonce('what-did-they-say');
     include(dirname(__FILE__) . '/admin.inc');
   }
-  
+
+  /**
+   * Show the Manage Transcriptions meta box.
+   */
   function manage_transcriptions_meta_box() {
     global $post;
 
