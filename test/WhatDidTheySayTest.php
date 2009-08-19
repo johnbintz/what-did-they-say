@@ -9,15 +9,14 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     global $wpdb;
     _reset_wp();
     $wpdb = null;
+    _set_user_capabilities('submit_transcriptions', 'approve_transcriptions');
   }
 
   function testSaveTranscription() {
     wp_insert_post(array('ID' => 1)); 
 
+
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-    $what->expects($this->any())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));
 
     $what->save_transcript(1, "en", "This is a transcript");
     $this->assertEquals(array("en" => "This is a transcript"), get_post_meta(1, "provided_transcripts", true));
@@ -45,9 +44,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     wp_insert_post(array('ID' => 1));
 
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-    $what->expects($this->any())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));
 
     $wpdb = $this->getMock('wpdb', array('get_results', 'prepare'));
     
@@ -125,9 +121,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
          ->will($this->returnValue($expected_query));    
 
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-    $what->expects($this->any())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));
 
     if ($expected_result === true) {
       $wpdb->expects($this->once())
@@ -144,37 +137,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
         'transcript' => "This is a transcript"
       )
     ));
-  }
-  
-  function providerTestIsUserAllowedToUpdate() {
-    return array(
-      array(
-        false, array(), array(), 1, false
-      ),
-      array(
-        false, array('edit_posts'), array(), 1, true
-      ),      
-      array(
-        true, array(), array(2), 1, false
-      ),
-      array(
-        true, array(), array(1), 1, true
-      ),
-    ); 
-  }
-  
-  /**
-   * @dataProvider providerTestIsUserAllowedToUpdate
-   */
-  function testIsUserAllowedToUpdate($only_allowed_users, $current_user_can, $allowed_users, $current_user_id, $expected_result) {
-    update_option('what-did-they-say-options', array('allowed_users' => $allowed_users, 'only_allowed_users' => $only_allowed_users)); 
-    _set_user_capabilities($current_user_can);
-    wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
-    wp_set_current_user($current_user_id);
-    
-    
-    $what = new WhatDidTheySay();
-    $this->assertEquals($expected_result, $what->is_user_allowed_to_update());
   }
   
   function providerTestUpdateQueuedTranscription() {
@@ -202,9 +164,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     global $wpdb;
 
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-    $what->expects($this->once())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));    
     
     $wpdb = $this->getMock('wpdb', array('prepare', 'get_results', 'query'));
 
@@ -242,9 +201,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     global $wpdb;
     
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-    $what->expects($this->once())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));
     
     $wpdb = $this->getMock('wpdb', array('prepare', 'get_var', 'query'));
     
@@ -275,9 +231,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     global $wpdb;
     
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update', 'save_transcript'));
-    $what->expects($this->once())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));
     
     wp_insert_post((object)array('ID' => 1));
     
@@ -301,9 +254,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
   
   function testDeleteTranscript() {
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-    $what->expects($this->once())
-         ->method('is_user_allowed_to_update')
-         ->will($this->returnValue(true));
 
     wp_insert_post((object)array('ID' => 1));
     update_post_meta(1, "provided_transcripts", array("en" => "This is a transcript"));

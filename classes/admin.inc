@@ -60,7 +60,7 @@
         <td>
           <?php if ($default) { _e('(yes)', 'what-did-they-say'); } ?>        
         </td>
-        <td>
+        <td style="vertical-align: inherit">
           <a class="rename button" href="#"><?php _e('Rename', 'what-did-they-say') ?></a>
         </td>
         <td>

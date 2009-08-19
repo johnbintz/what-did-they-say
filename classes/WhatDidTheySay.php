@@ -40,7 +40,7 @@ class WhatDidTheySay {
    * @return bool True if the transcript was saved, false otherwise.
    */
   function save_transcript($post_id, $language, $transcript) {
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('submit_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
         $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
@@ -77,7 +77,7 @@ class WhatDidTheySay {
   function get_queued_transcriptions_for_post($post_id) {
     global $wpdb;
     
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('submit_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
         $query = $wpdb->prepare('SELECT * FROM %s WHERE post_id = %d', $this->table, $post_id);
@@ -105,7 +105,7 @@ class WhatDidTheySay {
   function add_queued_transcription_to_post($post_id, $transcript_info) {
     global $wpdb;
     
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('approve_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
         $transcript_info = (array)$transcript_info;
@@ -132,23 +132,6 @@ class WhatDidTheySay {
     return false;
   }
   
-  function is_user_allowed_to_update() {
-    $options = get_option('what-did-they-say-options');
-    $user_info = wp_get_current_user();
-    
-    $ok = false;
-    if ($options['only_allowed_users']) {
-      $ok = in_array($user_info->ID, $options['allowed_users']);
-    } else {
-      $ok = true;
-      if (!current_user_can('edit_posts')) {
-        $ok = in_array($user_info->ID, $options['allowed_users']);
-      }
-    }
-    
-    return $ok;
-  }
-  
   /**
    * Update a queued transcript.
    * @param array $update_info The info on the transcript being updated.
@@ -157,7 +140,7 @@ class WhatDidTheySay {
   function update_queued_transcription($update_info) {
     global $wpdb;
 
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('submit_transcriptions')) {
       $query = $wpdb->prepare("SELECT * FROM %s WHERE id = %d", $this->table, $update_info['id']);
       $result = $wpdb->get_results($query);
       
@@ -187,7 +170,7 @@ class WhatDidTheySay {
   function delete_queued_transcription($transcription_id) {
     global $wpdb;
     
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('submit_transcriptions')) {
       $query = $wpdb->prepare("SELECT id FROM %s WHERE id = %d", $this->table, $transcription_id);
       if (!is_null($wpdb->get_var($query))) {
         $query = $wpdb->prepare("DELETE FROM %s WHERE id = %d", $this->table, $transcription_id);
@@ -202,7 +185,7 @@ class WhatDidTheySay {
   function add_transcription_to_post($transcription_id) {
     global $wpdb;
     
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('approve_transcriptions')) {
       $query = $wpdb->prepare("SELECT * from %s WHERE id = %d", $this->table, $transcription_id);
       $result = $wpdb->get_results($query);
       if (is_array($result)) {
@@ -222,7 +205,7 @@ class WhatDidTheySay {
   }
   
   function delete_transcript($post_id, $language) {
-    if ($this->is_user_allowed_to_update()) {
+    if (current_user_can('approve_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
         $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
