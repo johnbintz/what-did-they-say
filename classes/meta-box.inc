@@ -3,7 +3,13 @@
 <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 <p>
   <label>
-    Edit transcript for:
+    <input type="checkbox" name="wdts[allow_on_post]" value="yes" <?php echo ($transcripts['_allow']) ? 'checked="checked"' : '' ?> />
+    <?php _e('Allow new transcripts to be submitted for this post', 'what-did-they-say') ?>
+  </label>
+</p>
+<p>
+  <label>
+    <?php _e('Edit transcript for:', 'what-did-they-say') ?>
     <select name="wdts[language]" id="wdts-language">
       <?php foreach ($options['languages'] as $code => $info) { ?>
         <option value="<?php echo $code ?>" <?php echo $info['default'] ? 'selected="selected"' : '' ?>><?php echo $info['name'] ?></option>

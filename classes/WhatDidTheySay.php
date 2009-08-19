@@ -250,6 +250,17 @@ class WhatDidTheySay {
 
     return $options['languages'];
   }
+
+  function set_allow_transcripts_for_post($post_id, $allow = true) {
+    $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
+    $current_transcripts['_allow'] = $allow;
+    update_post_meta($post_id, "provided_transcripts", $current_transcripts);
+  }
+
+  function get_allow_transcripts_for_post($post_id) {
+    $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
+    return $current_transcripts['_allow'];
+  }
 }
 
 ?>

@@ -137,14 +137,16 @@ class WhatDidTheySayAdmin {
   function handle_update_queue_transcript($queue_transcript_info) {
     $updated = false;
     if (current_user_can('submit_transcriptions')) {
-      switch ($queue_transcript_info['action']) {
-        case 'submit_queued_transcript':
-          $result = $this->what_did_they_say->add_queued_transcription_to_post($queue_transcript_info['post_id'], $queue_transcript_info);
-          if ($result) {
-            $updated = __('Transcript added to queue.', 'what-did-they-say'); 
-          }
+      if ($what_did_they_say->get_allow_transcripts_for_post($queue_transcript_info['post_id'])) {
+        switch ($queue_transcript_info['action']) {
+          case 'submit_queued_transcript':
+            $result = $this->what_did_they_say->add_queued_transcription_to_post($queue_transcript_info['post_id'], $queue_transcript_info);
+            if ($result) {
+              $updated = __('Transcript added to queue.', 'what-did-they-say');
+            }
+        }
       }
-    } 
+    }
     return $updated;
   }
 
@@ -152,12 +154,20 @@ class WhatDidTheySayAdmin {
     $updated = false;
     if (current_user_can('approve_transcriptions')) {
       $options = get_option('what-did-they-say-options');
-  
+
       switch ($post_transcript_info['action']) {
         case "manage_post_transcripts":
           foreach ($post_transcript_info['transcripts'] as $language => $transcript) {
-            $this->what_did_they_say->save_transcript($post_transcript_info['post_id'], $language, $transcript);
+            switch ($language) {
+              case "_allow":
+                $allow = true;
+                break;
+              default:
+                $this->what_did_they_say->save_transcript($post_transcript_info['post_id'], $language, $transcript);
+                break;
+            }
           }
+          $this->what_did_they_say->set_allow_transcripts_for_post($post_transcript_info['post_id'], isset($post_transcript_info['allow_on_post']));
           $updated = __('Transcripts updated', 'what-did-they-say');
           break;
       }

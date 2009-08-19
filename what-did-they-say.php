@@ -75,9 +75,11 @@ function transcripts_display($dropdown_message = null, $single_language_message 
   $post_transcripts = $what_did_they_say->get_transcripts($post->ID);
   if (!empty($post_transcripts)) {
     foreach ($post_transcripts as $code => $transcript) {
-      $transcript = trim($transcript);
-      if (!empty($transcript)) {
-        $transcripts[$code] = $transcript;
+      if (substr($code, 0, 1) != "_") {
+        $transcript = trim($transcript);
+        if (!empty($transcript)) {
+          $transcripts[$code] = $transcript;
+        }
       }
     }
 
@@ -126,35 +128,39 @@ function the_media_transcript_queue_editor() {
   
   if (current_user_can('submit_transcriptions')) { ?>
     <?php if (is_array($queued_transcripts_for_user)) { ?>
-      <div class="queued-transcriptions">
-        <h3><?php _e('Your queued transcriptions', 'what-did-they-say') ?></h3>
-        <?php foreach ($queued_transcripts_for_user as $transcript) { ?>
-          <h4><?php echo $what_did_they_say->get_language_name($transcript->language) ?></h4>
-          <div>
-            <?php echo $transcript->transcript ?>
-          </div>
-        <?php } ?>
-      </div>
-    <?php } ?>
-    <form method="post" class="transcript-editor">
-      <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
-      <input type="hidden" name="wdts[action]" value="submit_queued_transcript" />
-      <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
-      <h3><?php _e('Submit a new transcription:', 'what-did-they-say') ?></h3>
-      <label>
-        <?php _e('Language:', 'what-did-they-say') ?>
-        <select name="wdts[language]">
-          <?php foreach ($what_did_they_say->get_languages() as $code => $info) { ?>
-            <option value="<?php echo $code ?>"><?php echo $info['name'] ?></option>
+      <?php if (count($queued_transcripts_for_user) > 0) { ?>
+        <div class="queued-transcriptions">
+          <h3><?php _e('Your queued transcriptions', 'what-did-they-say') ?></h3>
+          <?php foreach ($queued_transcripts_for_user as $transcript) { ?>
+            <h4><?php echo $what_did_they_say->get_language_name($transcript->language) ?></h4>
+            <div>
+              <?php echo $transcript->transcript ?>
+            </div>
           <?php } ?>
-        </select>
-      </label><br />
-      <label>
-        <?php _e('Transcription:', 'what-did-they-say') ?><br />
-        <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
-      </label>
-      <input type="submit" value="<?php _e('Submit New Transcription', 'what-did-they-say') ?>" />
-    </form>
+        </div>
+      <?php } ?>
+    <?php } ?>
+    <?php if ($what_did_they_say->get_allow_transcripts_for_post($post->ID)) { ?>
+      <form method="post" class="transcript-editor">
+        <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
+        <input type="hidden" name="wdts[action]" value="submit_queued_transcript" />
+        <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
+        <h3><?php _e('Submit a new transcription:', 'what-did-they-say') ?></h3>
+        <label>
+          <?php _e('Language:', 'what-did-they-say') ?>
+          <select name="wdts[language]">
+            <?php foreach ($what_did_they_say->get_languages() as $code => $info) { ?>
+              <option value="<?php echo $code ?>"><?php echo $info['name'] ?></option>
+            <?php } ?>
+          </select>
+        </label><br />
+        <label>
+          <?php _e('Transcription:', 'what-did-they-say') ?><br />
+          <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
+        </label>
+        <input type="submit" value="<?php _e('Submit New Transcription', 'what-did-they-say') ?>" />
+      </form>
+    <?php } ?>
   <?php }
 }
 
