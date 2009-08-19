@@ -171,13 +171,8 @@ class WhatDidTheySay {
     global $wpdb;
     
     if (current_user_can('submit_transcriptions')) {
-      $query = $wpdb->prepare("SELECT id FROM " . $this->table . " WHERE id = %d", $transcription_id);
-      if (!is_null($wpdb->get_var($query))) {
-        $query = $wpdb->prepare("DELETE FROM " . $this->table . " WHERE id = %d", $transcription_id);
-        $wpdb->query($query); 
-        
-        return true;
-      }
+      $query = $wpdb->prepare("DELETE FROM " . $this->table . " WHERE id = %d", $transcription_id);
+      return $wpdb->query($query);
     }
     return false;
   }
@@ -195,10 +190,8 @@ class WhatDidTheySay {
           $post = get_post($result->post_id);
           if (!empty($post)) {
             $this->save_transcript($result->post_id, $result->language, $result->transcript);
-            
-            $query = $wpdb->prepare("DELETE FROM " . $this->table . " WHERE id = %d", $transcription_id);
-            $result = $wpdb->query($query);
-          } 
+            $this->delete_queued_transcription($transcription_id);
+          }
         }
       } 
     } 

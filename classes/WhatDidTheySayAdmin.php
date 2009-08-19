@@ -41,7 +41,8 @@ class WhatDidTheySayAdmin {
     
     add_action('admin_menu', array(&$this, 'admin_menu'));
     add_action('admin_notices', array(&$this, 'admin_notices'));
-    
+    add_action('admin_init', array(&$this, 'admin_init'));
+
     wp_enqueue_script('prototype');
 
     add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
@@ -59,6 +60,10 @@ class WhatDidTheySayAdmin {
     }
 
     $this->read_language_file();
+  }
+
+  function admin_init() {
+    wp_enqueue_script('scriptaculous-effects');
   }
 
   function the_media_transcript($transcript) {
@@ -137,7 +142,7 @@ class WhatDidTheySayAdmin {
   function handle_update_queue_transcript($queue_transcript_info) {
     $updated = false;
     if (current_user_can('submit_transcriptions')) {
-      if ($what_did_they_say->get_allow_transcripts_for_post($queue_transcript_info['post_id'])) {
+      if ($this->what_did_they_say->get_allow_transcripts_for_post($queue_transcript_info['post_id'])) {
         switch ($queue_transcript_info['action']) {
           case 'submit_queued_transcript':
             $result = $this->what_did_they_say->add_queued_transcription_to_post($queue_transcript_info['post_id'], $queue_transcript_info);
@@ -167,7 +172,23 @@ class WhatDidTheySayAdmin {
                 break;
             }
           }
+
           $this->what_did_they_say->set_allow_transcripts_for_post($post_transcript_info['post_id'], isset($post_transcript_info['allow_on_post']));
+
+          $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($post_transcript_info['post_id']);
+          if (is_array($queued_transcriptions)) {
+            $transcriptions_to_delete = array();
+
+            foreach ($queued_transcriptions as $transcription) { $transcriptions_to_delete[$transcription->id] = true; }
+            if (isset($post_transcript_info['queue'])) {
+              foreach ($post_transcript_info['queue'] as $id => $keep) { unset($transcriptions_to_delete[$id]); }
+            }
+
+            foreach (array_keys($transcriptions_to_delete) as $id) {
+              $this->what_did_they_say->delete_queued_transcription($id);
+            }
+          }
+
           $updated = __('Transcripts updated', 'what-did-they-say');
           break;
       }
@@ -317,6 +338,8 @@ class WhatDidTheySayAdmin {
 
     $options = get_option('what-did-they-say-options');
     $transcripts = $this->what_did_they_say->get_transcripts($post->ID);
+    $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($post->ID);
+    
     $nonce = wp_create_nonce('what-did-they-say');
     include(dirname(__FILE__) . '/meta-box.inc');
   }

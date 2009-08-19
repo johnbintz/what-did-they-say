@@ -204,10 +204,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     
     $wpdb = $this->getMock('wpdb', array('prepare', 'get_var', 'query'));
     
-    $wpdb->expects($this->once())
-         ->method('get_var')
-         ->will($this->returnValue(in_array($transcript_id_to_delete, $valid_transcripts) ? $transcript_id_to_delete : null));
-         
     if (in_array($transcript_id_to_delete, $valid_transcripts)) {
       $wpdb->expects($this->once())
            ->method('query');

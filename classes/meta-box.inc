@@ -7,9 +7,35 @@
     <?php _e('Allow new transcripts to be submitted for this post', 'what-did-they-say') ?>
   </label>
 </p>
+<?php if (is_array($queued_transcriptions) && !empty($queued_transcriptions)) { ?>
+  <p><strong><?php _e('Manage queued transcripts:', 'what-did-they-say') ?></strong></p>
+  <?php foreach ($queued_transcriptions as $transcription) {
+    $user = get_userdata($transcription->user_id);
+    if (!empty($user)) { ?>
+  
+      <div class="queued-transcription-holder">
+        <input type="hidden" name="wdts[queue][<?php echo $transcription->id ?>]" value="keep" />
+        <input type="hidden" name="wdts[language][<?php echo $transcription->id ?>]" value="<?php echo $transcription->language ?>" />
+        <p><?php
+          printf(
+            __('From <strong>%s</strong> in <strong>%s</strong>:', 'what-did-they-say'),
+            $user->display_name,
+            $this->what_did_they_say->get_language_name($transcription->language)
+          )
+        ?></p>
+        <div class="queued-transcription"><?php echo $transcription->transcript ?></div>
+        <div class="queued-transcription-raw" style="display:none"><?php echo $transcription->transcript ?></div>
+        <div style="padding: 10px 0">
+          <a href="#" class="approve-transcript button">Approve</a>
+          <a href="#" class="delete-transcript button">Delete</a>
+        </div>
+      </div>
+    <?php } ?>
+  <?php } ?>
+<?php } ?>
 <p>
   <label>
-    <?php _e('Edit transcript for:', 'what-did-they-say') ?>
+    <?php _e('Edit provided transcript for:', 'what-did-they-say') ?>
     <select name="wdts[language]" id="wdts-language">
       <?php foreach ($options['languages'] as $code => $info) { ?>
         <option value="<?php echo $code ?>" <?php echo $info['default'] ? 'selected="selected"' : '' ?>><?php echo $info['name'] ?></option>
@@ -29,4 +55,43 @@
   }
   switch_transcript();
   Event.observe($('wdts-language'), 'change', switch_transcript);
+
+  $$('.approve-transcript').each(function(b) {
+    Event.observe(b, 'click', function(e) {
+      Event.stop(e);
+      var lang = b.parentNode.parentNode.select("input[name*=[language]]").shift();
+      if (lang) {
+        lang = lang.value;
+        var editor = $('wdts-transcripts-' + lang);
+
+        var raw_transcript = b.parentNode.parentNode.select(".queued-transcription-raw").shift();
+        if (raw_transcript && editor) {
+          var ok = true;
+          if (editor.value.match(/[^ ]/)) {
+            ok = confirm('<?php _e('This will overwrite the current transcript. Are you sure?', 'what-did-they-say') ?>');
+          }
+          if (ok) {
+            editor.value = raw_transcript.innerHTML;
+            var p = b.parentNode.parentNode;
+            new Effect.Fade(p, {
+              'afterFinish': function() { p.parentNode.removeChild(p); }
+            });
+          }
+        }
+      }
+    });
+  });
+
+  $$('.delete-transcript').each(function(b) {
+    Event.observe(b, 'click', function(e) {
+      Event.stop(e);
+
+      if (confirm('<?php _e('This will delete the queued transcript. Are you sure?', 'what-did-they-say') ?>')) {
+        var p = b.parentNode.parentNode;
+        new Effect.Fade(p, {
+          'afterFinish': function() { p.parentNode.removeChild(p); }
+        });
+      }
+    });
+  });
 </script>
