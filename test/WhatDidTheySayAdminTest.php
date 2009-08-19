@@ -7,6 +7,7 @@ require_once(dirname(__FILE__) . '/../classes/WhatDidTheySayAdmin.php');
 class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
   function setUp() {
     _reset_wp(); 
+    _set_user_capabilities('submit_transcriptions', 'approve_transcriptions', 'change_languages');
   }
   
   function testReadLanguageData() {
@@ -86,6 +87,7 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
   function testHandleUpdateCapabilities() {
     $admin = new WhatDidTheySayAdmin();
     update_option('what-did-they-say-options', $admin->default_options);
+    _set_user_capabilities('edit_users');
 
     $admin->handle_update_capabilities(array(
       'action' => 'capabilities',

@@ -116,9 +116,27 @@ function transcripts_display($dropdown_message = null, $single_language_message 
 
 function the_media_transcript_queue_editor() {
   global $post, $what_did_they_say;
+
+  $queued_transcripts_for_user = false;
+
+  $user = wp_get_current_user();
+  if (!empty($user)) {
+    $queued_transcripts_for_user = $what_did_they_say->get_queued_transcriptions_for_user_and_post($user->ID, $post->ID);
+  }
   
   if (current_user_can('submit_transcriptions')) { ?>
-    <form method="post">
+    <?php if (is_array($queued_transcripts_for_user)) { ?>
+      <div class="queued-transcriptions">
+        <h3><?php _e('Your queued transcriptions', 'what-did-they-say') ?></h3>
+        <?php foreach ($queued_transcripts_for_user as $transcript) { ?>
+          <h4><?php echo $what_did_they_say->get_language_name($transcript->language) ?></h4>
+          <div>
+            <?php echo $transcript->transcript ?>
+          </div>
+        <?php } ?>
+      </div>
+    <?php } ?>
+    <form method="post" class="transcript-editor">
       <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
       <input type="hidden" name="wdts[action]" value="submit_queued_transcript" />
       <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
@@ -135,7 +153,7 @@ function the_media_transcript_queue_editor() {
         <?php _e('Transcription:', 'what-did-they-say') ?><br />
         <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
       </label>
-      <input type="submit" value="<?php _e('Submit New Transcription', 'what-did-they-say') ?>" />        
+      <input type="submit" value="<?php _e('Submit New Transcription', 'what-did-they-say') ?>" />
     </form>
   <?php }
 }

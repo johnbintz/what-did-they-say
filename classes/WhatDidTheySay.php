@@ -80,7 +80,7 @@ class WhatDidTheySay {
     if (current_user_can('submit_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
-        $query = $wpdb->prepare('SELECT * FROM %s WHERE post_id = %d', $this->table, $post_id);
+        $query = $wpdb->prepare('SELECT * FROM ' . $this->table . ' WHERE post_id = %d', $post_id);
         $results = $wpdb->get_results($query);
         if (!empty($results)) {
           $valid_results = array();
@@ -104,7 +104,7 @@ class WhatDidTheySay {
    */
   function add_queued_transcription_to_post($post_id, $transcript_info) {
     global $wpdb;
-    
+
     if (current_user_can('approve_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
@@ -116,11 +116,11 @@ class WhatDidTheySay {
           }
           if ($ok) {
             extract($transcript_info);
-            $user = get_userdata($user_id);
+            $user = wp_get_current_user();
             if (!empty($user)) {
               $query = $wpdb->prepare(
-                "INSERT INTO %s (post_id, user_id, language, transcript) VALUES (%d, %d, %s, %s)",
-                $this->table, $post_id, $user_id, $language, $transcript
+                "INSERT INTO " . $this->table . "(post_id, user_id, language, transcript) VALUES (%d, %d, %s, %s)",
+                $post_id, $user->ID, $language, $transcript
               );
               
               return $wpdb->query($query);
@@ -141,7 +141,7 @@ class WhatDidTheySay {
     global $wpdb;
 
     if (current_user_can('submit_transcriptions')) {
-      $query = $wpdb->prepare("SELECT * FROM %s WHERE id = %d", $this->table, $update_info['id']);
+      $query = $wpdb->prepare("SELECT * FROM " . $this->table . " WHERE id = %d", $update_info['id']);
       $result = $wpdb->get_results($query);
       
       if (is_array($result)) {
@@ -151,8 +151,8 @@ class WhatDidTheySay {
             $result->{$field} = $update_info[$field];
           }
           $query = $wpdb->prepare(
-            "UPDATE %s SET language = %s, transcript = %s WHERE id = %d",
-            $this->table, $result->language, $result->transcript, $result->id
+            "UPDATE " . $this->table . " SET language = %s, transcript = %s WHERE id = %d",
+            $result->language, $result->transcript, $result->id
           );
           $wpdb->query($query);
           return true;
@@ -171,9 +171,9 @@ class WhatDidTheySay {
     global $wpdb;
     
     if (current_user_can('submit_transcriptions')) {
-      $query = $wpdb->prepare("SELECT id FROM %s WHERE id = %d", $this->table, $transcription_id);
+      $query = $wpdb->prepare("SELECT id FROM " . $this->table . " WHERE id = %d", $transcription_id);
       if (!is_null($wpdb->get_var($query))) {
-        $query = $wpdb->prepare("DELETE FROM %s WHERE id = %d", $this->table, $transcription_id);
+        $query = $wpdb->prepare("DELETE FROM " . $this->table . " WHERE id = %d", $transcription_id);
         $wpdb->query($query); 
         
         return true;
@@ -186,7 +186,7 @@ class WhatDidTheySay {
     global $wpdb;
     
     if (current_user_can('approve_transcriptions')) {
-      $query = $wpdb->prepare("SELECT * from %s WHERE id = %d", $this->table, $transcription_id);
+      $query = $wpdb->prepare("SELECT * from " . $this->table . " WHERE id = %d", $transcription_id);
       $result = $wpdb->get_results($query);
       if (is_array($result)) {
         if (count($result) == 1) {
@@ -196,12 +196,22 @@ class WhatDidTheySay {
           if (!empty($post)) {
             $this->save_transcript($result->post_id, $result->language, $result->transcript);
             
-            $query = $wpdb->prepare("DELETE FROM %s WHERE id = %d", $this->table, $transcription_id);
+            $query = $wpdb->prepare("DELETE FROM " . $this->table . " WHERE id = %d", $transcription_id);
             $result = $wpdb->query($query);
           } 
         }
       } 
     } 
+  }
+
+  function get_queued_transcriptions_for_user_and_post($user_id, $post_id) {
+    global $wpdb;
+
+    if (current_user_can('submit_transcriptions')) {
+      $query = $wpdb->prepare("SELECT * FROM " . $this->table . " WHERE user_id = %d AND post_id = %d", $user_id, $post_id);
+      return $wpdb->get_results($query);
+    }
+    return false;
   }
   
   function delete_transcript($post_id, $language) {

@@ -15,7 +15,6 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
   function testSaveTranscription() {
     wp_insert_post(array('ID' => 1)); 
 
-
     $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
 
     $what->save_transcript(1, "en", "This is a transcript");
@@ -110,7 +109,9 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
     wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
     wp_insert_post(array('ID' => 1));
 
-    $expected_query = sprintf("INSERT INTO '%s' (post_id, user_id, language, transcript) VALUES ('%d', '%d', '%s', '%s')",
+    wp_set_current_user(1);
+
+    $expected_query = sprintf("INSERT INTO %s (post_id, user_id, language, transcript) VALUES ('%d', '%d', '%s', '%s')",
                               $this->what->table,
                               1, 1, "en", "This is a transcript");
 
@@ -120,7 +121,7 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
          ->method('prepare')
          ->will($this->returnValue($expected_query));    
 
-    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
+    $what = new WhatDidTheySay();
 
     if ($expected_result === true) {
       $wpdb->expects($this->once())
@@ -128,11 +129,10 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
            ->with($expected_query)
            ->will($this->returnValue(true));
     }
-         
+
     $this->assertEquals($expected_result, $what->add_queued_transcription_to_post(
       1,
       array(
-        'user_id' => 1,
         'language' => 'en',
         'transcript' => "This is a transcript"
       )
