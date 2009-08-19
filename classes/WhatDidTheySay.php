@@ -214,6 +214,26 @@ class WhatDidTheySay {
       } 
     }
   }
+  
+  function get_default_language() {
+    $language = false;
+    $options = get_option('what-did-they-say-options');
+    foreach ($options['languages'] as $code => $info) {
+      if (is_null($language)) { $language = $code; }
+      if ($info['default']) { $language = $code; break; }
+    }
+    return $language;
+  }
+  
+  function get_language_name($language) {
+    $options = get_option('what-did-they-say-options');
+
+    if (isset($options['languages'][$language])) {
+      return $options['languages'][$language]['name'];
+    } else {
+      return false; 
+    }
+  }
 }
 
 ?>

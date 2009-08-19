@@ -59,19 +59,6 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($expected_results, $options['languages']);
   }
 
-  function testHandleUpdateOptions() {
-    $admin = new WhatDidTheySayAdmin();
-
-    update_option('what-did-they-say-options', array('only_allowed_users' => false));
-
-    $admin->handle_update_options(array(
-      'only_allowed_users' => 'yes'
-    ));
-
-    $options = get_option('what-did-they-say-options');
-    $this->assertTrue($options['only_allowed_users']);
-  }
-
   function testBuildFullDefaultLanguageInfo() {
     $admin = new WhatDidTheySayAdmin();
     $admin->all_languages = array(
