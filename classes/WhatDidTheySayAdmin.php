@@ -12,8 +12,6 @@ class WhatDidTheySayAdmin {
       'it',
       'de'
     ),
-    'only_allowed_users' => false,
-    'users' => array(),
     'capabilities' => array(
       'submit_transcriptions' => 'administrator',
       'approve_transcriptions' => 'administrator',
@@ -124,19 +122,20 @@ class WhatDidTheySayAdmin {
    */
   function user_has_cap($capabilities, $requested_capabilities, $capability_name) {
     $options = get_option('what-did-they-say-options');
+    if (is_array($options)) {
+      $role_cascade = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
+      $allowed_roles = array();
+      $capture_roles = false;
 
-    $role_cascade = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
-    $allowed_roles = array();
-    $capture_roles = false;
+      for ($i = 0; $i < count($role_cascade); ++$i) {
+        if (in_array($role_cascade, $capabilities)) { $capture_roles = true; }
+        if ($capture_roles) { $allowed_roles[] = $role_cascade[$i]; }
+      }
 
-    for ($i = 0; $i < count($role_cascade); ++$i) {
-      if (in_array($role_cascade, $capabilities)) { $capture_roles = true; }
-      if ($capture_roles) { $allowed_roles[] = $role_cascade[$i]; }
-    }
-
-    foreach ($requested_capabilities as $requested_capability) {
-      if (in_array($options['capabilities'][$requested_capability], $allowed_roles)) {
-        $capabilities[$requested_capability] = true;
+      foreach ($requested_capabilities as $requested_capability) {
+        if (in_array($options['capabilities'][$requested_capability], $allowed_roles)) {
+          $capabilities[$requested_capability] = true;
+        }
       }
     }
 
@@ -227,7 +226,7 @@ class WhatDidTheySayAdmin {
             }
           }
 
-          $updated = __('Transcripts updated', 'what-did-they-say');
+          $updated = __('Transcripts updated.', 'what-did-they-say');
           break;
       }
     }
@@ -301,12 +300,31 @@ class WhatDidTheySayAdmin {
                 $options['capabilities'][$capability] = $info['capabilities'][$capability];
               }
             }
-            $updated = __('User capabilities updated', 'what-did-they-say');
+            $updated = __('User capabilities updated.', 'what-did-they-say');
           }
           break;
       }
       if ($updated !== false) {
         update_option('what-did-they-say-options', $options);
+      }
+    }
+    return $updated;
+  }
+
+  /**
+   * Handle resettings what-did-they-say-options.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * @return string|false A string if a message is to be displayed, or false if no message.
+   */
+  function handle_update_reset_options($info) {
+    $updated = false;
+    if (current_user_can('manage_options')) {
+      switch ($info['action']) {
+        case "reset_options":
+          delete_option('what-did-they-say-options');
+          $this->install();
+          $updated = __('<strong>What Did They Say?!?</strong> options reset.', 'what-did-they-say');
+          break;
       }
     }
     return $updated;
@@ -337,8 +355,9 @@ class WhatDidTheySayAdmin {
     $options = get_option('what-did-they-say-options');
     if (empty($options)) {
       $this->default_options['languages'] = $this->build_default_languages();
+      ksort($this->default_options['languages']);
       update_option('what-did-they-say-options', $this->default_options);
-    } 
+    }
   }
 
   /**
@@ -397,6 +416,7 @@ class WhatDidTheySayAdmin {
    */
   function manage_admin() {
     $options = get_option('what-did-they-say-options');
+
     $nonce = wp_create_nonce('what-did-they-say');
     include(dirname(__FILE__) . '/admin.inc');
   }
@@ -408,6 +428,7 @@ class WhatDidTheySayAdmin {
     global $post;
 
     $options = get_option('what-did-they-say-options');
+
     $transcripts = $this->what_did_they_say->get_transcripts($post->ID);
     $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($post->ID);
     

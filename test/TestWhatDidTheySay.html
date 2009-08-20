@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>TestWhatDidTheySay</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestWhatDidTheySay</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/wp-admin/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Installed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>What Did They Say?!?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//table[@id='all-plugins-table']/tbody/tr[15]/td[2]/div/span[1]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href,'what-did-they-say') and contains(@href,'activate')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Plugin activated.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//a[contains(text(), &quot;What Did They Say?!?&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=exact:What Did They Say?!?</td>
+	<td></td>
+</tr>
+<!--Reset-->
+<tr>
+	<td>assertTextPresent</td>
+	<td>Reset Settings to Default</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Reset What Did They Say?!?']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure? You could leave transcriptions inaccessible.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>What Did They Say?!? options reset</td>
+	<td></td>
+</tr>
+<!--Capabilities-->
+<tr>
+	<td>select</td>
+	<td>wdts[capabilities][submit_transcriptions]</td>
+	<td>label=Editor</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>wdts[capabilities][approve_transcriptions]</td>
+	<td>label=Editor</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>wdts[capabilities][change_languages]</td>
+	<td>label=Editor</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Change capabilities']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>User capabilities updated.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertSelectedLabel</td>
+	<td>wdts[capabilities][submit_transcriptions]</td>
+	<td>Editor</td>
+</tr>
+<tr>
+	<td>assertSelectedLabel</td>
+	<td>wdts[capabilities][approve_transcriptions]</td>
+	<td>Editor</td>
+</tr>
+<tr>
+	<td>assertSelectedLabel</td>
+	<td>wdts[capabilities][change_languages]</td>
+	<td>Editor</td>
+</tr>
+<!--Make new language default-->
+<tr>
+	<td>assertText</td>
+	<td>//th/span[contains(text(), &quot;English&quot;)]/../../td[1]</td>
+	<td>(yes)</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//th/span[contains(text(), &quot;German&quot;)]/../..//input[@value=&quot;Default&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>German set as default.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotText</td>
+	<td>//th/span[contains(text(), &quot;English&quot;)]/../../td[1]</td>
+	<td>(yes)</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//th/span[contains(text(), &quot;German&quot;)]/../../td[1]</td>
+	<td>(yes)</td>
+</tr>
+<!--Add a new language-->
+
+</tbody></table>
+</body>
+</html>
