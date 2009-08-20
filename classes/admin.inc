@@ -112,7 +112,7 @@
 </div>
 
 <script type="text/javascript">
-  $$('form.verify').each(function(f) {
+  $$('.verify').each(function(f) {
     Event.observe(f, 'submit', function(e) {
       if (!confirm("<?php _e('You are about to delete this language from the available list. Continue?', 'what-did-they-say') ?>")) {
         Event.stop(e);

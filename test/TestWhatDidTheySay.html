@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
+<link rel="selenium.base" href="http://comicpress.local/" />
 <title>TestWhatDidTheySay</title>
 </head>
 <body>
@@ -27,11 +27,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//table[@id='all-plugins-table']/tbody/tr[15]/td[2]/div/span[1]/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
 	<td>//a[contains(@href,'what-did-they-say') and contains(@href,'activate')]</td>
 	<td></td>
@@ -47,7 +42,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
+	<td>clickAndWait</td>
 	<td>link=exact:What Did They Say?!?</td>
 	<td></td>
 </tr>
@@ -65,6 +60,11 @@
 <tr>
 	<td>assertConfirmation</td>
 	<td>Are you sure? You could leave transcriptions inaccessible.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>30000</td>
 	<td></td>
 </tr>
 <tr>
@@ -140,6 +140,198 @@
 	<td>(yes)</td>
 </tr>
 <!--Add a new language-->
+<tr>
+	<td>select</td>
+	<td>//select[@name='wdts[code]']</td>
+	<td>label=Danish</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Add New Language']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Danish added.</td>
+	<td></td>
+</tr>
+<!--Delete a language-->
+<tr>
+	<td>click</td>
+	<td>//input[@value='Delete']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>You are about to delete this language from the available list. Continue?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>30000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Danish deleted.</td>
+	<td></td>
+</tr>
+<!--Rename a language-->
+<tr>
+	<td>assertVisible</td>
+	<td>//span[contains(text(), &quot;German&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//span[contains(text(), &quot;German&quot;)]/../..//a[contains(text(), &quot;Rename&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//span[contains(text(), &quot;German&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//span[contains(text(), &quot;German&quot;)]/..//input[@name=&quot;wdts[name]&quot;]</td>
+	<td>Deutsch</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//span[contains(text(), &quot;German&quot;)]/..//input[@type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>German renamed to Deutsch.</td>
+	<td></td>
+</tr>
+<!--Reset Settings-->
+<tr>
+	<td>assertTextPresent</td>
+	<td>Reset Settings to Default</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Reset What Did They Say?!?']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure? You could leave transcriptions inaccessible.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>30000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>What Did They Say?!? options reset</td>
+	<td></td>
+</tr>
+<!--Meta Box-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>title</td>
+	<td>WDTS Test Post</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>publish</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Post published.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>post_ID</td>
+	<td>post_id</td>
+</tr>
+<!--Edit Two Transcriptions-->
+<tr>
+	<td>assertSelectedLabel</td>
+	<td>wdts-language</td>
+	<td>English</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>wdts-transcripts-en</td>
+	<td>This is a test transcript.</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>wdts-language</td>
+	<td>label=German</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>wdts-transcripts-de</td>
+	<td>Dies ist ein Test transcript.</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>publish</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Post updated.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>wdts-transcripts-en</td>
+	<td>This is a test transcript.</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>wdts-transcripts-de</td>
+	<td>Dies ist ein Test transcript.</td>
+</tr>
+<!--Delete post-->
+<tr>
+	<td>click</td>
+	<td>link=Delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>You are about to delete this post 'WDTS Test Post'<br />&nbsp;&nbsp;'Cancel' to stop, 'OK' to delete.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>30000</td>
+	<td></td>
+</tr>
+<!--Deactivate Plugin-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Installed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href,'what-did-they-say') and contains(@href,'deactivate')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Plugin deactivated.</td>
+	<td></td>
+</tr>
 
 </tbody></table>
 </body>
