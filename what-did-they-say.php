@@ -33,6 +33,18 @@ add_action('init', array(&$what_did_they_say_admin, 'init'));
 register_activation_hook(__FILE__, array(&$what_did_they_say, 'install'));
 register_activation_hook(__FILE__, array(&$what_did_they_say_admin, 'install'));
 
+// template tags
+// please, if you use any of these, wrap them in function_exists() so your site doesn't
+// blow up if you disable the plugin! Example:
+//
+// if (function_exists('the_media_transcript')) { the_media_transcript(); }
+//
+
+/**
+ * Get the transcript for the current post.
+ * @param string $language The language code to use. If not specificed, use the default language.
+ * @return string|false The transcript in the requested language for the specified post, or false if no transcript found.
+ */
 function get_the_media_transcript($language = null) {
   global $post, $what_did_they_say;
   
@@ -46,11 +58,20 @@ function get_the_media_transcript($language = null) {
   return $transcript;
 }
 
+/**
+ * Show the transcript for the current post in the requested_language.
+ * @param string $language The language code to use. If not specificed, use the default language.
+ */
 function the_media_transcript($language = null) {
-  $transcript = apply_filters('the_media_transcript', get_the_media_transcript());
+  $transcript = apply_filters('the_media_transcript', get_the_media_transcript($language));
   echo $transcript;
 }
 
+/**
+ * Get the name of the language specified by the provided language code.
+ * @param string $language The language code to use. If not specificed, use the default language.
+ * @return string The name of the requested language.
+ */
 function get_the_language_name($language = null) {
   global $what_did_they_say;
   
@@ -58,11 +79,20 @@ function get_the_language_name($language = null) {
   return $what_did_they_say->get_language_name($language);
 }
 
+/**
+ * Show the name of the language specified by the provided language code.
+ * @param string $language The language code to use. If not specificed, use the default language.
+ */
 function the_language_name($language = null) {
   $name = apply_filters('the_language_name', get_the_language_name($language));
   echo $name; 
 }
 
+/**
+ * Display all transcripts for a post, with a dropdown selector for people to select other languages.
+ * @param string $dropdown_message If set, the text that appears to the left of the language dropdown.
+ * @param string $single_language_message If set, the text that appears when only one transcript exists for this post.
+ */
 function transcripts_display($dropdown_message = null, $single_language_message = null) {
   global $post, $what_did_they_say;
   
@@ -116,19 +146,22 @@ function transcripts_display($dropdown_message = null, $single_language_message 
   echo apply_filters('transcripts_display', implode("\n", $output));
 }
 
+/**
+ * If you're allowing users to submit transcripts to the post transcript queue, use this tag in your Loop.
+ */
 function the_media_transcript_queue_editor() {
   global $post, $what_did_they_say;
 
-  $queued_transcripts_for_user = false;
+  if (current_user_can('submit_transcriptions')) {
+    $queued_transcripts_for_user = false;
 
-  $user = wp_get_current_user();
-  if (!empty($user)) {
-    $queued_transcripts_for_user = $what_did_they_say->get_queued_transcriptions_for_user_and_post($user->ID, $post->ID);
-  }
-  
-  if (current_user_can('submit_transcriptions')) { ?>
-    <?php if (is_array($queued_transcripts_for_user)) { ?>
-      <?php if (count($queued_transcripts_for_user) > 0) { ?>
+    $user = wp_get_current_user();
+    if (!empty($user)) {
+      $queued_transcripts_for_user = $what_did_they_say->get_queued_transcriptions_for_user_and_post($user->ID, $post->ID);
+    }
+
+    if (is_array($queued_transcripts_for_user)) {
+      if (count($queued_transcripts_for_user) > 0) { ?>
         <div class="queued-transcriptions">
           <h3><?php _e('Your queued transcriptions', 'what-did-they-say') ?></h3>
           <?php foreach ($queued_transcripts_for_user as $transcript) { ?>
