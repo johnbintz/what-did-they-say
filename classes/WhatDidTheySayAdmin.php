@@ -339,7 +339,8 @@ class WhatDidTheySayAdmin {
    */
   function read_language_file() {
     if (file_exists($this->language_file)) {
-      foreach (file($this->language_file, FILE_IGNORE_NEW_LINES) as $language) {
+      foreach (file($this->language_file) as $language) {
+        $language = trim($language);
         list($code, $date_added, $name, $additional) = explode("\t", $language);
         $this->all_languages[$code] = $name;
       } 

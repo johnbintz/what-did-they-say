@@ -86,17 +86,14 @@ class WhatDidTheySay {
    * @return array|false The array of transcripts for the post, or false if the post is invalid.
    */
   function get_queued_transcriptions_for_post($post_id) {
-    global $wpdb;
-    
     if (current_user_can('submit_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
-        $query = $wpdb->prepare('SELECT * FROM ' . $this->table . ' WHERE post_id = %d', $post_id);
-        $results = $wpdb->get_results($query);
+        $results = get_post_meta($post_id, "queued_transcripts", true);
         if (!empty($results)) {
           $valid_results = array();
           foreach ($results as $result) {
-            $user = get_userdata($result->user_id);
+            $user = get_userdata($result['user_id']);
             if (!empty($user)) {
               $valid_results[] = $result; 
             }
@@ -114,9 +111,7 @@ class WhatDidTheySay {
    * @param array $transcript_info The new transcript's info.
    */
   function add_queued_transcription_to_post($post_id, $transcript_info) {
-    global $wpdb;
-
-    if (current_user_can('approve_transcriptions')) {
+    if (current_user_can('submit_transcriptions')) {
       $post = get_post($post_id);
       if (!empty($post)) {
         $transcript_info = (array)$transcript_info;
@@ -129,12 +124,12 @@ class WhatDidTheySay {
             extract($transcript_info);
             $user = wp_get_current_user();
             if (!empty($user)) {
-              $query = $wpdb->prepare(
-                "INSERT INTO " . $this->table . "(post_id, user_id, language, transcript) VALUES (%d, %d, %s, %s)",
-                $post_id, $user->ID, $language, $transcript
-              );
+              $current_transcriptions = get_post_meta($post_id, 'queued_transcripts', true);
+              $transcript_info['user_id'] = $user->ID;
+              $current_transcriptions[] = $transcript_info;
+              update_post_meta($post_id, 'queued_transcripts', $current_transcriptions);
               
-              return $wpdb->query($query);
+              return true;
             }
           }
         }

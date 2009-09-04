@@ -6,75 +6,49 @@ require_once(dirname(__FILE__) . '/../classes/WhatDidTheySay.php');
 
 class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
   function setUp() {
-    global $wpdb;
     _reset_wp();
-    $wpdb = null;
     _set_user_capabilities('submit_transcriptions', 'approve_transcriptions');
+
+    $this->what = new WhatDidTheySay();
   }
 
   function testSaveTranscription() {
     wp_insert_post(array('ID' => 1)); 
 
-    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-
-    $what->save_transcript(1, "en", "This is a transcript");
+    $this->what->save_transcript(1, "en", "This is a transcript");
     $this->assertEquals(array("en" => "This is a transcript"), get_post_meta(1, "provided_transcripts", true));
     
-    $what->save_transcript(1, "en", "this is a new transcript"); 
+    $this->what->save_transcript(1, "en", "this is a new transcript"); 
     $this->assertEquals(array("en" => "this is a new transcript"), get_post_meta(1, "provided_transcripts", true));
     
-    $what->save_transcript(1, "fr", "il s'agit d'une nouvelle transcription"); 
+    $this->what->save_transcript(1, "fr", "il s'agit d'une nouvelle transcription");
     $this->assertEquals(array("en" => "this is a new transcript", "fr" => "il s'agit d'une nouvelle transcription"), get_post_meta(1, "provided_transcripts", true));
   }
   
   function testGetListOfLanguagesForPost() {
-    $what = new WhatDidTheySay();
-    
-    update_post_meta(1, "provided_transcripts", array('en' => 'this is a new transcript', 'fr' => "il s'agit d'une nouvelle transcription"));    
-    $this->assertEquals(array('en', 'fr'), $what->get_transcript_languages(1));
+    update_post_meta(1, "provided_transcripts", array('en' => 'this is a new transcript', 'fr' => "il s'agit d'une nouvelle transcription"));
+    $this->assertEquals(array('en', 'fr'), $this->what->get_transcript_languages(1));
 
-    $this->assertEquals(false, $what->get_transcript_languages(2));
+    $this->assertEquals(false, $this->what->get_transcript_languages(2));
   }
   
   function testGetQueuedTranscriptionsForPost() {
-    global $wpdb;
-    
     wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
     wp_insert_post(array('ID' => 1));
 
-    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
-
-    $wpdb = $this->getMock('wpdb', array('get_results', 'prepare'));
-    
-    $expected_query = sprintf("SELECT * FROM '%s' WHERE post_id = '%d'", $what->table, 1);
-    
-    $wpdb->expects($this->once())
-         ->method('prepare')
-         ->will($this->returnValue($expected_query));
-    
-    $wpdb->expects($this->once())
-         ->method('get_results')
-         ->with($expected_query)
-         ->will(
-           $this->returnValue(
-             array(
-               (object)array('id' => 1, 'post_id' => 1, 'user_id' => 1, 'language' => 'en', 'transcript' => "This is a transcript"),
-               (object)array('id' => 2, 'post_id' => 1, 'user_id' => 2, 'language' => 'fr', 'transcript' => "il s'agit d'une nouvelle transcription"),
-             )
-           )
-         );
+    update_post_meta(1, "queued_transcripts", array(
+      array('user_id' => 1, 'language' => 'en', 'transcript' => 'This is a transcript')
+    ));
          
     $this->assertEquals(
       array(
-        (object)array(
-          'id' => 1,
-          'post_id' => 1,
+        array(
           'user_id' => 1,
           'language' => 'en',
           'transcript' => 'This is a transcript'
         )
       ),
-      $what->get_queued_transcriptions_for_post(1)
+      $this->what->get_queued_transcriptions_for_post(1)
     );
     
     $this->assertFalse($what->get_queued_transcriptions_for_post(2));
@@ -104,31 +78,12 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
    * @dataProvider providerTestAddQueuedTranscriptionToPost
    */
   function testAddQueuedTranscriptionToPost($query_settings, $expected_result) {
-    global $wpdb;
-    
     wp_insert_user(array('ID' => 1, 'first_name' => 'Test', 'last_name' => 'User'));
     wp_insert_post(array('ID' => 1));
 
     wp_set_current_user(1);
 
-    $expected_query = sprintf("INSERT INTO %s (post_id, user_id, language, transcript) VALUES ('%d', '%d', '%s', '%s')",
-                              $this->what->table,
-                              1, 1, "en", "This is a transcript");
-
-    $wpdb = $this->getMock('wpdb', array('query', 'prepare'));
-
-    $wpdb->expects($this->once())
-         ->method('prepare')
-         ->will($this->returnValue($expected_query));    
-
-    $what = new WhatDidTheySay();
-
-    if ($expected_result === true) {
-      $wpdb->expects($this->once())
-           ->method('query')
-           ->with($expected_query)
-           ->will($this->returnValue(true));
-    }
+    $what = $this->getMock('WhatDidTheySay', array('is_user_allowed_to_update'));
 
     $this->assertEquals($expected_result, $what->add_queued_transcription_to_post(
       1,
@@ -137,6 +92,24 @@ class WhatDidTheySayTest extends PHPUnit_Framework_TestCase {
         'transcript' => "This is a transcript"
       )
     ));
+
+    if ($expected_result) {
+      $this->assertEquals(array(
+        array('user_id' => 1, 'language' => 'en', 'transcript' => 'This is a transcript')
+      ), get_post_meta(1, "queued_transcripts", true));
+
+      $what->add_queued_transcription_to_post(
+      1, array(
+          'language' => 'fr',
+          'transcript' => "il s'agit d'une transcription"
+        )
+      );
+
+      $this->assertEquals(array(
+        array('user_id' => 1, 'language' => 'en', 'transcript' => 'This is a transcript'),
+        array('user_id' => 1, 'language' => 'fr', 'transcript' => "il s'agit d'une transcription")
+      ), get_post_meta(1, "queued_transcripts", true));
+    }
   }
   
   function providerTestUpdateQueuedTranscription() {
