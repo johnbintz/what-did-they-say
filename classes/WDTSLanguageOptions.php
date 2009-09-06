@@ -45,19 +45,31 @@ class WDTSLanguageOptions {
   function delete_language($code_to_delete) {
     $options = get_option($this->key);
 
-    $new_languages = array();
-    foreach ($options['languages'] as $code => $info) {
-      if ($code != $code_to_delete) { $new_languages[$code] = $info; }
+    $did_delete = false;
+    if (isset($options['languages'][$code_to_delete])) {
+      $did_delete = true;
+      unset($options['languages'][$code_to_delete]);
     }
-    $options['languages'] = $new_languages;
     
     update_option($this->key, $options);
+    return $did_delete;
   }
   
   function add_language($code, $info) {
-    $options = get_option($this->key);    
-    $options['languages'][$code] = $info;
+    $options = get_option($this->key);   
+    
+    $result = false;
+    if (!empty($code) && is_array($info)) {
+      if (!isset($options['languages'][$code])) {
+        if (!empty($info['name'])) {
+          $options['languages'][$code] = $info;
+          $result = true;
+        }        
+      }
+    }
+    
     update_option($this->key, $options);
+    return $result;
   }
   
   function rename_language($code_to_rename, $new_name) {

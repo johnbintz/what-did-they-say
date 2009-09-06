@@ -46,39 +46,75 @@ class WDTSLanguageOptionsTest extends PHPUnit_Framework_TestCase {
     );
   }
   
-  function testDeleteLanguage() {
+  function providerTestDeleteLanguage() {
+    return array(
+      array('de', true),
+      array('fr', false)
+    ); 
+  }
+  
+  /**
+   * @dataProvider providerTestDeleteLanguage
+   */
+  function testDeleteLanguage($code, $expected_result) {
+    $check = array(
+      'en' => array('name' => 'English'),
+      'de' => array('name' => 'German')
+    );    
+
     update_option($this->l->key, array(
-      'languages' => array(
-        'en' => array('name' => 'English'),
-        'de' => array('name' => 'German')
-      )
+      'languages' => $check
     ));
     
-    $this->l->delete_language('en');
+    $this->assertEquals(
+      $expected_result,
+      $this->l->delete_language($code)
+    );
+    
+    if ($expected_result) {
+      unset($check[$code]);
+    }    
     
     $this->assertEquals(array(
-        'languages' => array(
-          'de' => array('name' => 'German')
-        )
-      ),
+      'languages' => $check      ),
       get_option($this->l->key)
     );
   }
 
-  function testAddLanguage() {
+  function providerTestAddLanguage() {
+    return array(
+      array('de', 'German', true),
+      array('de', '', false),
+      array('', 'German', false),
+      array('en', 'English', false),
+    ); 
+  }
+
+  /**
+   * @dataProvider providerTestAddLanguage
+   */
+  function testAddLanguage($code, $name, $expected_result) {
     update_option($this->l->key, array(
       'languages' => array(
         'en' => array('name' => 'English')
       )
     ));
     
-    $this->l->add_language('de', array('name' => 'German'));
+    $this->assertEquals(
+      $expected_result,
+      $this->l->add_language($code, array('name' => $name))
+    );
+    
+    $check = array(    
+      'en' => array('name' => 'English')
+    );
+    
+    if ($expected_result) {
+      $check[$code] = array('name' => $name); 
+    }
     
     $this->assertEquals(array(
-        'languages' => array(
-          'en' => array('name' => 'English'),
-          'de' => array('name' => 'German')
-        )
+        'languages' => $check
       ),
       get_option($this->l->key)
     );
@@ -105,7 +141,7 @@ class WDTSLanguageOptionsTest extends PHPUnit_Framework_TestCase {
 
     $this->assertEquals(
       $expected_result,
-      $result = $this->l->rename_language($code_to_rename, $new_name)
+      $this->l->rename_language($code_to_rename, $new_name)
     );
     
     $check = array(
