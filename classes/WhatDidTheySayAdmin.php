@@ -29,8 +29,7 @@ class WhatDidTheySayAdmin {
    * Initialize the admin interface.
    * @param WhatDidTheySay $what_did_they_say The WhatDidTheySay object to use for all transcript transactions.
    */
-  function WhatDidTheySayAdmin($what_did_they_say = null) {
-    $this->what_did_they_say = $what_did_they_say;
+  function WhatDidTheySayAdmin() {
     $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
   }
   
