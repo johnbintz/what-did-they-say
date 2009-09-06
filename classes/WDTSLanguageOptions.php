@@ -1,16 +1,6 @@
 <?php
 
-/**
- * WhatDidTheySay manages transcriptions that are attached as metadata
- * individual posts. Transcriptions can be updated, deleted, and moved to
- * other posts as necessary.
- */
-class WhatDidTheySay {
-  /**
-   * Constructor.
-   */
-  function WhatDidTheySay() {}
-
+class WDTSLanguageOptions {
   /**
    * Get the default transcript language for this blog.
    * @return string The language code representing the default language.
@@ -48,26 +38,6 @@ class WhatDidTheySay {
     $options = get_option('what-did-they-say-options');
 
     return $options['languages'];
-  }
-
-  /**
-   * Set whether or not the indicated post can accept new queued transcriptions.
-   * @param int $post_id The post ID to affect.
-   * @param boolean $allow True if the post can accept new queued transcriptions.
-   */
-  function set_allow_transcripts_for_post($post_id, $allow = true) {
-    $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
-    $current_transcripts['_allow'] = $allow;
-    update_post_meta($post_id, "provided_transcripts", $current_transcripts);
-  }
-
-  /**
-   * See if the indicated post is accepting new transcripts.
-   * @return boolean True if the post is acceptin new transcripts.
-   */
-  function get_allow_transcripts_for_post($post_id) {
-    $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
-    return $current_transcripts['_allow'];
   }
 }
 

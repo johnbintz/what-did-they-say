@@ -4,8 +4,12 @@ class WDTSTranscriptManager {
   var $key = null;
   var $post_id = null;
   
+  function __construct($post_id = null) {
+    if (is_numeric($post_id)) { $this->post_id = $post_id; }     
+  }
+  
   function WDTSTranscriptManager($post_id = null) {
-    if (is_numeric($post_id)) { $this->post_id = $post_id; } 
+    $this->__construct($post_id);
   }
   
   function _get_transcripts_metadata() {
