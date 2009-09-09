@@ -240,15 +240,19 @@ class WhatDidTheySayAdmin {
   function handle_update_languages($info) {
     $updated = false;
     if (current_user_can('change_languages')) {
-      $options = get_option('what-did-they-say-options');
+      $language_options = new WDTSLanguageOptions();
+      
       switch ($info['action']) {
         case "delete":
-          $updated = sprintf(__('%s deleted.', 'what-did-they-say'), $options['languages'][$info['code']]['name']);
-          unset($options['languages'][$info['code']]);
+          if ($result = $language_options->delete_language($info['code'])) {
+            $updated = sprintf(__('%s deleted.', 'what-did-they-say'), $result['name']);
+          }
           break;
         case "add":
           $this->read_language_file();
           if (isset($this->all_languages[$info['code']])) {
+            
+            
             $options['languages'][$info['code']] = array('name' => $this->all_languages[$info['code']]);
             $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$info['code']]);
           }
@@ -273,10 +277,6 @@ class WhatDidTheySayAdmin {
             }
           }
           break;
-      }
-      if ($updated !== false) {
-        ksort($options['languages']);
-        update_option('what-did-they-say-options', $options);
       }
     }
     return $updated;

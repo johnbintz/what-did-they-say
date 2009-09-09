@@ -47,7 +47,7 @@ class WDTSLanguageOptions {
 
     $did_delete = false;
     if (isset($options['languages'][$code_to_delete])) {
-      $did_delete = true;
+      $did_delete = $options['languages'][$code_to_delete];
       unset($options['languages'][$code_to_delete]);
     }
     

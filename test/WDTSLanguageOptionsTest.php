@@ -48,7 +48,7 @@ class WDTSLanguageOptionsTest extends PHPUnit_Framework_TestCase {
   
   function providerTestDeleteLanguage() {
     return array(
-      array('de', true),
+      array('de', array('name' => 'German')),
       array('fr', false)
     ); 
   }
@@ -71,12 +71,10 @@ class WDTSLanguageOptionsTest extends PHPUnit_Framework_TestCase {
       $this->l->delete_language($code)
     );
     
-    if ($expected_result) {
-      unset($check[$code]);
-    }    
+    if ($expected_result) { unset($check[$code]); }    
     
-    $this->assertEquals(array(
-      'languages' => $check      ),
+    $this->assertEquals(
+      array('languages' => $check),
       get_option($this->l->key)
     );
   }
