@@ -173,7 +173,9 @@ class WhatDidTheySayAdmin {
   function handle_update_queue_transcript($info) {
     $updated = false;
     if (current_user_can('submit_transcriptions')) {
-      if ($this->what_did_they_say->get_allow_transcripts_for_post($info['post_id'])) {
+      $queued_transcript = new WDTSTranscriptOptions($info['post_id']));
+      
+      if ($this->what_did_they_say->get_allow_transcripts_for_post() {
         switch ($info['action']) {
           case 'submit_queued_transcript':
             $result = $this->what_did_they_say->add_queued_transcription_to_post($info['post_id'], $info);
