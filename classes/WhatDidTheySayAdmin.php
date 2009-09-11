@@ -292,17 +292,13 @@ class WhatDidTheySayAdmin {
     $updated = false;
     if (current_user_can('edit_users')) {
       $options = get_option('what-did-they-say-options');
-      switch ($info['action']) {
-        case "capabilities":
-          if (isset($info['capabilities'])) {
-            foreach (array_keys($this->default_options['capabilities']) as $capability) {
-              if (isset($info['capabilities'][$capability])) {
-                $options['capabilities'][$capability] = $info['capabilities'][$capability];
-              }
-            }
-            $updated = __('User capabilities updated.', 'what-did-they-say');
+      if (isset($info['capabilities'])) {
+        foreach (array_keys($this->default_options['capabilities']) as $capability) {
+          if (isset($info['capabilities'][$capability])) {
+            $options['capabilities'][$capability] = $info['capabilities'][$capability];
           }
-          break;
+        }
+        $updated = __('User capabilities updated.', 'what-did-they-say');
       }
       if ($updated !== false) {
         update_option('what-did-they-say-options', $options);
@@ -319,13 +315,9 @@ class WhatDidTheySayAdmin {
   function handle_update_reset_options($info) {
     $updated = false;
     if (current_user_can('manage_options')) {
-      switch ($info['action']) {
-        case "reset_options":
-          delete_option('what-did-they-say-options');
-          $this->install();
-          $updated = __('<strong>What Did They Say?!?</strong> options reset.', 'what-did-they-say');
-          break;
-      }
+      delete_option('what-did-they-say-options');
+      $this->install();
+      $updated = __('<strong>What Did They Say?!?</strong> options reset.', 'what-did-they-say');
     }
     return $updated;
   }
