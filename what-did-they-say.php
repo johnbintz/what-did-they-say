@@ -93,7 +93,7 @@ function the_language_name($language = null) {
  * @param string $single_language_message If set, the text that appears when only one transcript exists for this post.
  */
 function transcripts_display($dropdown_message = null, $single_language_message = null) {
-  global $post, $what_did_they_say;
+  global $post;
   
   if (is_null($dropdown_message)) { $dropdown_message = __('Select a language:', 'what-did-they-say'); }
   if (is_null($single_language_message)) { $single_language_message = __('%s transcript:', 'what-did-they-say'); }
@@ -101,7 +101,10 @@ function transcripts_display($dropdown_message = null, $single_language_message 
   $output = array();
   
   $transcripts = array();
-  $post_transcripts = $what_did_they_say->get_transcripts($post->ID);
+
+  $approved_transcripts = new WDTSApprovedTranscript($post->ID);
+  $post_transcripts = $approved_transcripts->get_transcripts();
+
   if (!empty($post_transcripts)) {
     foreach ($post_transcripts as $code => $transcript) {
       if (substr($code, 0, 1) != "_") {
@@ -154,10 +157,14 @@ function the_media_transcript_queue_editor() {
   if (current_user_can('submit_transcriptions')) {
     $queued_transcripts_for_user = false;
 
+    $queued_transcripts = new WDTSQueuedTranscript($post->ID);
+
     $user = wp_get_current_user();
     if (!empty($user)) {
-      $queued_transcripts_for_user = $what_did_they_say->get_queued_transcriptions_for_user_and_post($user->ID, $post->ID);
+      $queued_transcripts_for_user = $queued_transcripts->get_transcripts_for_user($user->ID);
     }
+
+    $transcript_options = new WDTSTranscriptOptions($post->ID);
 
     if (is_array($queued_transcripts_for_user)) {
       if (count($queued_transcripts_for_user) > 0) { ?>
@@ -172,7 +179,7 @@ function the_media_transcript_queue_editor() {
         </div>
       <?php } ?>
     <?php } ?>
-    <?php if ($what_did_they_say->get_allow_transcripts_for_post($post->ID)) { ?>
+    <?php if ($transcript_options->are_new_transcripts_allowed()) { ?>
       <form method="post" class="transcript-editor">
         <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
         <input type="hidden" name="wdts[action]" value="submit_queued_transcript" />

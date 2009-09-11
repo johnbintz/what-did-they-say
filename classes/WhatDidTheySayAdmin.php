@@ -194,43 +194,39 @@ class WhatDidTheySayAdmin {
    * @param array $info The part of the $_POST array for What Did They Say?!?
    * @return string|false A string if a message is to be displayed, or false if no message.
    */
-  function handle_update_post_transcripts($info) {
+  function handle_update_manage_post_transcripts($info) {
     $updated = false;
     if (current_user_can('approve_transcriptions')) {
       $options = get_option('what-did-they-say-options');
 
-      switch ($info['action']) {
-        case "manage_post_transcripts":
-          foreach ($info['transcripts'] as $language => $transcript) {
-            switch ($language) {
-              case "_allow":
-                $allow = true;
-                break;
-              default:
-                $this->what_did_they_say->save_transcript($info['post_id'], $language, $transcript);
-                break;
-            }
-          }
+      $approved_transcript_manager = new WDTSApprovedTranscript($info['post_id']);
 
-          $this->what_did_they_say->set_allow_transcripts_for_post($info['post_id'], isset($info['allow_on_post']));
-
-          $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($info['post_id']);
-          if (is_array($queued_transcriptions)) {
-            $transcriptions_to_delete = array();
-
-            foreach ($queued_transcriptions as $transcription) { $transcriptions_to_delete[$transcription->id] = true; }
-            if (isset($post_transcript_info['queue'])) {
-              foreach ($post_transcript_info['queue'] as $id => $keep) { unset($transcriptions_to_delete[$id]); }
-            }
-
-            foreach (array_keys($transcriptions_to_delete) as $id) {
-              $this->what_did_they_say->delete_queued_transcription($id);
-            }
-          }
-
-          $updated = __('Transcripts updated.', 'what-did-they-say');
-          break;
+      foreach ($info['transcripts'] as $language => $transcript) {
+        $approved_transcript_manager->save_transcript(array(
+          'language' => $language,
+          'transcript' => $transcript
+        ));
       }
+
+      $transcript_options = new WDTSTranscriptOptions($info['post_id']);
+      $transcript_options->set_allow_transcripts(isset($info['allow_on_post']));
+
+      $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($info['post_id']);
+      if (is_array($queued_transcriptions)) {
+        $transcriptions_to_delete = array();
+
+        foreach ($queued_transcriptions as $transcription) { $transcriptions_to_delete[$transcription->id] = true; }
+        if (isset($post_transcript_info['queue'])) {
+          foreach ($post_transcript_info['queue'] as $id => $keep) { unset($transcriptions_to_delete[$id]); }
+        }
+
+        foreach (array_keys($transcriptions_to_delete) as $id) {
+          $this->what_did_they_say->delete_queued_transcription($id);
+        }
+      }
+
+      $updated = __('Transcripts updated.', 'what-did-they-say');
+      break;
     }
     return $updated;
   }
@@ -422,9 +418,13 @@ class WhatDidTheySayAdmin {
 
     $options = get_option('what-did-they-say-options');
 
-    $transcripts = $this->what_did_they_say->get_transcripts($post->ID);
-    $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($post->ID);
-    
+    foreach (array('Approved', 'Queued') as $name) {
+      $var_name = strtolower($name);
+      $class_name = "WDTS${name}Transcript";
+      ${"${var_name}_transcript_manager"} = new $class_name($post->ID);
+      ${"${var_name}_transcripts"} = ${"${var_name}_transcript_manager"}->get_transcripts();
+    }
+
     $nonce = wp_create_nonce('what-did-they-say');
     include(dirname(__FILE__) . '/meta-box.inc');
   }

@@ -1,5 +1,5 @@
 <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
-<input type="hidden" name="wdts[action]" value="manage_post_transcripts" />
+<input type="hidden" name="wdts[module]" value="manage-post-transcripts" />
 <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 <p>
   <label>
@@ -7,24 +7,24 @@
     <?php _e('Allow new transcripts to be submitted for this post', 'what-did-they-say') ?>
   </label>
 </p>
-<?php if (is_array($queued_transcriptions) && !empty($queued_transcriptions)) { ?>
+<?php if (is_array($queued_transcripts) && !empty($queued_transcripts)) { ?>
   <p><strong><?php _e('Manage queued transcripts:', 'what-did-they-say') ?></strong></p>
-  <?php foreach ($queued_transcriptions as $transcription) {
-    $user = get_userdata($transcription->user_id);
+  <?php foreach ($queued_transcripts as $transcript) {
+    $user = get_userdata($transcript->user_id);
     if (!empty($user)) { ?>
   
       <div class="queued-transcription-holder">
-        <input type="hidden" name="wdts[queue][<?php echo $transcription->id ?>]" value="keep" />
-        <input type="hidden" name="wdts[language][<?php echo $transcription->id ?>]" value="<?php echo $transcription->language ?>" />
+        <input type="hidden" name="wdts[queue][<?php echo $transcript->id ?>]" value="keep" />
+        <input type="hidden" name="wdts[language][<?php echo $transcript->id ?>]" value="<?php echo $transcript->language ?>" />
         <p><?php
           printf(
             __('From <strong>%s</strong> in <strong>%s</strong>:', 'what-did-they-say'),
             $user->display_name,
-            $this->what_did_they_say->get_language_name($transcription->language)
+            $this->what_did_they_say->get_language_name($transcript->language)
           )
         ?></p>
-        <div class="queued-transcription"><?php echo $transcription->transcript ?></div>
-        <div class="queued-transcription-raw" style="display:none"><?php echo $transcription->transcript ?></div>
+        <div class="queued-transcription"><?php echo $transcript->transcript ?></div>
+        <div class="queued-transcription-raw" style="display:none"><?php echo $transcript->transcript ?></div>
         <div style="padding: 10px 0">
           <a href="#" class="approve-transcript button">Approve</a>
           <a href="#" class="delete-transcript button">Delete</a>
@@ -44,7 +44,7 @@
   </label>
 
   <?php foreach (array_keys($options['languages']) as $code) { ?>
-    <textarea class="transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 100%; height: 200px"><?php echo $transcripts[$code] ?></textarea>
+    <textarea class="transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 100%; height: 200px"><?php echo $approved_transcripts[$code] ?></textarea>
   <?php } ?>
 </p>
 <script type="text/javascript">

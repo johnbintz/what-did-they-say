@@ -20,9 +20,9 @@ class WDTSTranscriptOptions {
    * See if the indicated post is accepting new transcripts.
    * @return boolean True if the post is acceptin new transcripts.
    */
-  function get_allow_transcripts() {
+  function are_new_transcripts_allowed() {
     $options = $this->_get_transcript_options();
-    return issset($options['allow_transcripts']) ? $options['allow_transcripts'] : false;
+    return isset($options['allow_transcripts']) ? $options['allow_transcripts'] : false;
   }
 
   function _get_transcript_options() {
