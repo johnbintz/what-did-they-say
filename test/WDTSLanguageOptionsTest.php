@@ -6,18 +6,43 @@ require_once(dirname(__FILE__) . '/../../mockpress/mockpress.php');
 
 class WDTSLanguageOptionsTest extends PHPUnit_Framework_TestCase {
   function setUp() {
+    _reset_wp();
     $this->l = new WDTSLanguageOptions();
   }
   
   function testGetDefaultLanguage() {
     update_option($this->l->key, array(
       'languages' => array(
-        'en' => array('default' => false),
+        'en' => array(),
         'de' => array('default' => true)
       )
     ));
     
     $this->assertEquals('de', $this->l->get_default_language());
+  }
+
+  function providerTestSetDefaultLanguage() {
+    return array(
+      array('en', true,  array('en' => array('default' => true), 'de' => array())),
+      array('de', false, array('en' => array(), 'de' => array('default' => true))),
+      array('fr', false, array('en' => array(), 'de' => array('default' => true))),
+    );
+  }
+
+  /**
+   * @dataProvider providerTestSetDefaultLanguage
+   */
+  function testSetDefaultLanguage($set_default, $expected_result, $expected_language_info) {
+    update_option($this->l->key, array(
+      'languages' => array(
+        'en' => array(),
+        'de' => array('default' => true)
+      )
+    ));
+
+    $this->assertEquals($expected_result, $this->l->set_default_language($set_default));
+
+    $this->assertEquals($expected_language_info, $this->l->get_languages());
   }
   
   function testGetLanguageName() {

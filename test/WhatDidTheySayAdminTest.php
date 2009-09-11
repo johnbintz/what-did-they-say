@@ -16,50 +16,6 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue(count($admin->read_language_file()) > 0);
   } 
 
-  function providerTestHandleUpdateLanguages() {
-    return array(
-      array(
-        array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
-        array('code' => 'en', 'action' => 'delete'),
-        array('de' => array('name' => 'German'))
-      ),
-      array(
-        array('de' => array('name' => 'German')),
-        array('code' => 'en', 'action' => 'add'),
-        array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
-      ),
-      array(
-        array('en' => array('name' => 'English', 'default' => true), 'de' => array('name' => 'German')),
-        array('code' => 'de', 'action' => 'default'),
-        array('en' => array('name' => 'English'), 'de' => array('name' => 'German', 'default' => true)),
-      ),
-      array(
-        array('en' => array('name' => 'English'), 'de' => array('name' => 'German')),
-        array('code' => 'de', 'action' => 'rename', 'name' => 'Deutsch'),
-        array('en' => array('name' => 'English'), 'de' => array('name' => 'Deutsch')),
-      ),
-    );
-  }
-
-  /**
-   * @dataProvider providerTestHandleUpdateLanguages
-   */
-  function testHandleUpdateLanguages($original_options, $form_submission, $expected_results) {
-    $admin = new WhatDidTheySayAdmin();
-    $admin->all_languages = array(
-      'en' => 'English',
-      'de' => 'German',
-      'fr' => 'French'
-    );
-
-    update_option('what-did-they-say-options', array('languages' => $original_options));
-    
-    $admin->handle_update_languages($form_submission);
-
-    $options = get_option('what-did-they-say-options');
-    $this->assertEquals($expected_results, $options['languages']);
-  }
-
   function testBuildFullDefaultLanguageInfo() {
     $admin = new WhatDidTheySayAdmin();
     $admin->all_languages = array(

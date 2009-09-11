@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 foreach (glob(dirname(__FILE__) . '/classes/*.php') as $file) { require_once($file); }
 
-$what_did_they_say =& new WhatDidTheySay();
 $what_did_they_say_admin =& new WhatDidTheySayAdmin(&$what_did_they_say);
 
 add_action('init', array(&$what_did_they_say_admin, 'init'));

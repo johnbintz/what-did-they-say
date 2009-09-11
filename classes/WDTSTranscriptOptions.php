@@ -14,20 +14,27 @@ class WDTSTranscriptOptions {
    * @param int $post_id The post ID to affect.
    * @param boolean $allow True if the post can accept new queued transcriptions.
    */
-  function set_allow_transcripts_for_post($post_id, $allow = true) {
-    $current_transcripts = get_post_meta($post_id, "transcript_options", true);
-    if (!is_array
-    $current_transcripts['_allow'] = $allow;
-    update_post_meta($post_id, "provided_transcripts", $current_transcripts);
-  }
+  function set_allow_transcripts($allow = true) { $this->_update_option('allow_transcripts', $allow); }
 
   /**
    * See if the indicated post is accepting new transcripts.
    * @return boolean True if the post is acceptin new transcripts.
    */
-  function get_allow_transcripts_for_post($post_id) {
-    $current_transcripts = get_post_meta($post_id, "provided_transcripts", true);
-    return $current_transcripts['_allow'];
+  function get_allow_transcripts() {
+    $options = $this->_get_transcript_options();
+    return issset($options['allow_transcripts']) ? $options['allow_transcripts'] : false;
+  }
+
+  function _get_transcript_options() {
+    $current_transcripts = get_post_meta($this->post_id, "transcript_options", true);
+    if (!is_array($current_transcripts)) { $current_transcripts = array(); }
+    return $current_transcripts;
+  }
+
+  function _update_option($option, $value) {
+    $current_options = $this->_get_transcript_options();
+    $current_transcripts[$option] = $value;
+    update_post_meta($this->post_id, "transcript_options", $current_transcripts);
   }
 }
 

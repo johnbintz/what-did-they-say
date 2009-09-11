@@ -17,6 +17,30 @@ class WDTSLanguageOptions {
     return $language;
   }
 
+  function set_default_language($language) {
+    $options = get_option($this->key);
+
+    if (isset($options['languages'][$language])) {
+      $ok = true;
+      if (isset($options['languages'][$language]['default'])) {
+        $ok = !$options['languages'][$language]['default'];
+      }
+      if ($ok) {
+        $updated_languages = array();
+        foreach ($options['languages'] as $code => $info) {
+          unset($info['default']);
+          if ($code == $language) { $info['default'] = true; }
+          $updated_languages[$code] = $info;
+        }
+        $options['languages'] = $updated_languages;
+        update_option($this->key, $options);
+
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Get the name of a language from the language code.
    * @param string $language The language code to search for.
@@ -49,6 +73,7 @@ class WDTSLanguageOptions {
     if (isset($options['languages'][$code_to_delete])) {
       $did_delete = $options['languages'][$code_to_delete];
       unset($options['languages'][$code_to_delete]);
+      ksort($options['languages']);
     }
     
     update_option($this->key, $options);
@@ -63,11 +88,12 @@ class WDTSLanguageOptions {
       if (!isset($options['languages'][$code])) {
         if (!empty($info['name'])) {
           $options['languages'][$code] = $info;
+          ksort($options['languages']);
           $result = true;
         }        
       }
     }
-    
+
     update_option($this->key, $options);
     return $result;
   }
@@ -86,6 +112,7 @@ class WDTSLanguageOptions {
         $new_languages[$code] = $info;
       }
       $options['languages'] = $new_languages;
+      ksort($options['languages']);
       
       update_option($this->key, $options);
     }

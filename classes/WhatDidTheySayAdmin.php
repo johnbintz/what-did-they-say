@@ -157,11 +157,12 @@ class WhatDidTheySayAdmin {
    * @param array $info The part of the $_POST array for What Did They Say?!?
    */
   function handle_update($info) {
-    foreach (get_class_methods($this) as $method) {
-      if (strpos($method, "handle_update_") === 0) {
-        $result = $this->{$method}($info);
+    if (isset($info['module'])) {
+      $method_name = "handle_update_" . str_replace("-", "_", $info['module']);
+      if (method_exists($this, $method_name)) {
+        $result = $this->{$method_name}($info);
         if (!empty($result)) { $this->notices[] = $result; }
-      } 
+      }
     }
   }
 
@@ -173,9 +174,9 @@ class WhatDidTheySayAdmin {
   function handle_update_queue_transcript($info) {
     $updated = false;
     if (current_user_can('submit_transcriptions')) {
-      $queued_transcript = new WDTSTranscriptOptions($info['post_id']));
+      $queued_transcript = new WDTSTranscriptOptions($info['post_id']);
       
-      if ($this->what_did_they_say->get_allow_transcripts_for_post() {
+      if ($this->what_did_they_say->get_allow_transcripts_for_post()) {
         switch ($info['action']) {
           case 'submit_queued_transcript':
             $result = $this->what_did_they_say->add_queued_transcription_to_post($info['post_id'], $info);
@@ -248,35 +249,33 @@ class WhatDidTheySayAdmin {
         case "delete":
           if ($result = $language_options->delete_language($info['code'])) {
             $updated = sprintf(__('%s deleted.', 'what-did-they-say'), $result['name']);
+          } else {
+            $updated = sprintf(__('Language not deleted!', 'what-did-they-say'));
           }
           break;
         case "add":
           $this->read_language_file();
           if (isset($this->all_languages[$info['code']])) {
-            
-            
-            $options['languages'][$info['code']] = array('name' => $this->all_languages[$info['code']]);
-            $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$info['code']]);
+            if ($language_options->add_language($info['code'], array('name' => $this->all_languages[$info['code']]))) {
+              $updated = sprintf(__('%s added.', 'what-did-they-say'), $this->all_languages[$info['code']]);
+            } else {
+              $updated = sprintf(__('Language not added!', 'what-did-they-say'));
+            }
           }
           break;
         case "default":
-          if (isset($options['languages'][$info['code']])) {
-            foreach ($options['languages'] as $code => $lang_info) {
-              if ($code == $info['code']) {
-                $options['languages'][$code]['default'] = true;
-                $updated = sprintf(__('%s set as default.', 'what-did-they-say'), $lang_info['name']);
-              } else {
-                unset($options['languages'][$code]['default']);
-              }
-            }
+          if ($language_options->set_default_language($info['code'])) {
+            $updated = sprintf(__('%s set as default.', 'what-did-they-say'), $language_options->get_language_name($info['code']));
+          } else {
+            $updated = sprintf(__('Language not set as default!', 'what-did-they-say'));
           }
           break;
         case "rename":
-          if (isset($options['languages'][$info['code']])) {
-            if (!empty($info['name'])) {
-              $updated = sprintf(__('%1$s renamed to %2$s.', 'what-did-they-say'), $options['languages'][$info['code']]['name'], $info['name']);
-              $options['languages'][$info['code']]['name'] = $info['name'];
-            }
+          $original_language_name = $language_options->get_language_name($info['code']);
+          if ($language_options->rename_language($info['code'], $info['name'])) {
+            $updated = sprintf(__('%1$s renamed to %2$s.', 'what-did-they-say'), $original_language_name, $info['name']);
+          } else {
+            $updated = sprintf(__('Language not renamed!', 'what-did-they-say'));
           }
           break;
       }
