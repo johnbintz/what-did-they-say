@@ -174,15 +174,15 @@ class WhatDidTheySayAdmin {
   function handle_update_queue_transcript($info) {
     $updated = false;
     if (current_user_can('submit_transcriptions')) {
-      $queued_transcript = new WDTSTranscriptOptions($info['post_id']);
+      $transcript_options = new WDTSTranscriptOptions($info['post_id']);
       
-      if ($this->what_did_they_say->get_allow_transcripts_for_post()) {
-        switch ($info['action']) {
-          case 'submit_queued_transcript':
-            $result = $this->what_did_they_say->add_queued_transcription_to_post($info['post_id'], $info);
-            if ($result) {
-              $updated = __('Transcript added to queue.', 'what-did-they-say');
-            }
+      if ($transcript_options->are_new_transcripts_allowed()) {
+        $queued_transcript_manager = new WDTSQueuedTranscript($info['post_id']);
+        
+        if ($queued_transcript_manager->save_transcript($info)) {
+          $updated = __('Transcript added to queue.', 'what-did-they-say');
+        } else {
+          $updated = __('Transcript not added to queue.', 'what-did-they-say');          
         }
       }
     }
@@ -211,18 +211,18 @@ class WhatDidTheySayAdmin {
       $transcript_options = new WDTSTranscriptOptions($info['post_id']);
       $transcript_options->set_allow_transcripts(isset($info['allow_on_post']));
 
-      $queued_transcriptions = $this->what_did_they_say->get_queued_transcriptions_for_post($info['post_id']);
+      $queued_transcript_manager = new WDTSQueuedTranscript($info['post_id']);
+      $queued_transcripts = $queued_transcript_manager->get_transcripts();
+
       if (is_array($queued_transcriptions)) {
-        $transcriptions_to_delete = array();
+        $transcripts_to_delete = array();
 
-        foreach ($queued_transcriptions as $transcription) { $transcriptions_to_delete[$transcription->id] = true; }
+        foreach ($queued_transcriptions as $transcription) { $transcripts_to_delete[$transcription->id] = true; }
         if (isset($post_transcript_info['queue'])) {
-          foreach ($post_transcript_info['queue'] as $id => $keep) { unset($transcriptions_to_delete[$id]); }
+          foreach ($post_transcript_info['queue'] as $id => $keep) { unset($transcripts_to_delete[$id]); }
         }
 
-        foreach (array_keys($transcriptions_to_delete) as $id) {
-          $this->what_did_they_say->delete_queued_transcription($id);
-        }
+        foreach (array_keys($transcripts_to_delete) as $id) { $queued_transcripts->delete_transcript($id); }
       }
 
       $updated = __('Transcripts updated.', 'what-did-they-say');
