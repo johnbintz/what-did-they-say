@@ -176,7 +176,7 @@ function the_media_transcript_queue_editor() {
       ${"${var_name}_transcript_manager"} = new $class_name($post->ID);
       ${"${var_name}_transcripts"} = ${"${var_name}_transcript_manager"}->get_transcripts();
     }
-
+    
     $nonce = wp_create_nonce('what-did-they-say');
 
     ?>
@@ -184,7 +184,7 @@ function the_media_transcript_queue_editor() {
       <h3><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
       <form method="post" class="transcript-editor">
         <?php include(dirname(__FILE__) . '/classes/meta-box.inc') ?>
-        <input type="submit" value="Submit New" />
+        <input type="submit" value="Modify Transcript" />
       </form>
     <?php } ?>
     <?php if (current_user_can('submit_transcriptions')) { ?>

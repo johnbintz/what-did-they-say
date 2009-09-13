@@ -16,7 +16,8 @@ class WhatDidTheySayAdmin {
       'submit_transcriptions' => 'administrator',
       'approve_transcriptions' => 'administrator',
       'change_languages' => 'administrator'
-    )
+    ),
+    'load_default_styles' => true
   );
   
   var $capabilities = array();
@@ -45,10 +46,14 @@ class WhatDidTheySayAdmin {
       'change_languages'      => __('Change the available languages', 'what-did-they-say')
     );
     
+    $options = get_option('what-did-they-say-options');
+    if (!is_array($options)) {
+      $options = $this->default_options;
+      update_option('what-did-they-say-options', $options);
+    }
+    
     add_action('admin_menu', array(&$this, 'admin_menu'));
     add_action('admin_notices', array(&$this, 'admin_notices'));
-
-    wp_enqueue_script('prototype');
 
     add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
     add_filter('the_media_transcript', array(&$this, 'the_media_transcript'));
@@ -63,18 +68,71 @@ class WhatDidTheySayAdmin {
           
           if ($this->is_ajax) { exit(0); }
         }
-      } 
-    }
-
-    $this->read_language_file();
-
-    if (current_user_can('submit_transcriptions')) {
-      wp_enqueue_script('scriptaculous-effects');      
+      }
     }
   }
 
   function template_redirect() {
-    wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'toggle-transcript.js', array('prototype'), false, true);    
+    wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype'), false, true);
+    if (current_user_can('submit_transcriptions')) { wp_enqueue_script('scriptaculous-effects'); }
+    
+    foreach (get_class_methods($this) as $method) {
+      if (strpos($method, "shortcode_") === 0) {
+        $shortcode_name = str_replace("_", "-", str_replace("shortcode_", "", $method));
+        add_shortcode($shortcode_name, array(&$this, $method));
+      } 
+    }
+    
+    add_filter('filter_shortcode_dialog', array(&$this, 'filter_shortcode_dialog'), 10, 4);
+    add_filter('filter_shortcode_scene_action', array(&$this, 'filter_shortcode_scene_action'), 10, 2);
+    add_filter('filter_shortcode_scene_heading', array(&$this, 'filter_shortcode_scene_heading'), 10, 2);
+    
+    $options = get_option('what-did-they-say-options');
+    if (!empty($options['load_default_styles'])) {
+      wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+    }
+  }
+
+  function shortcode_dialog($atts, $speech) {
+    extract(shortcode_atts(array(
+      'name' => 'Nobody',
+      'direction' => ''
+    ), $atts));
+    
+    list($content) = apply_filters('filter_shortcode_dialog', "", $name, $direction, $speech);
+    return $content;
+  }
+  
+  function filter_shortcode_dialog($content, $name, $direction, $speech) {
+    $content  = '<div class="dialog"><span class="name">' . $name . '</span>';
+    if (!empty($direction)) {
+      $content .= ' <span class="direction">' . $direction . '</span>';
+    }
+    $content .= ' <span class="speech">' . $speech . '</span></div>';
+    
+    return array($content, $name, $direction, $speech);
+  }
+  
+  function shortcode_scene_action($atts, $description) {
+    extract(shortcode_atts(array(), $atts));
+    
+    list($content) = apply_filters('filter_shortcode_scene_action', "", $description); 
+    return $content;
+  }
+  
+  function filter_shortcode_scene_action($content, $description) {
+    return array('<div class="scene-action">' . $description . '</div>', $description);
+  }
+
+  function shortcode_scene_heading($atts, $description) {
+    extract(shortcode_atts(array(), $atts));
+    
+    list($content) = apply_filters('filter_shortcode_scene_heading', "", $description); 
+    return $content;
+  }
+
+  function filter_shortcode_scene_heading($content, $description) {
+    return array('<div class="scene-heading">' . $description . '</div>', $description);
   }
 
   /**
@@ -83,7 +141,7 @@ class WhatDidTheySayAdmin {
    * @return string The processed transcription text.
    */
   function the_media_transcript($transcript) {
-    return '<div class="transcript">' . $transcript . '</div>'; 
+    return '<div class="transcript">' . do_shortcode($transcript) . '</div>'; 
   }
 
   /**
@@ -180,8 +238,6 @@ class WhatDidTheySayAdmin {
   function handle_update_manage_post_transcripts($info) {
     $updated = false;
     if (current_user_can('approve_transcriptions')) {
-      $options = get_option('what-did-they-say-options');
-
       $approved_transcript_manager = new WDTSApprovedTranscript($info['post_id']);
 
       foreach ($info['transcripts'] as $language => $transcript) {
@@ -245,6 +301,19 @@ class WhatDidTheySayAdmin {
     header('HTTP/1.1 401 Unauthorized');    
   }
   
+  function handle_update_default_styles($info) {
+    $updated = false;
+    if (current_user_can('edit_themes')) {
+      $options = get_option('what-did-they-say-options');
+
+      $options['load_default_styles'] = isset($info['default_styles']);
+      
+      update_option('what-did-they-say-options', $options);
+      $updated = __('Default styles option updated.', 'what-did-they-say');
+    }
+    return $updated;
+  }
+    
   /**
    * Handle updates to languages.
    * @param array $info The part of the $_POST array for What Did They Say?!?
@@ -391,15 +460,21 @@ class WhatDidTheySayAdmin {
   /**
    * Handle admin_menu action.
    */
-  function admin_menu() {
-    if (current_user_can('edit_users')) {
+  function admin_menu() { 
+    global $plugin_page;
+
+    if (current_user_can('submit_transcriptions')) {       
       add_options_page(
-        __('What Did They Say?!? Settings', 'what-did-they-say'),
+        __('What Did They Say?!?', 'what-did-they-say'),
         __('What Did They Say?!?', 'what-did-they-say'),
         'manage_options',
         'manage-wdts',
         array(&$this, 'manage_admin')
       );
+      
+      if ($plugin_page == "manage-wdts") { $this->read_language_file(); }
+  
+      wp_enqueue_script('scriptaculous-effects');
     }
     
     if (current_user_can('approve_transcriptions')) {
@@ -411,6 +486,8 @@ class WhatDidTheySayAdmin {
         'normal',
         'low'
       );
+
+      wp_enqueue_script('scriptaculous-effects');
     }
   }
 

@@ -43,8 +43,12 @@
     </select>
   </label>
 
-  <?php foreach (array_keys($options['languages']) as $code) { ?>
-    <textarea class="edit-transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 100%; height: 200px"><?php echo $approved_transcripts[$code] ?></textarea>
+  <?php foreach (array_keys($options['languages']) as $code) {
+    $approved_transcript_text = '';
+    foreach ($approved_transcripts as $transcript) {
+      if ($transcript['language'] == $code) { $approved_transcript_text = $transcript['transcript']; break; } 
+    } ?>
+    <textarea class="edit-transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 100%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
   <?php } ?>
 </p>
 
@@ -61,6 +65,6 @@
   };
   
   var s = document.createElement('script');
-  s.src = '<?php echo plugin_dir_url(dirname(__FILE__)) . 'edit-transcripts.js' ?>';
+  s.src = '<?php echo plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js' ?>';
   document.getElementsByTagName('head')[0].appendChild(s);
 </script>

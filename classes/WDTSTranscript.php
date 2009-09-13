@@ -39,6 +39,10 @@ class WDTSTranscriptManager {
       $transcript_info['user_id'] = $user->ID;
       unset($transcript_info['key']);
       
+      foreach (array_keys($transcript_info) as $key) {
+        if (strpos($key, "_") === 0) { unset($transcript_info[$key]); } 
+      }
+      
       if (($transcripts = $this->_get_transcripts_metadata()) !== false) {
         $max_key = 0;
         foreach ($transcripts as $transcript) {
