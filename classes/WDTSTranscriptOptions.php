@@ -26,15 +26,15 @@ class WDTSTranscriptOptions {
   }
 
   function _get_transcript_options() {
-    $current_transcripts = get_post_meta($this->post_id, "transcript_options", true);
-    if (!is_array($current_transcripts)) { $current_transcripts = array(); }
-    return $current_transcripts;
+    $current_options = get_post_meta($this->post_id, "transcript_options", true);
+    if (!is_array($current_options)) { $current_options = array(); }
+    return $current_options;
   }
 
   function _update_option($option, $value) {
     $current_options = $this->_get_transcript_options();
-    $current_transcripts[$option] = $value;
-    update_post_meta($this->post_id, "transcript_options", $current_transcripts);
+    $current_options[$option] = $value;
+    update_post_meta($this->post_id, "transcript_options", $current_options);
   }
 }
 

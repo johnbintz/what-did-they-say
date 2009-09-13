@@ -26,11 +26,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 foreach (glob(dirname(__FILE__) . '/classes/*.php') as $file) { require_once($file); }
 
-$what_did_they_say_admin =& new WhatDidTheySayAdmin(&$what_did_they_say);
+$what_did_they_say_admin = new WhatDidTheySayAdmin(&$what_did_they_say);
 
 add_action('init', array(&$what_did_they_say_admin, 'init'));
-register_activation_hook(__FILE__, array(&$what_did_they_say, 'install'));
-register_activation_hook(__FILE__, array(&$what_did_they_say_admin, 'install'));
 
 // template tags
 // please, if you use any of these, wrap them in function_exists() so your site doesn't
@@ -72,10 +70,10 @@ function the_media_transcript($language = null) {
  * @return string The name of the requested language.
  */
 function get_the_language_name($language = null) {
-  global $what_did_they_say;
-  
-  if (is_null($language)) { $language = $what_did_they_say->get_default_language(); }  
-  return $what_did_they_say->get_language_name($language);
+  $language_options = new WDTSLanguageOptions();
+
+  if (is_null($language)) { $language = $language_options->get_default_language(); }  
+  return $language_options->get_language_name($language);
 }
 
 /**
@@ -106,19 +104,21 @@ function transcripts_display($dropdown_message = null, $single_language_message 
   $post_transcripts = $approved_transcripts->get_transcripts();
 
   if (!empty($post_transcripts)) {
-    foreach ($post_transcripts as $code => $transcript) {
-      if (substr($code, 0, 1) != "_") {
-        $transcript = trim($transcript);
-        if (!empty($transcript)) {
-          $transcripts[$code] = $transcript;
-        }
+    foreach ($post_transcripts as $transcript) {
+      extract($transcript, EXTR_PREFIX_ALL, "transcript");
+      $transcript_transcript = trim($transcript_transcript);
+      if (!empty($transcript_transcript)) {
+        $transcripts[$transcript_language] = $transcript_transcript;
       }
     }
 
+    $language_options = new WDTSLanguageOptions();
+
     if (count($transcripts) > 0) {
-      $default_language = $what_did_they_say->get_default_language();
+      $default_language = $language_options->get_default_language();
 
       $output[] = '<div class="transcript-bundle">';
+      
       if (count($transcripts) == 1) {
         list($code, $transcript) = each($transcripts);
         $output[] = apply_filters('the_language_name', get_the_language_name($code));
@@ -152,7 +152,7 @@ function transcripts_display($dropdown_message = null, $single_language_message 
  * If you're allowing users to submit transcripts to the post transcript queue, use this tag in your Loop.
  */
 function the_media_transcript_queue_editor() {
-  global $post, $what_did_they_say;
+  global $post;
 
   if (current_user_can('submit_transcriptions')) {
     $queued_transcripts_for_user = false;
@@ -164,40 +164,50 @@ function the_media_transcript_queue_editor() {
       $queued_transcripts_for_user = $queued_transcripts->get_transcripts_for_user($user->ID);
     }
 
-    $transcript_options = new WDTSTranscriptOptions($post->ID);
+    $language_options = new WDTSLanguageOptions();
 
-    if (is_array($queued_transcripts_for_user)) {
-      if (count($queued_transcripts_for_user) > 0) { ?>
-        <div class="queued-transcriptions">
-          <h3><?php _e('Your queued transcriptions', 'what-did-they-say') ?></h3>
-          <?php foreach ($queued_transcripts_for_user as $transcript) { ?>
-            <h4><?php echo $what_did_they_say->get_language_name($transcript->language) ?></h4>
-            <div>
-              <?php echo $transcript->transcript ?>
-            </div>
-          <?php } ?>
-        </div>
-      <?php } ?>
-    <?php } ?>
-    <?php if ($transcript_options->are_new_transcripts_allowed()) { ?>
+    $transcript_options = new WDTSTranscriptOptions($post->ID);    
+
+    $options = get_option('what-did-they-say-options');
+
+    foreach (array('Approved', 'Queued') as $name) {
+      $var_name = strtolower($name);
+      $class_name = "WDTS${name}Transcript";
+      ${"${var_name}_transcript_manager"} = new $class_name($post->ID);
+      ${"${var_name}_transcripts"} = ${"${var_name}_transcript_manager"}->get_transcripts();
+    }
+
+    $nonce = wp_create_nonce('what-did-they-say');
+
+    ?>
+    <?php if (current_user_can('approve_transcriptions')) { ?>
+      <h3><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
       <form method="post" class="transcript-editor">
-        <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
-        <input type="hidden" name="wdts[action]" value="submit_queued_transcript" />
-        <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
-        <h3><?php _e('Submit a new transcription:', 'what-did-they-say') ?></h3>
-        <label>
-          <?php _e('Language:', 'what-did-they-say') ?>
-          <select name="wdts[language]">
-            <?php foreach ($what_did_they_say->get_languages() as $code => $info) { ?>
-              <option value="<?php echo $code ?>"><?php echo $info['name'] ?></option>
-            <?php } ?>
-          </select>
-        </label><br />
-        <label>
-          <?php _e('Transcription:', 'what-did-they-say') ?><br />
-          <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
-        </label>
-        <input type="submit" value="<?php _e('Submit New Transcription', 'what-did-they-say') ?>" />
+        <?php include(dirname(__FILE__) . '/classes/meta-box.inc') ?>
+        <input type="submit" value="Submit New" />
+      </form>
+    <?php } ?>
+    <?php if (current_user_can('submit_transcriptions')) { ?>
+      <?php if ($transcript_options->are_new_transcripts_allowed()) { ?>
+        <h3><?php _e('Submit a new transcript:', 'what-did-they-say') ?></h3>
+        <form method="post" class="transcript-editor">
+          <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
+          <input type="hidden" name="wdts[module]" value="queue-transcript" />
+          <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
+          <label>
+            <?php _e('Language:', 'what-did-they-say') ?>
+            <select name="wdts[language]">
+              <?php foreach ($language_options->get_languages() as $code => $info) { ?>
+                <option value="<?php echo $code ?>"><?php echo $info['name'] ?></option>
+              <?php } ?>
+            </select>
+          </label><br />
+          <label>
+            <?php _e('Transcription:', 'what-did-they-say') ?><br />
+            <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
+          </label>
+          <input type="submit" value="<?php _e('Submit For Approval', 'what-did-they-say') ?>" />
+        <?php } ?>
       </form>
     <?php } ?>
   <?php }

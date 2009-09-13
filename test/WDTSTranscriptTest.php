@@ -17,6 +17,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
   }
   
   function testSaveTranscript() {
+    $this->w->allow_multiple = false;
+    
     $this->w->save_transcript(array(
       'language' => 'en',
       'transcript' => 'this is a transcript'
@@ -27,7 +29,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         array(
           'language' => 'en',
           'transcript' => 'this is a transcript',
-          'user_id' => 1
+          'user_id' => 1,
+          'key' => 0
         ) 
       ),
       get_post_meta(1, $this->w->key, true)
@@ -43,7 +46,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         array(
           'language' => 'en',
           'transcript' => 'this is another transcript',
-          'user_id' => 1
+          'user_id' => 1,
+          'key' => 0
         ) 
       ),
       get_post_meta(1, $this->w->key, true)
@@ -59,39 +63,101 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         array(
           'language' => 'en',
           'transcript' => 'this is another transcript',
-          'user_id' => 1
+          'user_id' => 1,
+          'key' => 0
         ), 
         array(
           'language' => 'fr',
           'transcript' => "il s'agit d'une nouvelle transcription",
-          'user_id' => 1
+          'user_id' => 1,
+          'key' => 1
         ), 
       ),
       get_post_meta(1, $this->w->key, true)
     );
-  } 
+    
+    $this->w->allow_multiple = true;
+    
+    $this->w->save_transcript(array(
+      'language' => 'en',
+      'transcript' => 'this is yet another transcript'
+    ));
+
+    $this->assertEquals(
+      array(
+        array(
+          'language' => 'en',
+          'transcript' => 'this is another transcript',
+          'user_id' => 1,
+          'key' => 0
+        ), 
+        array(
+          'language' => 'fr',
+          'transcript' => "il s'agit d'une nouvelle transcription",
+          'user_id' => 1,
+          'key' => 1
+        ), 
+        array(
+          'language' => 'en',
+          'transcript' => 'this is yet another transcript',
+          'user_id' => 1,
+          'key' => 2
+        ), 
+      ),
+      get_post_meta(1, $this->w->key, true)
+    );
+  }
   
   function testDeleteTranscript() {
-    update_post_meta(1, $this->w->key, array(
-      array(
-        'language' => 'en',
-        'transcript' => 'this is another transcript',
-        'user_id' => 1
-      ), 
-      array(
-        'language' => 'fr',
-        'transcript' => "il s'agit d'une nouvelle transcription",
-        'user_id' => 1
-      ), 
+    $this->w->save_transcript(array(
+      'language' => 'en',
+      'transcript' => 'this is another transcript'
     ));
     
+    $this->w->save_transcript(array(
+      'language' => 'fr',
+      'transcript' => "il s'agit d'une nouvelle transcription",
+    ));
+
     $this->w->delete_transcript('en');
 
     $this->assertEquals(array(
       array(
         'language' => 'fr',
         'transcript' => "il s'agit d'une nouvelle transcription",
-        'user_id' => 1
+        'user_id' => 1,
+        'key' => 1
+      ), 
+    ), get_post_meta(1, $this->w->key, true));
+  }
+  
+  function testDeleteTranscriptByKey() {
+    $this->w->save_transcript(array(
+      'language' => 'en',
+      'transcript' => 'this is another transcript'
+    ));
+    
+    $this->w->save_transcript(array(
+      'language' => 'fr',
+      'transcript' => "il s'agit d'une nouvelle transcription",
+    ));
+    
+    $this->assertEquals(
+      $this->w->delete_transcript_by_key(0),
+      array(
+        'language' => 'en',
+        'transcript' => "this is another transcript",
+        'user_id' => 1,
+        'key' => 0
+      )
+    );
+
+    $this->assertEquals(array(
+      array(
+        'language' => 'fr',
+        'transcript' => "il s'agit d'une nouvelle transcription",
+        'user_id' => 1,
+        'key' => 1
       ), 
     ), get_post_meta(1, $this->w->key, true));
   }

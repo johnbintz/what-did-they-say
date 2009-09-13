@@ -12,7 +12,9 @@ class WDTSLanguageOptions {
     $options = get_option($this->key);
     foreach ($options['languages'] as $code => $info) {
       if (is_null($language)) { $language = $code; }
-      if ($info['default']) { $language = $code; break; }
+      if (isset($info['default'])) { 
+        if ($info['default']) { $language = $code; break; }
+      }
     }
     return $language;
   }

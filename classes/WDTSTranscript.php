@@ -3,6 +3,7 @@
 class WDTSTranscriptManager { 
   var $key = null;
   var $post_id = null;
+  var $allow_multiple = false;
   
   function __construct($post_id = null) {
     if (is_numeric($post_id)) { $this->post_id = $post_id; }     
@@ -36,36 +37,63 @@ class WDTSTranscriptManager {
     if (!empty($user)) {
       $transcript_info = (array)$transcript_info;          
       $transcript_info['user_id'] = $user->ID;
+      unset($transcript_info['key']);
       
-      if (($transcripts = $this->_get_transcripts_metadata()) !== false) {      
-        $new_transcripts = array();
-        $was_added = false;
+      if (($transcripts = $this->_get_transcripts_metadata()) !== false) {
+        $max_key = 0;
         foreach ($transcripts as $transcript) {
-          if ($transcript['language'] == $transcript_info['language']) {
-            $was_added = true;
-            $new_transcripts[] = $transcript_info;
-          } else {
-            $new_transcripts[] = $transcript; 
-          }
+          $max_key = max($max_key, $transcript['key']) + 1;  
         }
-        if (!$was_added) { $new_transcripts[] = $transcript_info; }
+        $transcript_info['key'] = $max_key;
         
-        return update_post_meta($this->post_id, $this->key, $new_transcripts);
+        if ($this->allow_multiple) {
+          $transcripts[] = $transcript_info;
+        } else {
+          $new_transcripts = array();
+          $was_added = false;
+          foreach ($transcripts as $transcript) {
+            if ($transcript['language'] == $transcript_info['language']) {
+              $was_added = true;
+              $transcript_info['key']--;
+              $new_transcripts[] = $transcript_info;
+            } else {
+              $new_transcripts[] = $transcript; 
+            }
+          }
+          if (!$was_added) { $new_transcripts[] = $transcript_info; }
+          $transcripts = $new_transcripts;
+        }
+        
+        return update_post_meta($this->post_id, $this->key, $transcripts);
       }
     }
     return false;       
   }
   
   function delete_transcript($language = null) {
+    return $this->_delete_transcript_by_field('language', $language);
+  }
+  
+  function delete_transcript_by_key($key = null) {
+    return $this->_delete_transcript_by_field('key', $key);
+  }
+  
+  function _delete_transcript_by_field($field, $value) {
     if (($transcripts = $this->_get_transcripts_metadata()) !== false) {      
       $new_transcripts = array();
+      $deleted_transcript = false;
       foreach ($transcripts as $transcript) {
-        if ($transcript['language'] != $language) { $new_transcripts[] = $transcript; } 
+        if ($transcript[$field] != $value) {
+          $new_transcripts[] = $transcript;
+        } else {
+          $deleted_transcript = $transcript;
+        }
       }
 
-      return update_post_meta($this->post_id, $this->key, $new_transcripts);
+      update_post_meta($this->post_id, $this->key, $new_transcripts);
+      return $deleted_transcript;
     } 
-    return false;
+    return false;    
   }
   
   function get_transcripts() {
