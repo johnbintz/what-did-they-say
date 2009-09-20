@@ -61,6 +61,9 @@ class WhatDidTheySayAdmin {
     
     add_filter('template_redirect', array(&$this, 'template_redirect'));
     
+    add_filter('posts_where', array(&$this, 'posts_where'));
+    add_filter('posts_join', array(&$this, 'posts_join'));
+    
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
@@ -70,6 +73,30 @@ class WhatDidTheySayAdmin {
         }
       }
     }
+  }
+
+  function posts_where($where) {
+    global $wpdb;
+    
+    $search = get_query_var('s');
+    if (!empty($search)) {
+      $where .= $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts');
+      $search = addslashes_gpc($search);
+      $where .= " AND $wpdb->postmeta.meta_value LIKE '%$search%') ";
+    }
+    
+    return $where;
+  }
+  
+  function posts_join($join) {
+    global $wpdb;
+    
+    $search = get_query_var('s');
+    if (!empty($search)) {
+      $join .=  " JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) ";
+    }
+    
+    return $join;
   }
 
   function template_redirect() {
