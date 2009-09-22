@@ -14,6 +14,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
     
     $this->w = new WDTSTranscriptManager(1);
     $this->w->key = "test";
+		$this->w->search_key = "test_search";
   }
   
   function testSaveTranscript() {
@@ -36,6 +37,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
       get_post_meta(1, $this->w->key, true)
     );
 
+		$this->assertEquals("this is a transcript", get_post_meta(1, $this->w->search_key, true));
+
     $this->w->save_transcript(array(
       'language' => 'en',
       'transcript' => 'this is another transcript'
@@ -52,6 +55,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
       ),
       get_post_meta(1, $this->w->key, true)
     );
+
+    $this->assertEquals("this is another transcript", get_post_meta(1, $this->w->search_key, true));
 
     $this->w->save_transcript(array(
       'language' => 'fr',
@@ -76,6 +81,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
       get_post_meta(1, $this->w->key, true)
     );
     
+    $this->assertEquals("this is another transcript il s'agit d'une nouvelle transcription", get_post_meta(1, $this->w->search_key, true));
+
     $this->w->allow_multiple = true;
     
     $this->w->save_transcript(array(
@@ -106,6 +113,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
       ),
       get_post_meta(1, $this->w->key, true)
     );
+
+    $this->assertEquals("this is another transcript il s'agit d'une nouvelle transcription this is yet another transcript", get_post_meta(1, $this->w->search_key, true));
   }
   
   function testDeleteTranscript() {
@@ -129,6 +138,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         'key' => 1
       ), 
     ), get_post_meta(1, $this->w->key, true));
+
+    $this->assertEquals("il s'agit d'une nouvelle transcription", get_post_meta(1, $this->w->search_key, true));
   }
   
   function testDeleteTranscriptByKey() {
@@ -160,6 +171,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         'key' => 1
       ), 
     ), get_post_meta(1, $this->w->key, true));
+
+    $this->assertEquals("il s'agit d'une nouvelle transcription", get_post_meta(1, $this->w->search_key, true));
   }
   
   function testGetLanguages() {

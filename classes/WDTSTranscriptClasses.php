@@ -9,6 +9,7 @@ class WDTSQueuedTranscript extends WDTSTranscriptManager {
 
 class WDTSApprovedTranscript extends WDTSTranscriptManager {
   var $key = "approved_transcripts";
+  var $search_key = "approved_transcripts_words";
 }
 
 ?>

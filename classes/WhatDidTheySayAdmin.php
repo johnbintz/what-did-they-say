@@ -80,7 +80,7 @@ class WhatDidTheySayAdmin {
     
     $search = get_query_var('s');
     if (!empty($search)) {
-      $where .= $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts');
+      $where .= $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts_words');
       $search = addslashes_gpc($search);
       $where .= " AND $wpdb->postmeta.meta_value LIKE '%$search%') ";
     }
