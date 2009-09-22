@@ -17,7 +17,8 @@ class WhatDidTheySayAdmin {
       'approve_transcriptions' => 'administrator',
       'change_languages' => 'administrator'
     ),
-    'load_default_styles' => true
+    'load_default_styles' => true,
+    'excerpt_distance' => 30
   );
   
   var $capabilities = array();
@@ -56,8 +57,9 @@ class WhatDidTheySayAdmin {
     add_action('admin_notices', array(&$this, 'admin_notices'));
 
     add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
-    add_filter('the_media_transcript', array(&$this, 'the_media_transcript'));
-    add_filter('the_language_name', array(&$this, 'the_language_name'));
+    add_filter('the_media_transcript', array(&$this, 'the_media_transcript'), 10, 2);
+    add_filter('the_language_name', array(&$this, 'the_language_name'), 10, 2);
+    add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
     
     add_filter('template_redirect', array(&$this, 'template_redirect'));
     
@@ -80,11 +82,16 @@ class WhatDidTheySayAdmin {
     
     $search = get_query_var('s');
     if (!empty($search)) {
-      $where .= $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts_words');
+      $query = $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts_words');
       $search = addslashes_gpc($search);
-      $where .= " AND $wpdb->postmeta.meta_value LIKE '%$search%') ";
+      $query .= " AND $wpdb->postmeta.meta_value LIKE '%$search%') ";
+
+      $exact = get_query_var('exact');
+      $n = !empty($exact) ? '' : '%';
+
+      $where = preg_replace("#(\($wpdb->posts.post_title LIKE '{$n}{$search}{$n}'\))#", '\1' . $query, $where);
     }
-    
+
     return $where;
   }
   
@@ -167,8 +174,8 @@ class WhatDidTheySayAdmin {
    * @param string $transcript The transcription text.
    * @return string The processed transcription text.
    */
-  function the_media_transcript($transcript) {
-    return '<div class="transcript">' . do_shortcode($transcript) . '</div>'; 
+  function the_media_transcript($transcript, $output = "") {
+    return array($transcript, '<div class="transcript">' . do_shortcode($transcript) . '</div>');
   }
 
   /**
@@ -176,8 +183,46 @@ class WhatDidTheySayAdmin {
    * @param string $language The name of the language.
    * @return string The processed language name.
    */
-  function the_language_name($language) {
-    return '<h3 class="transcript-language">' . $language . '</h3>';
+  function the_language_name($language, $output = "") {
+    return array($language, '<h3 class="transcript-language">' . $language . '</h3>');
+  }
+
+  function the_matching_transcript_excerpts($transcripts, $search_string = '', $output = "") {
+    var_dump($search_string);
+    ob_start();
+    if (!empty($search_string)) {
+      $language_options = new WDTSLanguageOptions();
+      $options = get_option('what-did-they-say-options');
+      
+      foreach ($transcripts as $transcript) {
+        if (($pos = strpos($transcript['transcript'], $search_string)) !== false) {
+          $l = strlen($transcript['transcript']) - 1;
+          echo '<div class="transcript-match">';
+            echo '<h4>' . sprintf(__("%s transcript:", 'what-did-they-say'), $language_options->get_language_name($transcript['language'])) . '</h4>';
+            echo '<p>';
+              $start_ellipsis = $end_ellipsis = true;
+              foreach (array(
+                'start' => -1,
+                'end'   => 1
+              ) as $variable => $direction) {
+                ${$variable} = $pos + ($options['excerpt_distance'] * $direction);
+
+                if (${$variable} < 0) { ${$variable} = 0; $start_ellipsis = false; }
+                if (${$variable} > $l) { ${$variable} = $l; $end_ellipsis = false; }
+              }
+
+              $output = "";
+              if ($start_ellipsis) { $output .= "... "; }
+              $output .= str_replace($search_string, "<strong>" . $search_string . "</strong>", $transcript['transcript']);
+              if ($end_ellipsis) { $output .= " ..."; }
+
+              echo $output;
+            echo '</p>';
+          echo '</div>';
+        }
+      }
+    }
+    return array($transcripts, $search_string, ob_get_clean());
   }
   
   /**

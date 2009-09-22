@@ -167,8 +167,10 @@
       </table>
     <?php } ?>
   <?php } ?>
-  
+
   <?php if (current_user_can('manage_options')) { ?>
+    <h3>Miscellaneous Options</h3>
+  
     <h3><?php _e('Reset Settings to Default', 'what-did-they-say') ?></h3>
     <p><?php _e('Click the button below to reset capabilities and languages to their defaults. This will not affect any transcriptions you have already created, but some transcriptions may become inaccessible if you don\'t redefine the original language.', 'what-did-they-say') ?></p>
     <form method="post" id="reset-wdts">

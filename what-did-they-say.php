@@ -48,7 +48,9 @@ function get_the_media_transcript($language = null) {
   if (is_null($language)) { $language = $what_did_they_say->get_default_language(); }
   
   $transcript = false;
-  $transcripts = $what_did_they_say->get_transcripts($post->ID);
+  $approved_transcripts = new WDTSApprovedTranscript($post->ID);
+  $transcripts = $approved_transcripts->get_transcripts();
+  
   if (!empty($transcripts)) {
     if (isset($transcripts[$language])) { $transcript = $transcripts[$language]; }
   }
@@ -60,8 +62,34 @@ function get_the_media_transcript($language = null) {
  * @param string $language The language code to use. If not specificed, use the default language.
  */
 function the_media_transcript($language = null) {
-  $transcript = apply_filters('the_media_transcript', get_the_media_transcript($language));
-  echo $transcript;
+  echo end(apply_filters('the_media_transcript', get_the_media_transcript($language)));
+}
+
+/**
+ * Get the excerpt of all transcripts that match the provided search string.
+ */
+function get_the_matching_transcripts($search_string = '') {
+  global $post;
+
+  if (empty($search_string)) { $search_string = get_query_var('s'); }
+
+  $approved_transcripts = new WDTSApprovedTranscript($post->ID);
+  $transcripts = $approved_transcripts->get_transcripts();
+
+  $matching_transcripts = array();
+  if (!empty($transcripts)) {
+    foreach ($transcripts as $transcript) {
+      if (strpos($transcript['transcript'], $search_string) !== false) { $matching_transcripts[] = $transcript; }
+    }
+  }
+
+  return $matching_transcripts;
+}
+
+function the_matching_transcript_excerpts($search_string = '') {
+  if (empty($search_string)) { $search_string = get_query_var('s'); }
+
+  echo end(apply_filters('the_matching_transcript_excerpts', get_the_matching_transcripts($search_string), $search_string));
 }
 
 /**
@@ -81,8 +109,7 @@ function get_the_language_name($language = null) {
  * @param string $language The language code to use. If not specificed, use the default language.
  */
 function the_language_name($language = null) {
-  $name = apply_filters('the_language_name', get_the_language_name($language));
-  echo $name; 
+  echo end(apply_filters('the_language_name', get_the_language_name($language)));
 }
 
 /**
