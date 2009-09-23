@@ -373,12 +373,13 @@ class WhatDidTheySayAdmin {
     header('HTTP/1.1 401 Unauthorized');    
   }
   
-  function handle_update_default_styles($info) {
+  function handle_update_styles($info) {
     $updated = false;
     if (current_user_can('edit_themes')) {
       $options = get_option('what-did-they-say-options');
 
       $options['load_default_styles'] = isset($info['default_styles']);
+      $options['excerpt_distance'] = !empty($info['excerpt_distance']) ? $info['excerpt_distance'] : 30;
       
       update_option('what-did-they-say-options', $options);
       $updated = __('Default styles option updated.', 'what-did-they-say');
@@ -544,7 +545,10 @@ class WhatDidTheySayAdmin {
         array(&$this, 'manage_admin')
       );
       
-      if ($plugin_page == "manage-wdts") { $this->read_language_file(); }
+      if ($plugin_page == "manage-wdts") {
+        $this->read_language_file();
+        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+      }
   
       wp_enqueue_script('scriptaculous-effects');
     }
