@@ -1,0 +1,40 @@
+#wdts-tab-bar {
+  margin-top: 0.5em;
+  padding: 0.7em 0 0.2em;
+  overflow: hidden
+}
+
+.wdts-tab {
+  border-style: solid;
+  border-color: #b3b3b3;
+  border-width: 1px 1px 0 1px;
+  background-color: #FFFFFF;
+  padding: 0.5em;
+  margin: 0 0.2em;
+  border-radius-topleft: 0.5em;
+  border-radius-topright: 0.5em;
+  -moz-border-radius-topleft: 0.5em;
+  -moz-border-radius-topright: 0.5em;
+  -webkit-border-radius-topleft: 0.5em;
+  -webkit-border-radius-topright: 0.5em;
+  text-decoration: none;
+}
+
+.inactive {
+  background-color: #b3b3b3
+}
+
+#wdts-container {
+  border: solid #b3b3b3 1px;
+  padding: 0.5em;
+  overflow: hidden
+}
+
+#wdts-container label {
+  display: block;
+  padding: 0.3em 0
+}
+
+#wdts-container dd {
+  margin-left: 4em
+}

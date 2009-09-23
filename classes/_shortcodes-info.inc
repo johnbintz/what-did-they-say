@@ -1,9 +1,28 @@
 <?php if (current_user_can('submit_transcriptions')) { ?>
-  <h3><?php _e('Transcript Shortcodes', 'what-did-they-say') ?></h3>
+  <h3><?php _e('Shortcodes Info', 'what-did-they-say') ?></h3>
+
+  <h4><?php _e('Sample Transcript', 'what-did-they-say') ?></h4>
+  <pre>
+    [scene-heading]Ext. The Old Man's House[/scene-heading]
+    [scene-action]John is walking down to the car parked in the driveway.[/scene-action]
+    [dialog name="John" direction="(towards the house)"]Hey, where are the keys?[/dialog]
+  </pre>
+
+  <div style="width: 300px; border: solid #333 1px; margin: 10px; padding: 10px">
+    <div style="text-transform: uppercase; text-align: center; margin-bottom: 10px; font-weight: bold; font-family: 'Courier New'"><?php _e('Ext. The Old Man\'s House', 'what-did-they-say') ?></div>
+    <div style="font-family: 'Courier New'"><?php _e('John is walking down to the car parked in the driveway.', 'what-did-they-say') ?></div>
+    <div style="text-align: center; margin-top: 10px">
+      <div style="font-family: 'Courier New'; text-transform: uppercase"><?php _e('John', 'what-did-they-say') ?></div>
+      <div style="font-family: 'Courier New'; margin-bottom: 10px"><?php _e('(towards the house)', 'what-did-they-say') ?></div>
+      <div style="font-family: 'Courier New'"><?php _e('Hey, where are the keys?', 'what-did-they-say') ?></div>
+    </div>
+  </div>
+  
+  <h4><?php _e('Shortcode Details', 'what-did-they-say') ?></h4>
   <p>
-    <?php _e('Transcripts can be entered either using straight HTML or by using shortcodes built for What Did They Say?!?', 'what-did-they-say') ?>
+    <?php _e('Transcripts can be entered either using straight HTML or by using shortcodes built for <strong>What Did They Say?!?</strong>', 'what-did-they-say') ?>
     <?php _e('Using shortcodes will make your transcripts easier to style.', 'what-did-they-say') ?>
-    <?php _e('The default styles that come with What Did They Say?!? make your transcripts look like a screenplay.', 'what-did-they-say') ?>
+    <?php _e('The default styles that come with <strong>What Did They Say?!?</strong> make your transcripts look like a screenplay.', 'what-did-they-say') ?>
   </p>
   <h4><?php _e('Available Shortcodes', 'what-did-they-say') ?></h4>
 
@@ -22,7 +41,7 @@
     </p>
 
   <h5><?php _e('[dialog]', 'what-did-they-say') ?></h5>
-    <p><?php _e('The textfor when a character is speaking in a scene:', 'what-did-they-say') ?></p>
+    <p><?php _e('The text for when a character is speaking in a scene:', 'what-did-they-say') ?></p>
     <p>
       <?php _e('<code>[dialog name="John" direction="(towards the house)"]Hey, where are the keys?[/dialog]</code> becomes:', 'what-did-they-say') ?>
     </p>
