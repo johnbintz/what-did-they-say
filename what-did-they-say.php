@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 foreach (glob(dirname(__FILE__) . '/classes/*.php') as $file) { require_once($file); }
 
 $what_did_they_say_admin = new WhatDidTheySayAdmin(&$what_did_they_say);
+$what_did_they_say_admin->_parent_file = __FILE__;
 
 add_action('init', array(&$what_did_they_say_admin, 'init'));
 
@@ -43,18 +44,22 @@ add_action('init', array(&$what_did_they_say_admin, 'init'));
  * @return string|false The transcript in the requested language for the specified post, or false if no transcript found.
  */
 function get_the_media_transcript($language = null) {
-  global $post, $what_did_they_say;
-  
-  if (is_null($language)) { $language = $what_did_they_say->get_default_language(); }
-  
-  $transcript = false;
-  $approved_transcripts = new WDTSApprovedTranscript($post->ID);
-  $transcripts = $approved_transcripts->get_transcripts();
-  
-  if (!empty($transcripts)) {
-    if (isset($transcripts[$language])) { $transcript = $transcripts[$language]; }
+  global $post;
+
+  if (!empty($post)) {
+    $language_options = new WDTSLanguageOptions();
+    if (is_null($language)) { $language = $language_options->get_default_language(); }
+
+    $transcript = false;
+    $approved_transcripts = new WDTSApprovedTranscript($post->ID);
+    $transcripts = $approved_transcripts->get_transcripts();
+
+    if (!empty($transcripts)) {
+      if (isset($transcripts[$language])) { $transcript = $transcripts[$language]; }
+    }
+    return $transcript;
   }
-  return $transcript;
+  return '';
 }
 
 /**

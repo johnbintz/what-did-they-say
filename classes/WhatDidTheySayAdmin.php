@@ -536,7 +536,7 @@ class WhatDidTheySayAdmin {
   function admin_menu() { 
     global $plugin_page;
 
-    if (current_user_can('submit_transcriptions')) {       
+    if (current_user_can('submit_transcriptions')) {
       add_options_page(
         __('What Did They Say?!?', 'what-did-they-say'),
         __('What Did They Say?!?', 'what-did-they-say'),
@@ -548,6 +548,8 @@ class WhatDidTheySayAdmin {
       if ($plugin_page == "manage-wdts") {
         $this->read_language_file();
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+
+        $this->plugin_data = get_plugin_data($this->_parent_file);
       }
   
       wp_enqueue_script('scriptaculous-effects');

@@ -38,3 +38,18 @@
 #wdts-container dd {
   margin-left: 4em
 }
+
+#wdts-footer {
+  height: 3em;
+  overflow: hidden
+}
+
+#wdts-footer p {
+  margin: 0;
+  line-height: 3em
+}
+
+#wdts-footer form {
+  float: right;
+  display: inline
+}

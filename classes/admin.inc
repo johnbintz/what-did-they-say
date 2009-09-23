@@ -6,6 +6,8 @@
     'misc-options' => __('Misc. Options', 'what-did-they-say'),
     'shortcodes-info' => __('Shortcodes Info', 'what-did-they-say')
   );
+
+  extract($this->plugin_data);
 ?>
 <div class="wrap">
   <h2><?php _e('What Did They Say?!?', 'what-did-they-say') ?></h2>
@@ -20,6 +22,19 @@
         <?php include("_${page}.inc") ?>
       </div>
     <?php } ?>
+  </div>
+
+  <div id="wdts-footer">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="donate">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="8429526">
+    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+    </form>
+
+    <p>
+      <a href="<?php echo $PluginURI ?>"><?php _e('What Did They Say?!?', 'what-did-they-say') ?></a> Version <?php echo $Version ?> is &copy; 2009 <?php echo $Author ?>.
+    </p>
   </div>
 </div>
 
