@@ -77,6 +77,9 @@ class WhatDidTheySayAdmin {
     }
   }
 
+  /**
+   * Filter for WP_Query#get_posts to add searching for transcripts.
+   */
   function posts_where($where) {
     global $wpdb;
     
@@ -94,7 +97,10 @@ class WhatDidTheySayAdmin {
 
     return $where;
   }
-  
+
+  /**
+   * Filter for WP_Query#get_posts to add searching for transcripts.
+   */
   function posts_join($join) {
     global $wpdb;
     
@@ -106,6 +112,9 @@ class WhatDidTheySayAdmin {
     return $join;
   }
 
+  /**
+   * Action for when a non-admin page is displayed.
+   */
   function template_redirect() {
     wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype'), false, true);
     if (current_user_can('submit_transcriptions')) { wp_enqueue_script('scriptaculous-effects'); }
@@ -127,46 +136,61 @@ class WhatDidTheySayAdmin {
     }
   }
 
+  /**
+   * Dialog short code.
+   */
   function shortcode_dialog($atts, $speech) {
     extract(shortcode_atts(array(
       'name' => 'Nobody',
       'direction' => ''
     ), $atts));
     
-    list($content) = apply_filters('filter_shortcode_dialog', "", $name, $direction, $speech);
-    return $content;
+    return end(apply_filters('filter_shortcode_dialog', $name, $direction, $speech, ""));
   }
-  
-  function filter_shortcode_dialog($content, $name, $direction, $speech) {
+
+  /**
+   * Filter for dialog short code.
+   */
+  function filter_shortcode_dialog($name, $direction, $speech, $content) {
     $content  = '<div class="dialog"><span class="name">' . $name . '</span>';
     if (!empty($direction)) {
       $content .= ' <span class="direction">' . $direction . '</span>';
     }
     $content .= ' <span class="speech">' . $speech . '</span></div>';
     
-    return array($content, $name, $direction, $speech);
+    return array($name, $direction, $speech, $content);
   }
-  
+
+  /**
+   * Scene action short code.
+   */
   function shortcode_scene_action($atts, $description) {
     extract(shortcode_atts(array(), $atts));
     
-    list($content) = apply_filters('filter_shortcode_scene_action', "", $description); 
-    return $content;
-  }
-  
-  function filter_shortcode_scene_action($content, $description) {
-    return array('<div class="scene-action">' . $description . '</div>', $description);
+    return end(apply_filters('filter_shortcode_scene_action', $description, ""));
   }
 
+  /**
+   * Filter for scene action short code.
+   */
+  function filter_shortcode_scene_action($description, $content) {
+    return array($description, '<div class="scene-action">' . $description . '</div>', );
+  }
+
+  /**
+   * Scene heading short code.
+   */
   function shortcode_scene_heading($atts, $description) {
     extract(shortcode_atts(array(), $atts));
     
-    list($content) = apply_filters('filter_shortcode_scene_heading', "", $description); 
-    return $content;
+    return end(apply_filters('filter_shortcode_scene_heading', $description, ""));
   }
 
-  function filter_shortcode_scene_heading($content, $description) {
-    return array('<div class="scene-heading">' . $description . '</div>', $description);
+  /**
+   * Filter for scene heading short code.
+   */
+  function filter_shortcode_scene_heading($description, $content) {
+    return array($description, '<div class="scene-heading">' . $description . '</div>');
   }
 
   /**
@@ -187,6 +211,9 @@ class WhatDidTheySayAdmin {
     return array($language, '<h3 class="transcript-language">' . $language . '</h3>');
   }
 
+  /**
+   * Handle the_matching_transcript_excerpts.
+   */
   function the_matching_transcript_excerpts($transcripts, $search_string = '', $output = "") {
     ob_start();
     if (!empty($search_string)) {
@@ -341,7 +368,10 @@ class WhatDidTheySayAdmin {
     }
     return $updated;
   }
-  
+
+  /**
+   * Handle transcript approval.
+   */
   function handle_update_approve_transcript($info) {
     $this->is_ajax = true;
 
@@ -358,7 +388,10 @@ class WhatDidTheySayAdmin {
     }
     header('HTTP/1.1 401 Unauthorized');
   }
-  
+
+  /**
+   * Handle transcript deletion.
+   */
   function handle_update_delete_transcript($info) {
     $this->is_ajax = true;
 
@@ -373,7 +406,10 @@ class WhatDidTheySayAdmin {
     }
     header('HTTP/1.1 401 Unauthorized');    
   }
-  
+
+  /**
+   * Handle updating default styles.
+   */
   function handle_update_styles($info) {
     $updated = false;
     if (current_user_can('edit_themes')) {
