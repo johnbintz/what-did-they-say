@@ -60,7 +60,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
 
     $this->w->save_transcript(array(
       'language' => 'fr',
-      'transcript' => "il s'agit d'une nouvelle transcription"
+      'transcript' => "[dialog]il s'agit d'une nouvelle transcription[/dialog]"
     ));
 
     $this->assertEquals(
@@ -73,7 +73,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         ), 
         array(
           'language' => 'fr',
-          'transcript' => "il s'agit d'une nouvelle transcription",
+          'transcript' => "[dialog]il s'agit d'une nouvelle transcription[/dialog]",
           'user_id' => 1,
           'key' => 1
         ), 
@@ -100,7 +100,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         ), 
         array(
           'language' => 'fr',
-          'transcript' => "il s'agit d'une nouvelle transcription",
+          'transcript' => "[dialog]il s'agit d'une nouvelle transcription[/dialog]",
           'user_id' => 1,
           'key' => 1
         ), 

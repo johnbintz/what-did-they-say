@@ -80,7 +80,7 @@ class WDTSTranscriptManager {
   function _update_search_field($transcripts) {
     if (!empty($this->search_key)) {
       $search_lines = array();
-      foreach ($transcripts as $transcript) { $search_lines[] = $transcript['transcript']; }
+      foreach ($transcripts as $transcript) { $search_lines[] = preg_replace('#\[[^\]]+\]#', '', $transcript['transcript']); }
       update_post_meta($this->post_id, $this->search_key, implode(" ", $search_lines));
     }
   }
