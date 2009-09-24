@@ -188,7 +188,6 @@ class WhatDidTheySayAdmin {
   }
 
   function the_matching_transcript_excerpts($transcripts, $search_string = '', $output = "") {
-    var_dump($search_string);
     ob_start();
     if (!empty($search_string)) {
       $language_options = new WDTSLanguageOptions();
@@ -198,7 +197,7 @@ class WhatDidTheySayAdmin {
         if (($pos = strpos($transcript['transcript'], $search_string)) !== false) {
           $l = strlen($transcript['transcript']) - 1;
           echo '<div class="transcript-match">';
-            echo '<h4>' . sprintf(__("%s transcript:", 'what-did-they-say'), $language_options->get_language_name($transcript['language'])) . '</h4>';
+            echo '<h4>' . sprintf(__("%s transcript excerpt:", 'what-did-they-say'), $language_options->get_language_name($transcript['language'])) . '</h4>';
             echo '<p>';
               $start_ellipsis = $end_ellipsis = true;
               foreach (array(
@@ -207,14 +206,16 @@ class WhatDidTheySayAdmin {
               ) as $variable => $direction) {
                 ${$variable} = $pos + ($options['excerpt_distance'] * $direction);
 
+                if ($variable == "end") { ${$variable} += strlen($search_string); }
+
                 if (${$variable} < 0) { ${$variable} = 0; $start_ellipsis = false; }
                 if (${$variable} > $l) { ${$variable} = $l; $end_ellipsis = false; }
               }
 
               $output = "";
-              if ($start_ellipsis) { $output .= "... "; }
-              $output .= str_replace($search_string, "<strong>" . $search_string . "</strong>", $transcript['transcript']);
-              if ($end_ellipsis) { $output .= " ..."; }
+              if ($start_ellipsis) { $output .= "..."; }
+              $output .= str_replace($search_string, "<strong>" . $search_string . "</strong>", trim(substr($transcript['transcript'], $start, $end - $start)));
+              if ($end_ellipsis) { $output .= "..."; }
 
               echo $output;
             echo '</p>';
