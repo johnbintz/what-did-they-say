@@ -27,64 +27,72 @@ var WDTSInjector = Class.create({
   }
 });
 
-$$('#wdts-shorttags button').each(function(b) {
-  b.observe('click', function(e) {
-    Event.stop(e);
-    var current_transcript = $("wdts-transcripts-" + $F('wdts-language'));
-    if (current_transcript) {
-      if (document.selection) {
-        var range = document.selection.createRange();
-        var stored_range = range.duplicate();
-        stored_range.moveToElementText( element );
-        stored_range.setEndPoint( 'EndToEnd', range );
-        element.selectionStart = stored_range.text.length - range.text.length;
-        element.selectionEnd = element.selectionStart + range.text.length;
-      }
-
-      var start = current_transcript.selectionStart;
-      var end = current_transcript.selectionEnd;
-
-      var injector = new WDTSInjector(current_transcript, end);
-      
-      var new_content = (start == end);
-      var tag = b.id.replace('wdts-', '');
-      switch (b.id) {
-        case 'wdts-scene-heading':
-        case 'wdts-scene-action':
-          var message = tag.replace('-', '_');
-          if (new_content) {
-            var content = prompt(messages[message]);
-            if (content) {
-              injector.inject('[' + tag + ']' + content + "[/" + tag + "]\n", start);
-            }
-          } else {
-            injector.inject("[/" + tag + "]\n", end);
-            injector.inject('[' + tag + ']', start);
+Event.observe(window, 'load', function() {
+  [
+    [ '#wdts-shorttags button', $("wdts-transcripts-" + $F('wdts-language')) ],
+    [ '#wdts-submit-shorttags button', $('wdts-transcript') ]
+  ].each(function(info) {
+    $$(info[0]).each(function(b) {
+      top.console.log(b);
+      b.observe('click', function(e) {
+        Event.stop(e);
+        var current_transcript = info[1];
+        if (current_transcript) {
+          if (document.selection) {
+            var range = document.selection.createRange();
+            var stored_range = range.duplicate();
+            stored_range.moveToElementText( element );
+            stored_range.setEndPoint( 'EndToEnd', range );
+            element.selectionStart = stored_range.text.length - range.text.length;
+            element.selectionEnd = element.selectionStart + range.text.length;
           }
-          break;
-        case 'wdts-dialog':
-          var name = prompt(messages.dialog_name);
-          if (name) {
-            var direction = prompt(messages.dialog_direction);
-            var tag = '[dialog name="' + name + '"';
-            if (direction) { tag += ' direction="' + direction + '"'; }
-            tag += ']';
-            
-            if (new_content) {
-              var speech = prompt(messages.dialog_speech);
 
-              tag += speech + "[/dialog]\n";
+          var start = current_transcript.selectionStart;
+          var end = current_transcript.selectionEnd;
 
-              injector.inject(tag, start);
-            } else {
-              injector.inject("[/dialog]\n", end);
-              injector.inject(tag, start);
-            }
+          var injector = new WDTSInjector(current_transcript, end);
+
+          var new_content = (start == end);
+          var tag = b.id.replace('wdts-', '');
+          switch (b.id) {
+            case 'wdts-scene-heading':
+            case 'wdts-scene-action':
+              var message = tag.replace('-', '_');
+              if (new_content) {
+                var content = prompt(messages[message]);
+                if (content) {
+                  injector.inject('[' + tag + ']' + content + "[/" + tag + "]\n", start);
+                }
+              } else {
+                injector.inject("[/" + tag + "]\n", end);
+                injector.inject('[' + tag + ']', start);
+              }
+              break;
+            case 'wdts-dialog':
+              var name = prompt(messages.dialog_name);
+              if (name) {
+                var direction = prompt(messages.dialog_direction);
+                var tag = '[dialog name="' + name + '"';
+                if (direction) { tag += ' direction="' + direction + '"'; }
+                tag += ']';
+
+                if (new_content) {
+                  var speech = prompt(messages.dialog_speech);
+
+                  tag += speech + "[/dialog]\n";
+
+                  injector.inject(tag, start);
+                } else {
+                  injector.inject("[/dialog]\n", end);
+                  injector.inject(tag, start);
+                }
+              }
+              break;
           }
-          break;
-      }
-      injector.set_caret();
-    }
+          injector.set_caret();
+        }
+      });
+    });
   });
 });
 

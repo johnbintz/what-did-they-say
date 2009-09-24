@@ -153,8 +153,8 @@ function transcripts_display($dropdown_message = null, $single_language_message 
       
       if (count($transcripts) == 1) {
         list($code, $transcript) = each($transcripts);
-        $output[] = apply_filters('the_language_name', get_the_language_name($code));
-        $output[] = apply_filters('the_media_transcript', $transcript);
+        $output[] = end(apply_filters('the_language_name', get_the_language_name($code)));
+        $output[] = end(apply_filters('the_media_transcript', $transcript));
       } else {
         $output[] = $dropdown_message;
         $output[] = '<select>';
@@ -165,8 +165,8 @@ function transcripts_display($dropdown_message = null, $single_language_message 
           }
         $output[] = '</select>';
         foreach ($transcripts as $code => $transcript) {
-          $language_name = apply_filters('the_language_name', get_the_language_name($code));
-          $transcript    = apply_filters('the_media_transcript', $transcript);
+          $language_name = end(apply_filters('the_language_name', get_the_language_name($code)));
+          $transcript    = end(apply_filters('the_media_transcript', $transcript));
 
           $output[] = '<div '
                     . (($code == $default_language) ? 'style="display:none"' : '')
@@ -215,13 +215,13 @@ function the_media_transcript_queue_editor() {
     <?php if (current_user_can('approve_transcriptions')) { ?>
       <h3><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
       <form method="post" class="transcript-editor">
-        <?php include(dirname(__FILE__) . '/classes/meta-box.inc') ?>
+        <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
         <input type="submit" value="Modify Transcript" />
       </form>
     <?php } ?>
     <?php if (current_user_can('submit_transcriptions')) { ?>
       <?php if ($transcript_options->are_new_transcripts_allowed()) { ?>
-        <h3><?php _e('Submit a new transcript:', 'what-did-they-say') ?></h3>
+        <h3 style="margin-top: 0.5em"><?php _e('Submit a new transcript:', 'what-did-they-say') ?></h3>
         <form method="post" class="transcript-editor">
           <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
           <input type="hidden" name="wdts[module]" value="queue-transcript" />
@@ -234,10 +234,14 @@ function the_media_transcript_queue_editor() {
               <?php } ?>
             </select>
           </label><br />
-          <label>
-            <?php _e('Transcription:', 'what-did-they-say') ?><br />
-            <textarea style="height: 200px; width: 90%" name="wdts[transcript]"></textarea>
-          </label>
+          <?php _e('Transcript:', 'what-did-they-say') ?><br />
+          <div id="wdts-submit-shorttags">
+            <button class="wdts-create" id="wdts-scene-heading">Scene Heading</button>
+            <button class="wdts-create" id="wdts-scene-action">Scene Action</button>
+            <button class="wdts-create" id="wdts-dialog">Dialog</button>
+          </div>
+
+          <textarea style="height: 200px; width: 90%" id="wdts-transcript" name="wdts[transcript]"></textarea>
           <input type="submit" value="<?php _e('Submit For Approval', 'what-did-they-say') ?>" />
         <?php } ?>
       </form>

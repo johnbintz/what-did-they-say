@@ -23,7 +23,7 @@
             $language_options->get_language_name($transcript['language'])
           )
         ?></p>
-        <div class="queued-transcription"><?php echo $transcript['transcript'] ?></div>
+        <div class="queued-transcription transcript"><?php echo do_shortcode($transcript['transcript']) ?></div>
         <div class="queued-transcription-raw" style="display:none"><?php echo $transcript['transcript'] ?></div>
         <div style="padding: 10px 0">
           <a href="#" class="approve-transcript button">Approve</a>
@@ -54,7 +54,7 @@
     foreach ($approved_transcripts as $transcript) {
       if ($transcript['language'] == $code) { $approved_transcript_text = $transcript['transcript']; break; } 
     } ?>
-    <textarea class="edit-transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 100%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
+    <textarea class="edit-transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 95%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
   <?php } ?>
 </p>
 
