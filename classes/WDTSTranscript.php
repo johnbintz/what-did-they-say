@@ -80,9 +80,18 @@ class WDTSTranscriptManager {
   function _update_search_field($transcripts) {
     if (!empty($this->search_key)) {
       $search_lines = array();
-      foreach ($transcripts as $transcript) { $search_lines[] = preg_replace('#\[[^\]]+\]#', '', $transcript['transcript']); }
+      foreach ($transcripts as $transcript) {
+        $search_lines[] = preg_replace_callback('#\[[^\]]+\]#', array(&$this, '_update_search_field_callback'), $transcript['transcript']);
+      }
       update_post_meta($this->post_id, $this->search_key, implode(" ", $search_lines));
     }
+  }
+
+  function _update_search_field_callback($result) {
+    $properties = preg_match_all('#[a-z]+="([^\"]+)"#', reset($result), $matches);
+    $return = "";
+    foreach ($matches[1] as $match) { $return .= $match . " "; }
+    return $return;
   }
 
   function delete_transcript($language = null) {

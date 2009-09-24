@@ -1,11 +1,11 @@
 <?php
   $pages = array(
     'introduction' => __('Introduction', 'what-did-they-say'),
-    'capabilities' => __('Capabilities', 'what-did-they-say'),
-    'default-styles' => __('Styles', 'what-did-they-say'),
-    'change-languages' => __('Languages', 'what-did-they-say'),
-    'shortcodes-info' => __('Shortcodes Info', 'what-did-they-say'),
-    'misc-options' => __('Misc. Options', 'what-did-they-say'),
+    'capabilities' => array(__('Capabilities', 'what-did-they-say'), 'edit_users'),
+    'default-styles' => array(__('Styles', 'what-did-they-say'), 'edit_themes'),
+    'change-languages' => array(__('Languages', 'what-did-they-say'), 'change_languages'),
+    'shortcodes-info' => array(__('Shortcodes Info', 'what-did-they-say'), 'submit_transcriptions'),
+    'misc-options' => array(__('Misc. Options', 'what-did-they-say'), 'manage_options'),
   );
 
   extract($this->plugin_data);
@@ -14,7 +14,17 @@
   <h2><?php _e('What Did They Say?!?', 'what-did-they-say') ?></h2>
 
   <div id="wdts-tab-bar">
-    <?php foreach ($pages as $page => $title) { ?><a id="wdts-tab-<?php echo $page ?>" href="#" class="wdts-tab"><?php echo $title ?></a><?php } ?>
+    <?php foreach ($pages as $page => $title) {
+      $ok = true;
+      if (is_array($title)) {
+        $ok = current_user_can(end($title));
+        $title = reset($title);
+      }
+
+      if ($ok) {
+        ?><a id="wdts-tab-<?php echo $page ?>" href="#" class="wdts-tab"><?php echo $title ?></a>
+      <?php }
+    } ?>
   </div>
 
   <div id="wdts-container">

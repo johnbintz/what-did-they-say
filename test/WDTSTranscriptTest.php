@@ -87,7 +87,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
     
     $this->w->save_transcript(array(
       'language' => 'en',
-      'transcript' => 'this is yet another transcript'
+      'transcript' => '[dialog name="John"]this is yet another transcript[/dialog]'
     ));
 
     $this->assertEquals(
@@ -106,7 +106,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         ), 
         array(
           'language' => 'en',
-          'transcript' => 'this is yet another transcript',
+          'transcript' => '[dialog name="John"]this is yet another transcript[/dialog]',
           'user_id' => 1,
           'key' => 2
         ), 
@@ -114,7 +114,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
       get_post_meta(1, $this->w->key, true)
     );
 
-    $this->assertEquals("this is another transcript il s'agit d'une nouvelle transcription this is yet another transcript", get_post_meta(1, $this->w->search_key, true));
+    $this->assertEquals("this is another transcript il s'agit d'une nouvelle transcription John this is yet another transcript", get_post_meta(1, $this->w->search_key, true));
   }
   
   function testDeleteTranscript() {

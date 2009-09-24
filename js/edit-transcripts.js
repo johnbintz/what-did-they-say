@@ -33,7 +33,6 @@ Event.observe(window, 'load', function() {
     [ '#wdts-submit-shorttags button', $('wdts-transcript') ]
   ].each(function(info) {
     $$(info[0]).each(function(b) {
-      top.console.log(b);
       b.observe('click', function(e) {
         Event.stop(e);
         var current_transcript = info[1];

@@ -56,5 +56,8 @@
 
 #wdts-shorttags {
   background-color: #DFDFDF;
-  padding: 3px
+  padding: 3px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
 }

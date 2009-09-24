@@ -19,6 +19,7 @@ class WhatDidTheySayAdmin {
     ),
     'load_default_styles' => true,
     'automatic_embedding' => true,
+    'search_integration' => true,
     'excerpt_distance' => 30
   );
   
@@ -63,9 +64,11 @@ class WhatDidTheySayAdmin {
     add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
     
     add_filter('template_redirect', array(&$this, 'template_redirect'));
-    
-    add_filter('posts_where', array(&$this, 'posts_where'));
-    add_filter('posts_join', array(&$this, 'posts_join'));
+
+    if ($options['search_integration']) {
+      add_filter('posts_where', array(&$this, 'posts_where'));
+      add_filter('posts_join', array(&$this, 'posts_join'));
+    }
 
     if ($options['automatic_embedding']) {
       add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), 15);
@@ -230,38 +233,41 @@ class WhatDidTheySayAdmin {
    * Handle the_matching_transcript_excerpts.
    */
   function the_matching_transcript_excerpts($transcripts, $search_string = '', $content = "") {
+    $options = get_option('what-did-they-say-options');
     ob_start();
-    if (!empty($search_string)) {
-      $language_options = new WDTSLanguageOptions();
-      $options = get_option('what-did-they-say-options');
-      
-      foreach ($transcripts as $transcript) {
-        if (($pos = strpos($transcript['transcript'], $search_string)) !== false) {
-          $l = strlen($transcript['transcript']) - 1;
-          echo '<div class="transcript-match">';
-            echo '<h4>' . sprintf(__("%s transcript excerpt:", 'what-did-they-say'), $language_options->get_language_name($transcript['language'])) . '</h4>';
-            echo '<p>';
-              $start_ellipsis = $end_ellipsis = true;
-              foreach (array(
-                'start' => -1,
-                'end'   => 1
-              ) as $variable => $direction) {
-                ${$variable} = $pos + ($options['excerpt_distance'] * $direction);
+    if ($options['search_integration']) {
+      if (!empty($search_string)) {
+        $language_options = new WDTSLanguageOptions();
+        $options = get_option('what-did-they-say-options');
 
-                if ($variable == "end") { ${$variable} += strlen($search_string); }
+        foreach ($transcripts as $transcript) {
+          if (($pos = strpos($transcript['transcript'], $search_string)) !== false) {
+            $l = strlen($transcript['transcript']) - 1;
+            echo '<div class="transcript-match">';
+              echo '<h4>' . sprintf(__("%s transcript excerpt:", 'what-did-they-say'), $language_options->get_language_name($transcript['language'])) . '</h4>';
+              echo '<p>';
+                $start_ellipsis = $end_ellipsis = true;
+                foreach (array(
+                  'start' => -1,
+                  'end'   => 1
+                ) as $variable => $direction) {
+                  ${$variable} = $pos + ($options['excerpt_distance'] * $direction);
 
-                if (${$variable} < 0) { ${$variable} = 0; $start_ellipsis = false; }
-                if (${$variable} > $l) { ${$variable} = $l; $end_ellipsis = false; }
-              }
+                  if ($variable == "end") { ${$variable} += strlen($search_string); }
 
-              $output = "";
-              if ($start_ellipsis) { $output .= "..."; }
-              $output .= str_replace($search_string, "<strong>" . $search_string . "</strong>", trim(substr($transcript['transcript'], $start, $end - $start)));
-              if ($end_ellipsis) { $output .= "..."; }
+                  if (${$variable} < 0) { ${$variable} = 0; $start_ellipsis = false; }
+                  if (${$variable} > $l) { ${$variable} = $l; $end_ellipsis = false; }
+                }
 
-              echo $output;
-            echo '</p>';
-          echo '</div>';
+                $output = "";
+                if ($start_ellipsis) { $output .= "..."; }
+                $output .= str_replace($search_string, "<strong>" . $search_string . "</strong>", trim(substr($transcript['transcript'], $start, $end - $start)));
+                if ($end_ellipsis) { $output .= "..."; }
+
+                echo $output;
+              echo '</p>';
+            echo '</div>';
+          }
         }
       }
     }
@@ -527,6 +533,25 @@ class WhatDidTheySayAdmin {
   }
 
   /**
+   * Handle resettings what-did-they-say-options.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * @return string|false A string if a message is to be displayed, or false if no message.
+   */
+  function handle_update_core_features($info) {
+    $updated = false;
+    if (current_user_can('manage_options')) {
+      $options = get_option('what-did-they-say-options');
+      foreach (array('automatic_embedding', 'search_integration') as $field) {
+        $options[$field] = isset($info[$field]);
+      }
+      update_option('what-did-they-say-options', $options);
+
+      $updated = __('<strong>What Did They Say?!?</strong> core options changed.', 'what-did-they-say');
+    }
+    return $updated;
+  }
+  
+  /**
    * Read a data file containing all the known languages on Earth.
    * The data originally came from http://www.langtag.net/, specifically http://www.langtag.net/registries/lsr-language.txt.
    * The data file format is tab-delimited, with the following fields:
@@ -612,7 +637,7 @@ class WhatDidTheySayAdmin {
       if (strpos($pagenow, "post") === 0) {
         add_meta_box(
           'manage-transcriptions',
-          __('Manage Transcriptions', 'what-did-they-say'),
+          __('Manage Transcripts', 'what-did-they-say'),
           array(&$this, 'manage_transcriptions_meta_box'),
           'post',
           'normal',

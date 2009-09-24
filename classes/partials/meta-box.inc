@@ -47,15 +47,15 @@
     <button class="wdts-create" id="wdts-scene-heading">Scene Heading</button>
     <button class="wdts-create" id="wdts-scene-action">Scene Action</button>
     <button class="wdts-create" id="wdts-dialog">Dialog</button>
-  </div>
 
-  <?php foreach (array_keys($options['languages']) as $code) {
-    $approved_transcript_text = '';
-    foreach ($approved_transcripts as $transcript) {
-      if ($transcript['language'] == $code) { $approved_transcript_text = $transcript['transcript']; break; } 
-    } ?>
-    <textarea class="edit-transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 95%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
-  <?php } ?>
+    <?php foreach (array_keys($options['languages']) as $code) {
+      $approved_transcript_text = '';
+      foreach ($approved_transcripts as $transcript) {
+        if ($transcript['language'] == $code) { $approved_transcript_text = $transcript['transcript']; break; }
+      } ?>
+      <textarea class="edit-transcript" id="wdts-transcripts-<?php echo $code ?>" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 99%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
+    <?php } ?>
+  </div>
 </p>
 
 <script type="text/javascript">
