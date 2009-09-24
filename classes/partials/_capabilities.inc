@@ -4,6 +4,8 @@
     <input type="hidden" name="wdts[module]" value="capabilities" />
     <h3><?php _e('Capabilities', 'what-did-they-say') ?></h3>
 
+    <p><?php _e('Determine who can do what with transcripts by setting the minimum role requirements below.', 'what-did-they-say') ?></p>
+
     <table class="widefat fixed">
       <tr class="thead">
         <th scope="col" class="manage-col"><?php _e('Capability', 'what-did-they-say') ?></th>

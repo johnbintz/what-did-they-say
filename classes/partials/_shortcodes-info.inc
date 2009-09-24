@@ -1,6 +1,10 @@
 <?php if (current_user_can('submit_transcriptions')) { ?>
   <h3><?php _e('Shortcodes Info', 'what-did-they-say') ?></h3>
 
+  <p>
+    <em>(<?php _e('you can easily use these shortcodes with the appropriate buttons above all transcript editors', 'what-did-they-say') ?>)</em>
+  </p>
+  
   <h4><?php _e('Sample Transcript', 'what-did-they-say') ?></h4>
   <pre>
     [scene-heading]Ext. The Old Man's House[/scene-heading]

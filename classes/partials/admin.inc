@@ -1,10 +1,11 @@
 <?php
   $pages = array(
+    'introduction' => __('Introduction', 'what-did-they-say'),
     'capabilities' => __('Capabilities', 'what-did-they-say'),
     'default-styles' => __('Styles', 'what-did-they-say'),
     'change-languages' => __('Languages', 'what-did-they-say'),
+    'shortcodes-info' => __('Shortcodes Info', 'what-did-they-say'),
     'misc-options' => __('Misc. Options', 'what-did-they-say'),
-    'shortcodes-info' => __('Shortcodes Info', 'what-did-they-say')
   );
 
   extract($this->plugin_data);

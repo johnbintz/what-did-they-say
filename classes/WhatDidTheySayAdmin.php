@@ -18,6 +18,7 @@ class WhatDidTheySayAdmin {
       'change_languages' => 'administrator'
     ),
     'load_default_styles' => true,
+    'automatic_embedding' => true,
     'excerpt_distance' => 30
   );
   
@@ -65,6 +66,10 @@ class WhatDidTheySayAdmin {
     
     add_filter('posts_where', array(&$this, 'posts_where'));
     add_filter('posts_join', array(&$this, 'posts_join'));
+
+    if ($options['automatic_embedding']) {
+      add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), 15);
+    }
     
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
@@ -75,6 +80,16 @@ class WhatDidTheySayAdmin {
         }
       }
     }
+  }
+
+  /**
+   * Attempt to automatically embed transcripts in posts.
+   */
+  function the_content_automatic_embedding($content) {
+    ob_start();
+    transcripts_display();
+    the_media_transcript_queue_editor();
+    return $content . ob_get_clean();
   }
 
   /**
@@ -198,7 +213,7 @@ class WhatDidTheySayAdmin {
    * @param string $transcript The transcription text.
    * @return string The processed transcription text.
    */
-  function the_media_transcript($transcript, $output = "") {
+  function the_media_transcript($transcript, $content = "") {
     return array($transcript, '<div class="transcript">' . do_shortcode($transcript) . '</div>');
   }
 
@@ -207,14 +222,14 @@ class WhatDidTheySayAdmin {
    * @param string $language The name of the language.
    * @return string The processed language name.
    */
-  function the_language_name($language, $output = "") {
+  function the_language_name($language, $content = "") {
     return array($language, '<h3 class="transcript-language">' . $language . '</h3>');
   }
 
   /**
    * Handle the_matching_transcript_excerpts.
    */
-  function the_matching_transcript_excerpts($transcripts, $search_string = '', $output = "") {
+  function the_matching_transcript_excerpts($transcripts, $search_string = '', $content = "") {
     ob_start();
     if (!empty($search_string)) {
       $language_options = new WDTSLanguageOptions();
