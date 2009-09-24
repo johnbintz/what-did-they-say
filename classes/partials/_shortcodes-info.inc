@@ -8,13 +8,13 @@
     [dialog name="John" direction="(towards the house)"]Hey, where are the keys?[/dialog]
   </pre>
 
-  <div style="width: 300px; border: solid #333 1px; margin: 10px; padding: 10px">
-    <div style="text-transform: uppercase; text-align: center; margin-bottom: 10px; font-weight: bold; font-family: 'Courier New'"><?php _e('Ext. The Old Man\'s House', 'what-did-they-say') ?></div>
-    <div style="font-family: 'Courier New'"><?php _e('John is walking down to the car parked in the driveway.', 'what-did-they-say') ?></div>
-    <div style="text-align: center; margin-top: 10px">
-      <div style="font-family: 'Courier New'; text-transform: uppercase"><?php _e('John', 'what-did-they-say') ?></div>
-      <div style="font-family: 'Courier New'; margin-bottom: 10px"><?php _e('(towards the house)', 'what-did-they-say') ?></div>
-      <div style="font-family: 'Courier New'"><?php _e('Hey, where are the keys?', 'what-did-they-say') ?></div>
+  <div class="transcript">
+    <div class="scene-heading">Ext. The Old Man's House</div>
+    <div class="scene-action">John is walking down to the car parked in the driveway.</div>
+    <div class="dialog">
+      <span class="name">John</span>
+      <span class="direction">(towards the house)</span>
+      <span class="speech">Hey, where are the keys?</span>
     </div>
   </div>
   

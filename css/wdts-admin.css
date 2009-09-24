@@ -53,3 +53,8 @@
   float: right;
   display: inline
 }
+
+#wdts-shorttags {
+  background-color: #DFDFDF;
+  padding: 3px
+}

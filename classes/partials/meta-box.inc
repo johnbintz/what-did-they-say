@@ -43,6 +43,12 @@
     </select>
   </label>
 
+  <div id="wdts-shorttags">
+    <button class="wdts-create" id="wdts-scene-heading">Scene Heading</button>
+    <button class="wdts-create" id="wdts-scene-action">Scene Action</button>
+    <button class="wdts-create" id="wdts-dialog">Dialog</button>
+  </div>
+
   <?php foreach (array_keys($options['languages']) as $code) {
     $approved_transcript_text = '';
     foreach ($approved_transcripts as $transcript) {
@@ -61,10 +67,12 @@
     'overwrite': '<?php _e('This will overwrite the current transcript. Are you sure?', 'what-did-they-say') ?>',
     'delete': '<?php _e('This will delete the queued transcript. Are you sure?', 'what-did-they-say') ?>',
     'approved': '<?php _e('Transcript approved and posted. You can further edit it below.', 'what-did-they-say') ?>',
-    'deleted': '<?php _e('Transcript deleted.', 'what-did-they-say') ?>'
+    'deleted': '<?php _e('Transcript deleted.', 'what-did-they-say') ?>',
+    'scene_heading': '<?php _e('Enter the scene heading:', 'what-did-they-say') ?>',
+    'scene_action': '<?php _e('Enter the scene action:', 'what-did-they-say') ?>',
+    'dialog_name': '<?php _e('Enter the character name:', 'what-did-they-say') ?>',
+    'dialog_direction': '<?php _e('Enter the direction in which the character is speaking:', 'what-did-they-say') ?>',
+    'dialog_speech': '<?php _e('Enter what the character is speaking:', 'what-did-they-say') ?>',
   };
-  
-  var s = document.createElement('script');
-  s.src = '<?php echo plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js' ?>';
-  document.getElementsByTagName('head')[0].appendChild(s);
 </script>
+<script type="text/javascript" src="<?php echo plugin_dir_url(dirname(__FILE__)) . '../js/edit-transcripts.js' ?>"></script>

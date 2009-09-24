@@ -534,7 +534,7 @@ class WhatDidTheySayAdmin {
    * Handle admin_menu action.
    */
   function admin_menu() { 
-    global $plugin_page;
+    global $pagenow, $plugin_page;
 
     if (current_user_can('submit_transcriptions')) {
       add_options_page(
@@ -548,24 +548,28 @@ class WhatDidTheySayAdmin {
       if ($plugin_page == "manage-wdts") {
         $this->read_language_file();
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+        wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
 
         $this->plugin_data = get_plugin_data($this->_parent_file);
       }
   
       wp_enqueue_script('scriptaculous-effects');
     }
-    
-    if (current_user_can('approve_transcriptions')) {
-      add_meta_box(
-        'manage-transcriptions',
-        __('Manage Transcriptions', 'what-did-they-say'),
-        array(&$this, 'manage_transcriptions_meta_box'),
-        'post',
-        'normal',
-        'low'
-      );
 
-      wp_enqueue_script('scriptaculous-effects');
+    if (current_user_can('approve_transcriptions')) {
+      if (strpos($pagenow, "post") === 0) {
+        add_meta_box(
+          'manage-transcriptions',
+          __('Manage Transcriptions', 'what-did-they-say'),
+          array(&$this, 'manage_transcriptions_meta_box'),
+          'post',
+          'normal',
+          'low'
+        );
+
+        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+        wp_enqueue_script('scriptaculous-effects');
+      }
     }
   }
 
@@ -576,7 +580,7 @@ class WhatDidTheySayAdmin {
     $options = get_option('what-did-they-say-options');
 
     $nonce = wp_create_nonce('what-did-they-say');
-    include(dirname(__FILE__) . '/admin.inc');
+    include('partials/admin.inc');
   }
 
   /**
@@ -597,7 +601,7 @@ class WhatDidTheySayAdmin {
     $transcript_options = new WDTSTranscriptOptions($post->ID);    
 
     $nonce = wp_create_nonce('what-did-they-say');
-    include(dirname(__FILE__) . '/meta-box.inc');
+    include('partials/meta-box.inc');
   }
 }
 
