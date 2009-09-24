@@ -629,9 +629,14 @@ class WhatDidTheySayAdmin {
    * Show the admin page.
    */
   function manage_admin() {
+    global $wpdb;
+    
     $options = get_option('what-did-they-say-options');
 
     $nonce = wp_create_nonce('what-did-they-say');
+
+    $suggested_amount = 20 + ((int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'")) * 0.1);
+    
     include('partials/admin.inc');
   }
 

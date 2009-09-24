@@ -35,6 +35,7 @@
 
     <p>
       <a href="<?php echo $PluginURI ?>"><?php _e('What Did They Say?!?', 'what-did-they-say') ?></a> Version <?php echo $Version ?> is &copy; 2009 <?php echo $Author ?>.
+      <?php printf(__('Might I suggest a $%0.2f donation?', 'what-did-they-say'), $suggested_amount) ?>
     </p>
   </div>
 </div>
