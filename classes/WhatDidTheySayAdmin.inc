@@ -51,8 +51,7 @@ class WhatDidTheySayAdmin {
     
     $options = get_option('what-did-they-say-options');
     if (!is_array($options)) {
-      $options = $this->default_options;
-      update_option('what-did-they-say-options', $options);
+      $this->install();
     }
     
     add_action('admin_menu', array(&$this, 'admin_menu'));
