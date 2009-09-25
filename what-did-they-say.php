@@ -211,6 +211,8 @@ function the_media_transcript_queue_editor() {
     
     $nonce = wp_create_nonce('what-did-they-say');
 
+    include(dirname(__FILE__) . '/classes/partials/_editor-script.inc');
+
     ?>
     <?php if (current_user_can('approve_transcriptions')) { ?>
       <h3><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>

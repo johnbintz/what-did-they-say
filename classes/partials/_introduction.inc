@@ -15,14 +15,16 @@
     <p>
       <?php if (current_user_can('manage_options')) { ?>
         <?php _e('<strong>What Did They Say?!?</strong> can attempt to embed excerpts into your posts automatically:', 'what-did-they-say') ?>
-        <label>
-          <input type="checkbox"
-                 name="wdts[automatic_embedding]"
-                 value="yes"
-                 <?php echo $options['automatic_embedding'] ? 'checked="checked"' : '' ?> />
-            <?php _e('Enable automatic transcript embedding', 'what-did-they-say') ?>
-        </label>
-        <input type="submit" class="button" value="<?php _e('Submit', 'what-did-they-say') ?>" />
+        <fieldset>
+          <label>
+            <input type="checkbox"
+                   name="wdts[automatic_embedding]"
+                   value="yes"
+                   <?php echo $options['automatic_embedding'] ? 'checked="checked"' : '' ?> />
+              <?php _e('Enable automatic transcript embedding', 'what-did-they-say') ?>
+          </label>
+          <input type="submit" class="button" value="<?php _e('Submit', 'what-did-they-say') ?>" />
+        </fieldset>
       <?php } else { ?>
         <?php if ($options['automatic_embedding']) { ?>
           <?php _e('<strong>What Did They Say?!?</strong> is set to attempt to embed excerpts into your posts automatically.', 'what-did-they-say') ?>
@@ -49,14 +51,16 @@
       <?php _e('When someone searches your site, <strong>What Did They Say?!?</strong> can search your transcripts, too.', 'what-did-they-say') ?>
 
       <?php if (current_user_can('manage_options')) { ?>
-        <label>
-          <input type="checkbox"
-                 name="wdts[search_integration]"
-                 value="yes"
-                 <?php echo $options['search_integration'] ? 'checked="checked"' : '' ?> />
-            <?php _e('Enable transcript search integration', 'what-did-they-say') ?>
-        </label>
-        <input type="submit" class="button" value="<?php _e('Submit', 'what-did-they-say') ?>" />
+        <fieldset>
+          <label>
+            <input type="checkbox"
+                   name="wdts[search_integration]"
+                   value="yes"
+                   <?php echo $options['search_integration'] ? 'checked="checked"' : '' ?> />
+              <?php _e('Enable transcript search integration', 'what-did-they-say') ?>
+          </label>
+          <input type="submit" class="button" value="<?php _e('Submit', 'what-did-they-say') ?>" />
+        </fieldset>
       <?php } else { ?>
         <?php if ($options['search_integration']) { ?>
           <?php _e('<strong>What Did They Say?!?</strong> is set to search transcripts when your site is searched.', 'what-did-they-say') ?>

@@ -1,3 +1,5 @@
+var language_selector = $('wdts-language');
+
 function switch_transcript() {
   $$('.edit-transcript').each(function(t) {
     (t.id == "wdts-transcripts-" + $F('wdts-language')) ? t.show() : t.hide();
@@ -28,10 +30,16 @@ var WDTSInjector = Class.create({
 });
 
 Event.observe(window, 'load', function() {
-  [
-    [ '#wdts-shorttags button', $("wdts-transcripts-" + $F('wdts-language')) ],
-    [ '#wdts-submit-shorttags button', $('wdts-transcript') ]
-  ].each(function(info) {
+  var buttons_to_watch = [];
+  if ($('wdts-transcript')) {
+    buttons_to_watch.push([ '#wdts-submit-shorttags button', $('wdts-transcript') ]);
+  }
+
+  if ($$('select[name=wdts-language]').pop()) {
+    buttons_to_watch.push([ '#wdts-shorttags button', $("wdts-transcripts-" + $F('wdts-language')) ]);
+  }
+
+  buttons_to_watch.each(function(info) {
     $$(info[0]).each(function(b) {
       b.observe('click', function(e) {
         Event.stop(e);
@@ -179,6 +187,8 @@ $$('.delete-transcript').each(function(b) {
   });
 });
 
-switch_transcript();
-Event.observe(window, 'load', switch_transcript);
-Event.observe(language_selector, 'change', switch_transcript);
+if (language_selector) {
+  switch_transcript();
+  Event.observe(window, 'load', switch_transcript);
+  Event.observe(language_selector, 'change', switch_transcript);
+}

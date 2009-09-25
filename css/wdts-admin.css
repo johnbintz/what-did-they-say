@@ -61,3 +61,7 @@
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
 }
+
+#wdts-page-introduction label {
+  display: inline
+}

@@ -134,7 +134,10 @@ class WhatDidTheySayAdmin {
    */
   function template_redirect() {
     wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype'), false, true);
-    if (current_user_can('submit_transcriptions')) { wp_enqueue_script('scriptaculous-effects'); }
+    if (current_user_can('submit_transcriptions')) {
+      wp_enqueue_script('scriptaculous-effects');
+      wp_enqueue_script('edit-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'), false, true);
+    }
     
     foreach (get_class_methods($this) as $method) {
       if (strpos($method, "shortcode_") === 0) {
@@ -283,13 +286,13 @@ class WhatDidTheySayAdmin {
   function user_has_cap($capabilities, $requested_capabilities, $capability_name) {
     $options = get_option('what-did-they-say-options');
     if (is_array($options)) {
-      $role_cascade = array('administrator', 'editor', 'author', 'contributor', 'subscriber');
+      $role_cascade = array('subscriber', 'contributor', 'author', 'editor', 'administrator');
       $allowed_roles = array();
-      $capture_roles = false;
 
       for ($i = 0; $i < count($role_cascade); ++$i) {
-        if (in_array($role_cascade, $capabilities)) { $capture_roles = true; }
-        if ($capture_roles) { $allowed_roles[] = $role_cascade[$i]; }
+        if (isset($capabilities[$role_cascade[$i]])) {
+          $allowed_roles = array_slice($role_cascade, 0, $i + 1); break;
+        }
       }
 
       foreach ($requested_capabilities as $requested_capability) {
@@ -616,7 +619,7 @@ class WhatDidTheySayAdmin {
       add_options_page(
         __('What Did They Say?!?', 'what-did-they-say'),
         __('What Did They Say?!?', 'what-did-they-say'),
-        'manage_options',
+        'submit_transcriptions',
         'manage-wdts',
         array(&$this, 'manage_admin')
       );
@@ -645,6 +648,7 @@ class WhatDidTheySayAdmin {
 
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
         wp_enqueue_script('scriptaculous-effects');
+        wp_enqueue_script('edit-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'), false, true);
       }
     }
   }
@@ -683,6 +687,7 @@ class WhatDidTheySayAdmin {
 
     $nonce = wp_create_nonce('what-did-they-say');
     include('partials/meta-box.inc');
+    include('partials/_editor-script.inc');
   }
 }
 
