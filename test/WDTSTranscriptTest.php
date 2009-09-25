@@ -2,7 +2,7 @@
 
 require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__) . '/../../mockpress/mockpress.php');
-require_once(dirname(__FILE__) . '/../classes/WDTSTranscript.php');
+require_once(dirname(__FILE__) . '/../classes/WDTSTranscript.inc');
 
 class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
   function setUp() {

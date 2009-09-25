@@ -1,6 +1,6 @@
 <?php
 
-require_once('WDTSTranscript.php');
+require_once('WDTSTranscript.inc');
 
 class WDTSQueuedTranscript extends WDTSTranscriptManager {
   var $key = "queued_transcripts";

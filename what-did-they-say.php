@@ -24,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-foreach (glob(dirname(__FILE__) . '/classes/*.php') as $file) { require_once($file); }
+foreach (glob(dirname(__FILE__) . '/classes/*.inc') as $file) { require_once($file); }
 
 $what_did_they_say_admin = new WhatDidTheySayAdmin(&$what_did_they_say);
 $what_did_they_say_admin->_parent_file = __FILE__;

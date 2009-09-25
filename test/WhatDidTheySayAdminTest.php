@@ -2,7 +2,7 @@
 
 require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__) . '/../../mockpress/mockpress.php');
-require_once(dirname(__FILE__) . '/../classes/WhatDidTheySayAdmin.php');
+require_once(dirname(__FILE__) . '/../classes/WhatDidTheySayAdmin.inc');
 
 class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
   function setUp() {
