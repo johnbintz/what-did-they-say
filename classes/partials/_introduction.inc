@@ -64,7 +64,9 @@
           <?php _e('<strong>What Did They Say?!?</strong> will not search transcripts when your site is searched.', 'what-did-they-say') ?>
         <?php } ?>
       <?php } ?>
+    </p>
 
+    <p>
       <?php _e('If you want transcript excerpts to appear in your search results, add the following Template Tag to your search results Loop:', 'what-did-they-say') ?>
     </p>
 
