@@ -6,17 +6,15 @@
     <?php _e('Adding transcripts to your posts gives you better search engine visibility and helps disabled users enjoy your content.', 'what-did-they-say') ?>
   </p>
 
-  <h3><?php _e('Getting Started', 'what-did-they-say') ?></h3>
+  <form method="post">
+    <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
+    <input type="hidden" name="wdts[module]" value="core-features" />
 
-  <p>
-    <?php if (current_user_can('manage_options')) { ?>
-      <?php _e('<strong>What Did They Say?!?</strong> can attempt to embed excerpts into your posts automatically:', 'what-did-they-say') ?>
-      <form method="post">
-        <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
-        <input type="hidden" name="wdts[module]" value="core-features" />
-        <?php if ($options['search_integration']) { ?>
-          <input type="hidden" name="wdts[search_integration]" value="yes" />
-        <?php } ?>
+    <h3><?php _e('Getting Started', 'what-did-they-say') ?></h3>
+
+    <p>
+      <?php if (current_user_can('manage_options')) { ?>
+        <?php _e('<strong>What Did They Say?!?</strong> can attempt to embed excerpts into your posts automatically:', 'what-did-they-say') ?>
         <label>
           <input type="checkbox"
                  name="wdts[automatic_embedding]"
@@ -25,19 +23,18 @@
             <?php _e('Enable automatic transcript embedding', 'what-did-they-say') ?>
         </label>
         <input type="submit" class="button" value="<?php _e('Submit', 'what-did-they-say') ?>" />
-      </form>
-    <?php } else { ?>
-      <?php if ($options['automatic_embedding']) { ?>
-        <?php _e('<strong>What Did They Say?!?</strong> is set to attempt to embed excerpts into your posts automatically.', 'what-did-they-say') ?>
       <?php } else { ?>
-        <?php _e('<strong>What Did They Say?!?</strong> will not attempt to embed excerpts into your posts automatically.', 'what-did-they-say') ?>
+        <?php if ($options['automatic_embedding']) { ?>
+          <?php _e('<strong>What Did They Say?!?</strong> is set to attempt to embed excerpts into your posts automatically.', 'what-did-they-say') ?>
+        <?php } else { ?>
+          <?php _e('<strong>What Did They Say?!?</strong> will not attempt to embed excerpts into your posts automatically.', 'what-did-they-say') ?>
+        <?php } ?>
       <?php } ?>
-    <?php } ?>
-  </p>
+    </p>
 
-  <p>
-    <?php _e('If the automatic embedding method doesn\'t work or you desire more control, you can add the following Template Tags to the appropriate location in your posts Loop:', 'what-did-they-say') ?>
-  </p>
+    <p>
+      <?php _e('If the automatic embedding method doesn\'t work or you desire more control, you can add the following Template Tags to the appropriate location in your posts Loop:', 'what-did-they-say') ?>
+    </p>
 
   <pre>
 &lt;?php
@@ -46,18 +43,12 @@
   transcripts_display(); the_media_transcript_queue_editor();
 } ?&gt;</pre>
 
-  <h3><?php _e('Search Results', 'what-did-they-say') ?></h3>
+    <h3><?php _e('Search Results', 'what-did-they-say') ?></h3>
 
-  <p>
-    <?php _e('When someone searches your site, <strong>What Did They Say?!?</strong> can search your transcripts, too.', 'what-did-they-say') ?>
+    <p>
+      <?php _e('When someone searches your site, <strong>What Did They Say?!?</strong> can search your transcripts, too.', 'what-did-they-say') ?>
 
-    <?php if (current_user_can('manage_options')) { ?>
-      <form method="post">
-        <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
-        <input type="hidden" name="wdts[module]" value="core-features" />
-        <?php if ($options['automatic_embedding']) { ?>
-          <input type="hidden" name="wdts[automatic_embedding]" value="yes" />
-        <?php } ?>
+      <?php if (current_user_can('manage_options')) { ?>
         <label>
           <input type="checkbox"
                  name="wdts[search_integration]"
@@ -66,27 +57,28 @@
             <?php _e('Enable transcript search integration', 'what-did-they-say') ?>
         </label>
         <input type="submit" class="button" value="<?php _e('Submit', 'what-did-they-say') ?>" />
-      </form>
-    <?php } else { ?>
-      <?php if ($options['search_integration']) { ?>
-        <?php _e('<strong>What Did They Say?!?</strong> is set to search transcripts when your site is searched.', 'what-did-they-say') ?>
       <?php } else { ?>
-        <?php _e('<strong>What Did They Say?!?</strong> will not search transcripts when your site is searched.', 'what-did-they-say') ?>
+        <?php if ($options['search_integration']) { ?>
+          <?php _e('<strong>What Did They Say?!?</strong> is set to search transcripts when your site is searched.', 'what-did-they-say') ?>
+        <?php } else { ?>
+          <?php _e('<strong>What Did They Say?!?</strong> will not search transcripts when your site is searched.', 'what-did-they-say') ?>
+        <?php } ?>
       <?php } ?>
-    <?php } ?>
 
-    <?php _e('If you want transcript excerpts to appear in your search results, add the following Template Tag to your search results Loop:', 'what-did-they-say') ?>
-  </p>
+      <?php _e('If you want transcript excerpts to appear in your search results, add the following Template Tag to your search results Loop:', 'what-did-they-say') ?>
+    </p>
 
   <pre>
 &lt;php if (function_exists('the_matching_transcript_excerpts')) {
   the_matching_transcript_excerpts();
 } ?&gt;</pre>
 
-  <p>
-    <?php
-      $link = '<a href="#" onclick="make_active($(\'wdts-tab-default-styles\')); return false;">' . __('Styles', 'what-did-they-say') . '</a>';
-      printf(__('You can set the number of characters to show in context in search results on the %s page.', 'what-did-they-say'), $link);
-    ?>
-  </p>
+    <p>
+      <?php
+        $link = '<a href="#" onclick="make_active($(\'wdts-tab-default-styles\')); return false;">' . __('Styles', 'what-did-they-say') . '</a>';
+        printf(__('You can set the number of characters to show in context in search results on the %s page.', 'what-did-they-say'), $link);
+      ?>
+    </p>
+
+  </form>
 <?php } ?>
