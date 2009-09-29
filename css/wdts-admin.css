@@ -70,3 +70,7 @@
   padding: 1em 0;
   overflow: hidden
 }
+
+.queued-transcription-raw {
+  display: none
+}

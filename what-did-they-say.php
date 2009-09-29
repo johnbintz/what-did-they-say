@@ -218,6 +218,7 @@ function the_media_transcript_queue_editor() {
       <h3><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
       <form method="post" class="transcript-editor">
         <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
+        <?php include(dirname(__FILE__) . '/classes/partials/_editor-script.inc'); ?>
         <input type="submit" value="Modify Transcript" />
       </form>
     <?php } ?>
