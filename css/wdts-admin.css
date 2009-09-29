@@ -65,3 +65,7 @@
 #wdts-page-introduction label {
   display: inline
 }
+
+.transcript-action-links {
+  padding-top: 0.4em
+}

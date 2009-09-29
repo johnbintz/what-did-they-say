@@ -72,7 +72,18 @@ class WhatDidTheySayAdmin {
     if ($options['automatic_embedding']) {
       add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), 15);
     }
-    
+
+    foreach (get_class_methods($this) as $method) {
+      if (strpos($method, "shortcode_") === 0) {
+        $shortcode_name = str_replace("_", "-", str_replace("shortcode_", "", $method));
+        add_shortcode($shortcode_name, array(&$this, $method));
+      }
+    }
+
+    add_filter('filter_shortcode_dialog', array(&$this, 'filter_shortcode_dialog'), 10, 4);
+    add_filter('filter_shortcode_scene_action', array(&$this, 'filter_shortcode_scene_action'), 10, 2);
+    add_filter('filter_shortcode_scene_heading', array(&$this, 'filter_shortcode_scene_heading'), 10, 2);
+
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
@@ -137,18 +148,8 @@ class WhatDidTheySayAdmin {
     if (current_user_can('submit_transcriptions')) {
       wp_enqueue_script('scriptaculous-effects');
       wp_enqueue_script('edit-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'), false, true);
+      wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
     }
-    
-    foreach (get_class_methods($this) as $method) {
-      if (strpos($method, "shortcode_") === 0) {
-        $shortcode_name = str_replace("_", "-", str_replace("shortcode_", "", $method));
-        add_shortcode($shortcode_name, array(&$this, $method));
-      } 
-    }
-    
-    add_filter('filter_shortcode_dialog', array(&$this, 'filter_shortcode_dialog'), 10, 4);
-    add_filter('filter_shortcode_scene_action', array(&$this, 'filter_shortcode_scene_action'), 10, 2);
-    add_filter('filter_shortcode_scene_heading', array(&$this, 'filter_shortcode_scene_heading'), 10, 2);
     
     $options = get_option('what-did-they-say-options');
     if (!empty($options['load_default_styles'])) {
@@ -353,6 +354,27 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
 
+  function handle_update_update_queued_transcript($info) {
+    $this->is_ajax = true;
+
+    if ($this->current_user_can_edit_this_transcript($info['post_id'], $info['key'])) {
+      $queued_transcript_manager  = new WDTSQueuedTranscript($info['post_id']);
+      $queued_transcript_manager->update_transcript($info);
+
+      $post = get_post($info['post_id']);
+
+      $language_options = new WDTSLanguageOptions();
+      $transcript_options = new WDTSTranscriptOptions($post->ID);
+
+      $transcript = $queued_transcript_manager->get_transcript_by_key($info['key']);
+      $user = wp_get_current_user();
+
+      include(dirname(__FILE__) . '/partials/_queued-transcript-contents.inc');
+      return;
+    }
+    header('HTTP/1.1 401 Unauthorized');
+  }
+
   /**
    * Handle updates to post transcripts.
    * @param array $info The part of the $_POST array for What Did They Say?!?
@@ -412,13 +434,33 @@ class WhatDidTheySayAdmin {
     header('HTTP/1.1 401 Unauthorized');
   }
 
+  function current_user_can_edit_this_transcript($post_id, $transcript_id) {
+    if (current_user_can('approve_transcriptions')) {
+      $ok = true;
+    } else {
+      $ok = false;
+      if (current_user_can('submit_transcriptions')) {
+        $queued_transcript_manager  = new WDTSQueuedTranscript($post_id);
+        $user = wp_get_current_user();
+
+        $transcripts = $queued_transcript_manager->get_transcripts_for_user($user->ID);
+        foreach ($transcripts as $transcript) {
+          if ($transcript['key'] == $transcript_id) {
+            $ok = true; break;
+          }
+        }
+      }
+    }
+    return $ok;
+  }
+
   /**
    * Handle transcript deletion.
    */
   function handle_update_delete_transcript($info) {
     $this->is_ajax = true;
 
-    if (current_user_can('approve_transcriptions')) {
+    if ($this->current_user_can_edit_this_transcript($info['post_id'], $info['key'])) {
       $queued_transcript_manager  = new WDTSQueuedTranscript($info['post_id']);
       
       if (($transcript = $queued_transcript_manager->delete_transcript_by_key($info['key'])) !== false) {

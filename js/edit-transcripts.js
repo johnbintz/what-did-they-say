@@ -103,7 +103,7 @@ Event.observe(window, 'load', function() {
   });
 });
 
-$$('.approve-transcript').each(function(b) {
+function wdts_setup_approve_transcript_clicker(b) {
   b.observe('click', function(e) {
     Event.stop(e);
     var lang = b.parentNode.parentNode.select("input[name*=[language]]").shift();
@@ -124,7 +124,7 @@ $$('.approve-transcript').each(function(b) {
         if (ok) {
           editor.value = raw_transcript.innerHTML;
           var p = b.parentNode.parentNode;
-          
+
           new Ajax.Request(
             ajax_url, {
               'method': 'post',
@@ -138,12 +138,12 @@ $$('.approve-transcript').each(function(b) {
                 p.update(messages.approved);
                 new Effect.Highlight(p);
                 var i,il;
-                
+
                 for (i = 0, il = language_selector.options.length; i < il; ++i) {
                   if (language_selector.options[i].value == lang) {
                     language_selector.selectedIndex = i;
                     switch_transcript();
-                    break; 
+                    break;
                   }
                 }
               }
@@ -153,10 +153,10 @@ $$('.approve-transcript').each(function(b) {
       }
     }
   });
-});
+};
 
-$$('.delete-transcript').each(function(b) {
-  Event.observe(b, 'click', function(e) {
+function wdts_setup_delete_transcript_clicker(b) {
+  b.observe('click', function(e) {
     Event.stop(e);
 
     if (confirm(messages.delete)) {
@@ -166,7 +166,7 @@ $$('.delete-transcript').each(function(b) {
         post_id = post_id.value;
         key = key.value;
         var p = b.parentNode.parentNode;
-        
+
         new Ajax.Request(
           ajax_url, {
             'method': 'post',
@@ -181,11 +181,67 @@ $$('.delete-transcript').each(function(b) {
               new Effect.Highlight(p);
             }
           }
-        );    
+        );
       }
     }
   });
-});
+}
+
+function wdts_setup_edit_transcript_clicker(b) {
+  b.observe('click', function(e) {
+    Event.stop(e);
+
+    var target = b.parentNode.parentNode;
+
+    var transcript = target.select('.transcript').pop();
+    var textnode   = new Element('textarea', { style: 'height: 200px; width: 90%' });
+    var action_links = target.select('.transcript-action-links').pop();
+    textnode.value = target.select('.queued-transcription-raw').pop().innerHTML;
+
+    b.parentNode.parentNode.insertBefore(textnode, transcript);
+    transcript.hide();
+
+    var post_id = target.select("input[name*=[post_id]]").shift();
+    var key = target.select("input[name*=[key]]").shift();
+
+    var submitter  = new Element('button').update('Update Transcript');
+    submitter.observe('click', function(e) {
+      top.console.log(post_id);
+      top.console.log(key);
+      if (post_id && key) {
+        post_id = post_id.value;
+        key = key.value;
+
+        new Ajax.Updater(target, ajax_url, {
+          'method': 'post',
+          'parameters': {
+            'wdts[_nonce]': nonce,
+            'wdts[module]': 'update-queued-transcript',
+            'wdts[key]': key,
+            'wdts[post_id]': post_id,
+            'wdts[transcript]': textnode.value
+          },
+          'onComplete': function() {
+            new Effect.Highlight(target);
+            wdts_add_clickers(target);
+          }
+        });
+      }
+    });
+
+    b.parentNode.parentNode.appendChild(submitter);
+    action_links.parentNode.removeChild(action_links);
+  });
+}
+
+function wdts_add_clickers(p) {
+  top.console.log(p);
+  p.select('.edit-transcript').each(function(b) { top.console.log(b); wdts_setup_edit_transcript_clicker(b); });
+  p.select('.approve-transcript').each(function(b) { wdts_setup_approve_transcript_clicker(b); });
+  p.select('.delete-transcript').each(function(b) { wdts_setup_delete_transcript_clicker(b); });
+}
+
+wdts_add_clickers($$('body')[0]);
 
 if (language_selector) {
   switch_transcript();

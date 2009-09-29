@@ -191,6 +191,40 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
 
     $this->assertEquals(array('en', 'fr'), $this->w->get_languages());    
   }
+
+  function testUpdateTranscript() {
+    update_post_meta(1, $this->w->key,
+      array(
+        array(
+          'language' => 'en',
+          'transcript' => 'this is a transcript',
+          'user_id' => 1,
+          'key' => 0
+        )
+      )
+    );
+
+    $info = array(
+      'key' => 0,
+      'user_id' => 1,
+      'transcript' => 'hiss hiss hiss',
+      'language' => 'fr'
+    );
+
+    $this->w->update_transcript($info);
+
+    $this->assertEquals(
+      array(
+        array(
+          'language' => 'en',
+          'transcript' => 'hiss hiss hiss',
+          'user_id' => 1,
+          'key' => 0
+        )
+      ),
+      get_post_meta(1, $this->w->key, true)
+    );
+  }
 }
 
 ?>

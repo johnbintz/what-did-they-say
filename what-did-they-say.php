@@ -221,6 +221,14 @@ function the_media_transcript_queue_editor() {
         <input type="submit" value="Modify Transcript" />
       </form>
     <?php } ?>
+		<?php if ((count($queued_transcripts_for_user) > 0) && !current_user_can('approve_transcriptions')) { ?>
+      <h3 style="margin-top: 0.5em"><?php _e('Your Submitted Transcripts:', 'what-did-they-say') ?></h3>
+      <?php
+        foreach ($queued_transcripts_for_user as $transcript) {
+          include(dirname(__FILE__) . '/classes/partials/_display-queued-transcript.inc');
+        }
+      ?>
+		<?php } ?>
     <?php if (current_user_can('submit_transcriptions')) { ?>
       <?php if ($transcript_options->are_new_transcripts_allowed()) { ?>
         <h3 style="margin-top: 0.5em"><?php _e('Submit a new transcript:', 'what-did-they-say') ?></h3>

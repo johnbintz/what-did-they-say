@@ -77,6 +77,26 @@ class WDTSTranscriptManager {
     return false;
   }
 
+  function update_transcript($info) {
+    if (isset($info['key'])) {
+      if (($transcripts = $this->_get_transcripts_metadata()) !== false) {
+        $new_transcripts = array();
+        foreach ($transcripts as $transcript) {
+          if ($transcript['key'] == $info['key']) {
+            foreach (array('transcript') as $field) {
+              if (isset($info[$field])) {
+                $transcript[$field] = $info[$field];
+              }
+            }
+          }
+          $new_transcripts[] = $transcript;
+        }
+
+        return update_post_meta($this->post_id, $this->key, $new_transcripts);
+      }
+    }
+  }
+
   function _update_search_field($transcripts) {
     if (!empty($this->search_key)) {
       $search_lines = array();
@@ -134,6 +154,13 @@ class WDTSTranscriptManager {
       }
     }
     return $user_transcripts;
+  }
+
+  function get_transcript_by_key($key) {
+    foreach ($this->get_transcripts() as $transcript) {
+      if ($transcript['key'] == $key) { return $transcript; }
+    }
+    return false;
   }
 
   function get_languages() {

@@ -9,29 +9,12 @@
 </p>
 <?php if (is_array($queued_transcripts) && !empty($queued_transcripts)) { ?>
   <p><strong><?php _e('Manage queued transcripts:', 'what-did-they-say') ?></strong></p>
-  <?php foreach ($queued_transcripts as $transcript) {
-    $user = get_userdata($transcript['user_id']);
-    if (!empty($user)) { ?>
-  
-      <div class="queued-transcription-holder">
-        <input type="hidden" name="wdts[language]" value="<?php echo $transcript['language'] ?>" />
-        <input type="hidden" name="wdts[key]" value="<?php echo $transcript['key'] ?>" />
-        <p><?php
-          printf(
-            __('From <strong>%s</strong> in <strong>%s</strong>:', 'what-did-they-say'),
-            $user->display_name,
-            $language_options->get_language_name($transcript['language'])
-          )
-        ?></p>
-        <div class="queued-transcription transcript"><?php echo do_shortcode($transcript['transcript']) ?></div>
-        <div class="queued-transcription-raw" style="display:none"><?php echo $transcript['transcript'] ?></div>
-        <div style="padding: 10px 0">
-          <a href="#" class="approve-transcript button">Approve</a>
-          <a href="#" class="delete-transcript button">Delete</a>
-        </div>
-      </div>
-    <?php } ?>
-  <?php } ?>
+  <?php
+    foreach ($queued_transcripts as $transcript) {
+      $user = get_userdata($transcript['user_id']);
+      if (!empty($user)) { include('_display-queued-transcript.inc'); }
+    }
+  ?>
 <?php } ?>
 <p>
   <label>
@@ -44,9 +27,9 @@
   </label>
 
   <div id="wdts-shorttags">
-    <button class="wdts-create" id="wdts-scene-heading">Scene Heading</button>
-    <button class="wdts-create" id="wdts-scene-action">Scene Action</button>
-    <button class="wdts-create" id="wdts-dialog">Dialog</button>
+    <button class="wdts-create" id="wdts-scene-heading" onclick="return false">Scene Heading</button>
+    <button class="wdts-create" id="wdts-scene-action" onclick="return false">Scene Action</button>
+    <button class="wdts-create" id="wdts-dialog" onclick="return false">Dialog</button>
 
     <?php foreach (array_keys($options['languages']) as $code) {
       $approved_transcript_text = '';
