@@ -8,12 +8,6 @@
     $language_options->get_language_name($transcript['language'])
   )
 ?></p>
-<div class="queued-transcription transcript"><?php echo do_shortcode($transcript['transcript']) ?></div>
-<pre class="queued-transcription-raw" style="display:none"><?php echo $transcript['transcript'] ?></pre>
-<div class="transcript-action-links">
-  <?php if (current_user_can('approve_transcriptions')) { ?>
-    <a href="#" class="approve-transcript button">Approve</a> |
-  <?php } ?>
-  <a href="#" class="delete-transcript button">Delete</a> |
-  <a href="#" class="edit-transcript-button button">Edit</a>
-</div>
+<div class="queued-transcript transcript"><?php echo do_shortcode($transcript['transcript']) ?></div>
+<pre class="queued-transcript-raw" style="display:none"><?php echo $transcript['transcript'] ?></pre>
+<div class="queued-transcript-actions"></div>

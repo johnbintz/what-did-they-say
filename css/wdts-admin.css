@@ -54,12 +54,19 @@
   display: inline
 }
 
-#wdts-shorttags {
+.wdts-transcript-editor {
   background-color: #DFDFDF;
-  padding: 3px;
+  padding: 0.5em;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
+  margin: 0.35em 0
+}
+
+.wdts-transcript-editor label {
+  margin: 0.25em 0;
+  font-weight: bold;
+  cursor: pointer
 }
 
 #wdts-page-introduction label {
@@ -73,4 +80,8 @@
 
 .queued-transcription-raw {
   display: none
+}
+
+h3.wdts {
+  margin: 0.75em 0 0.25em;
 }

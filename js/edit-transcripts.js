@@ -1,10 +1,319 @@
-var language_selector = $('wdts-language');
+var WhatDidTheySay = Class.create({});
 
-function switch_transcript() {
-  $$('.edit-transcript').each(function(t) {
-    (t.id == "wdts-transcripts-" + $F('wdts-language')) ? t.show() : t.hide();
-  });
-}
+/**
+ * Set up a transcript editor widget.
+ */
+WhatDidTheySay.setup_transcript_editor = function(container) {
+  if (container) {
+    container = $(container);
+
+    var button_holder = container.select('.wdts-button-holder').pop();
+
+    if (button_holder) {
+      var language_selector = container.select('.wdts-transcript-selector').pop();
+
+      var get_transcript;
+
+      if (language_selector) {
+        var switch_transcripts = function() {
+          container.select('.edit-transcript').each(function(t) {
+            (t.name == 'wdts[transcripts][' + $F(language_selector) + ']') ? t.show() : t.hide();
+          });
+        };
+
+        switch_transcripts();
+
+        language_selector.observe('change', switch_transcripts);
+
+        get_transcript = function() { return container.select('textarea[name*=[' + $F(language_selector) + ']]').pop(); };
+      } else {
+        get_transcript = function() { return container.select('textarea').pop(); }
+      }
+
+      [ 'scene-heading', 'scene-action', 'dialog' ].each(function(tag) {
+        var b = new Element('button').update(WhatDidTheySay.button_labels[tag]);
+
+        var get_t = function() { return tag; };
+
+        b.observe('click', function(e) {
+          Event.stop(e);
+
+          var transcript = get_transcript();
+
+          if (transcript) {
+            if (document.selection) {
+              var range = document.selection.createRange();
+              var stored_range = range.duplicate();
+              stored_range.moveToElementText(current_transcript);
+              stored_range.setEndPoint('EndToEnd', range);
+              transcript.selectionStart = stored_range.text.length - range.text.length;
+              transcript.selectionEnd = current_transcript.selectionStart + range.text.length;
+            }
+
+            var start = transcript.selectionStart;
+            var end = transcript.selectionEnd;
+
+            var injector = new WDTSInjector(transcript, end);
+
+            var tag = get_t();
+
+            var new_content = (start == end);
+            switch (tag) {
+              case 'scene-heading':
+              case 'scene-action':
+                var message = tag.replace('-', '_');
+                if (new_content) {
+                  var content = prompt(WhatDidTheySay.messages[message]);
+                  if (content) {
+                    injector.inject('[' + tag + ']' + content + "[/" + tag + "]\n", start);
+                  }
+                } else {
+                  injector.inject("[/" + tag + "]\n", end);
+                  injector.inject('[' + tag + ']', start);
+                }
+                break;
+              case 'dialog':
+                var name = prompt(WhatDidTheySay.messages.dialog_name);
+                if (name) {
+                  var direction = prompt(WhatDidTheySay.messages.dialog_direction);
+                  var tag = '[dialog name="' + name + '"';
+                  if (direction) { tag += ' direction="' + direction + '"'; }
+                  tag += ']';
+
+                  if (new_content) {
+                    var speech = prompt(WhatDidTheySay.messages.dialog_speech);
+
+                    tag += speech + "[/dialog]\n";
+
+                    injector.inject(tag, start);
+                  } else {
+                    injector.inject("[/dialog]\n", end);
+                    injector.inject(tag, start);
+                  }
+                }
+                break;
+            }
+            injector.set_caret();
+          }
+        });
+
+        button_holder.insert(b);
+      });
+
+    }
+  }
+};
+
+/**
+ * Set up action buttons for queued transcripts.
+ */
+WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_editor_container) {
+  top.console.log(approved_editor_container);
+
+  if (container && approved_editor_container) {
+    container = $(container);
+    approved_editor_container = $(approved_editor_container);
+
+  top.console.log(approved_editor_container);
+
+    var actions_holder = container.select('.queued-transcript-actions').pop();
+
+    if (actions_holder) {
+      [
+        [ 'approve',
+          function(e) {
+            Event.stop(e);
+
+            var lang = container.select("input[name*=[language]]").shift();
+            var post_id = container.select("input[name*=[post_id]]").shift();
+            var key = container.select("input[name*=[key]]").shift();
+            if (lang && post_id && key) {
+              lang = lang.value;
+              post_id = post_id.value;
+              key = key.value;
+
+              var editor = approved_editor_container.select('textarea[name*=[' + lang + ']').pop();
+// 
+              var raw_transcript = p.select(".queued-transcript-raw").shift();
+              if (raw_transcript && editor) {
+                var ok = true;
+                if (editor.value.match(/[^ ]/)) {
+                  ok = confirm(WhatDidTheySay.messages.overwrite);
+                }
+                if (ok) {
+                  editor.value = raw_transcript.innerHTML;
+
+                  new Ajax.Request(
+                    WhatDidTheySay.ajax_url, {
+                      'method': 'post',
+                      'parameters': {
+                        'wdts[_nonce]': WhatDidTheySay.nonce,
+                        'wdts[module]': 'approve-transcript',
+                        'wdts[key]': key,
+                        'wdts[post_id]': post_id
+                      },
+                      'onSuccess': function() {
+                        container.update(WhatDidTheySay.messages.approved);
+                        new Effect.Highlight(container);
+
+                        var language_selector = approved_editor_container.select('select').pop();
+                        if (language_selector) {
+                          var i,il;
+                          for (i = 0, il = language_selector.options.length; i < il; ++i) {
+                            if (language_selector.options[i].value == lang) {
+                              language_selector.selectedIndex = i;
+                              switch_transcript();
+                              break;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  );
+                }
+              }
+            }
+          }
+        ],
+        [
+          'delete',
+          function(e) {
+            Event.stop(e);
+
+            if (confirm(WhatDidTheySay.messages.delete_message)) {
+              var post_id = container.select("input[name*=[post_id]]").pop();
+              var key = container.select("input[name*=[key]]").pop();
+
+              if (post_id && key) {
+                post_id = post_id.value;
+                key = key.value;
+
+                new Ajax.Request(
+                  WhatDidTheySay.ajax_url, {
+                    'method': 'post',
+                    'parameters': {
+                      'wdts[_nonce]': WhatDidTheySay.nonce,
+                      'wdts[module]': 'delete-transcript',
+                      'wdts[key]': key,
+                      'wdts[post_id]': post_id
+                    },
+                    'onSuccess': function() {
+                      container.update(WhatDidTheySay.messages.deleted);
+                      new Effect.Highlight(container);
+
+                      new PeriodicalExecuter(function(pe) {
+                        new Effect.Fade(container, { from: 1, to: 0, duration: 0.5 });
+                        pe.stop();
+                      }, 2);
+                    }
+                  }
+                );
+              }
+            }
+          }
+        ],
+        [
+          'edit',
+          function(e) {
+            Event.stop(e);
+
+            var transcript = container.select('.transcript').pop();
+
+            var editor        = new Element("div", { class: 'wdts-transcript-editor' });
+            var button_holder = new Element("div", { class: 'wdts-button-holder' });
+            var textnode   = new Element('textarea', { style: 'height: 200px; width: 99%' });
+            textnode.value = container.select('.queued-transcript-raw').pop().innerHTML;
+
+            editor.appendChild(button_holder);
+            editor.appendChild(textnode);
+
+            container.insertBefore(editor, transcript);
+            transcript.hide();
+
+            WhatDidTheySay.setup_transcript_editor(editor);
+
+            var post_id = container.select("input[name*=[post_id]]").shift();
+            var key = container.select("input[name*=[key]]").shift();
+
+            var submitter  = new Element('button').update('Update Transcript');
+            submitter.observe('click', function(e) {
+              Event.stop(e);
+              if (post_id && key) {
+                post_id = post_id.value;
+                key = key.value;
+
+                new Ajax.Updater(container, WhatDidTheySay.ajax_url, {
+                  'method': 'post',
+                  'parameters': {
+                    'wdts[_nonce]': WhatDidTheySay.nonce,
+                    'wdts[module]': 'update-queued-transcript',
+                    'wdts[key]': key,
+                    'wdts[post_id]': post_id,
+                    'wdts[transcript]': textnode.value
+                  },
+                  'onComplete': function() {
+                    new Effect.Highlight(container);
+                    WhatDidTheySay.setup_transcript_action_buttons(container);
+                  }
+                });
+              }
+            });
+
+            container.appendChild(submitter);
+            actions_holder.parentNode.removeChild(actions_holder);
+          }
+        ]
+      ].each(function(info) {
+        var button = new Element("button").update(WhatDidTheySay.button_labels[info[0]]);
+        button.observe('click', info[1]);
+
+        actions_holder.insert(button);
+      });
+    }
+  }
+};
+
+WhatDidTheySay.setup_allow_new_transcripts = function(checkbox) {
+  if (checkbox) {
+    checkbox = $(checkbox);
+
+    checkbox.observe('change', function(e) {
+      Event.stop(e);
+      
+      var p = $(checkbox.parentNode.parentNode);
+      if (p) {
+        var post_id = p.select("input[name*=[post_id]]").pop();
+        var key = p.select("input[name*=[key]]").pop();
+
+        if (post_id && key) {
+          post_id = post_id.value;
+          key = key.value;
+
+          var parameters = {
+            'wdts[_nonce]': WhatDidTheySay.nonce,
+            'wdts[module]': 'manage-post-transcripts',
+            'wdts[key]': key,
+            'wdts[post_id]': post_id
+          };
+
+          if (checkbox.checked) {
+            parameters['wdts[allow_on_post]'] = checkbox.value;
+          }
+
+          new Ajax.Request(
+            WhatDidTheySay.ajax_url, {
+              'method': 'post',
+              'parameters': parameters,
+              'onSuccess': function() {
+                new Effect.Highlight(checkbox.parentNode);
+              }
+            }
+          );
+        }
+      }
+    });
+  }
+};
 
 var WDTSInjector = Class.create({
   initialize: function(textarea, end) {
@@ -28,223 +337,3 @@ var WDTSInjector = Class.create({
     }
   }
 });
-
-Event.observe(window, 'load', function() {
-  var buttons_to_watch = [];
-  if ($('wdts-transcript')) {
-    buttons_to_watch.push([ '#wdts-submit-shorttags button', $('wdts-transcript') ]);
-  }
-
-  if ($$('select[name=wdts-language]').pop()) {
-    buttons_to_watch.push([ '#wdts-shorttags button', $("wdts-transcripts-" + $F('wdts-language')) ]);
-  }
-
-  buttons_to_watch.each(function(info) {
-    $$(info[0]).each(function(b) {
-      b.observe('click', function(e) {
-        Event.stop(e);
-        var current_transcript = info[1];
-        if (current_transcript) {
-          if (document.selection) {
-            var range = document.selection.createRange();
-            var stored_range = range.duplicate();
-            stored_range.moveToElementText(current_transcript);
-            stored_range.setEndPoint('EndToEnd', range);
-            current_transcript.selectionStart = stored_range.text.length - range.text.length;
-            current_transcript.selectionEnd = current_transcript.selectionStart + range.text.length;
-          }
-          
-          var start = current_transcript.selectionStart;
-          var end = current_transcript.selectionEnd;
-
-          var injector = new WDTSInjector(current_transcript, end);
-
-          var new_content = (start == end);
-          var tag = b.id.replace('wdts-', '');
-          switch (b.id) {
-            case 'wdts-scene-heading':
-            case 'wdts-scene-action':
-              var message = tag.replace('-', '_');
-              if (new_content) {
-                var content = prompt(messages[message]);
-                if (content) {
-                  injector.inject('[' + tag + ']' + content + "[/" + tag + "]\n", start);
-                }
-              } else {
-                injector.inject("[/" + tag + "]\n", end);
-                injector.inject('[' + tag + ']', start);
-              }
-              break;
-            case 'wdts-dialog':
-              var name = prompt(messages.dialog_name);
-              if (name) {
-                var direction = prompt(messages.dialog_direction);
-                var tag = '[dialog name="' + name + '"';
-                if (direction) { tag += ' direction="' + direction + '"'; }
-                tag += ']';
-
-                if (new_content) {
-                  var speech = prompt(messages.dialog_speech);
-
-                  tag += speech + "[/dialog]\n";
-
-                  injector.inject(tag, start);
-                } else {
-                  injector.inject("[/dialog]\n", end);
-                  injector.inject(tag, start);
-                }
-              }
-              break;
-          }
-          injector.set_caret();
-        }
-      });
-    });
-  });
-});
-
-function wdts_setup_approve_transcript_clicker(b) {
-  b.observe('click', function(e) {
-    Event.stop(e);
-
-    var p = $(b.parentNode.parentNode);
-    
-    var lang = p.select("input[name*=[language]]").shift();
-    var post_id = p.select("input[name*=[post_id]]").shift();
-    var key = p.select("input[name*=[key]]").shift();
-    if (lang && post_id && key) {
-      lang = lang.value;
-      post_id = post_id.value;
-      key = key.value;
-      var editor = $('wdts-transcripts-' + lang);
-
-      var raw_transcript = p.select(".queued-transcription-raw").shift();
-      if (raw_transcript && editor) {
-        var ok = true;
-        if (editor.value.match(/[^ ]/)) {
-          ok = confirm(messages.overwrite);
-        }
-        if (ok) {
-          editor.value = raw_transcript.innerHTML;
-
-          new Ajax.Request(
-            ajax_url, {
-              'method': 'post',
-              'parameters': {
-                'wdts[_nonce]': nonce,
-                'wdts[module]': 'approve-transcript',
-                'wdts[key]': key,
-                'wdts[post_id]': post_id
-              },
-              'onSuccess': function() {
-                p.update(messages.approved);
-                new Effect.Highlight(p);
-                var i,il;
-
-                for (i = 0, il = language_selector.options.length; i < il; ++i) {
-                  if (language_selector.options[i].value == lang) {
-                    language_selector.selectedIndex = i;
-                    switch_transcript();
-                    break;
-                  }
-                }
-              }
-            }
-          );
-        }
-      }
-    }
-  });
-};
-
-function wdts_setup_delete_transcript_clicker(b) {
-  b.observe('click', function(e) {
-    Event.stop(e);
-
-    var p = $(b.parentNode.parentNode);
-    
-    if (confirm(messages.delete_message)) {
-      var post_id = p.select("input[name*=[post_id]]").pop();
-      var key = p.select("input[name*=[key]]").pop();
-
-      if (post_id && key) {
-        post_id = post_id.value;
-        key = key.value;
-
-        new Ajax.Request(
-          ajax_url, {
-            'method': 'post',
-            'parameters': {
-              'wdts[_nonce]': nonce,
-              'wdts[module]': 'delete-transcript',
-              'wdts[key]': key,
-              'wdts[post_id]': post_id
-            },
-            'onSuccess': function() {
-              p.update(messages.deleted);
-              new Effect.Highlight(p);
-            }
-          }
-        );
-      }
-    }
-  });
-}
-
-function wdts_setup_edit_transcript_clicker(b) {
-  b.observe('click', function(e) {
-    Event.stop(e);
-
-    var p = $(b.parentNode.parentNode);
-
-    var transcript = p.select('.transcript').pop();
-    var textnode   = new Element('textarea', { style: 'height: 200px; width: 90%' });
-    var action_links = p.select('.transcript-action-links').pop();
-    textnode.value = p.select('.queued-transcription-raw').pop().innerHTML;
-
-    p.insertBefore(textnode, transcript);
-    transcript.hide();
-
-    var post_id = p.select("input[name*=[post_id]]").shift();
-    var key = p.select("input[name*=[key]]").shift();
-
-    var submitter  = new Element('button').update('Update Transcript');
-    submitter.observe('click', function(e) {
-      if (post_id && key) {
-        post_id = post_id.value;
-        key = key.value;
-
-        new Ajax.Updater(p, ajax_url, {
-          'method': 'post',
-          'parameters': {
-            'wdts[_nonce]': nonce,
-            'wdts[module]': 'update-queued-transcript',
-            'wdts[key]': key,
-            'wdts[post_id]': post_id,
-            'wdts[transcript]': textnode.value
-          },
-          'onComplete': function() {
-            new Effect.Highlight(p);
-            wdts_add_clickers(p);
-          }
-        });
-      }
-    });
-
-    p.appendChild(submitter);
-    action_links.parentNode.removeChild(action_links);
-  });
-}
-
-function wdts_add_clickers(p) {
-  p.select('.edit-transcript-button').each(function(b) { wdts_setup_edit_transcript_clicker(b); });
-  p.select('.approve-transcript').each(function(b) { wdts_setup_approve_transcript_clicker(b); });
-  p.select('.delete-transcript').each(function(b) { wdts_setup_delete_transcript_clicker(b); });
-}
-
-wdts_add_clickers($$('body').pop());
-if (language_selector) {
-  switch_transcript();
-  Event.observe(window, 'load', switch_transcript);
-  Event.observe(language_selector, 'change', switch_transcript);
-}
