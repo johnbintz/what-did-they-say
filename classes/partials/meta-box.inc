@@ -7,6 +7,10 @@
 
 <?php $approved_editor_id = md5(rand()) ?>
 
+<?php if (!is_admin()) { ?>
+  <?php include(dirname(__FILE__) . '/_manage-queued-transcripts.inc') ?>
+<?php } ?>
+
 <?php if (is_array($queued_transcripts) && !empty($queued_transcripts)) { ?>
   <p><strong><?php _e('Manage queued transcripts:', 'what-did-they-say') ?></strong></p>
   <?php
@@ -43,7 +47,14 @@
     <span class="wdts-update-message"></span>
   </div>
 </div>
+
 <script type="text/javascript">
   WhatDidTheySay.setup_transcript_editor('wdts-<?php echo $approved_editor_id ?>');
-  WhatDidTheySay.setup_allow_new_transcripts('wdts-<?php echo $checkbox_id ?>');
+  <?php
+    $allow_new_transcripts_parameters = array("'wdts-${checkbox_id}'");
+    if (isset($new_transcript_id)) {
+      $allow_new_transcripts_parameters[] = "'wdts-${new_transcript_id}'";
+    }
+  ?>
+  WhatDidTheySay.setup_allow_new_transcripts(<?php echo implode(",", $allow_new_transcripts_parameters) ?>);
 </script>

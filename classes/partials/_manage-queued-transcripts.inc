@@ -7,9 +7,9 @@
   ?>
 <?php } ?>
 <?php if (current_user_can('submit_transcriptions')) { ?>
-  <?php if ($transcript_options->are_new_transcripts_allowed()) { ?>
+  <div id="wdts-<?php echo $new_transcript_id ?>" <?php echo (!$transcript_options->are_new_transcripts_allowed() ? 'style="display:none"' : '') ?>>
     <h3 class="wdts"><?php _e('Submit a new transcript:', 'what-did-they-say') ?></h3>
-    <form method="post" id="<?php echo $id = "wdts-" . md5(rand()) ?>">
+    <form method="post">
       <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
       <input type="hidden" name="wdts[module]" value="queue-transcript" />
       <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
@@ -30,6 +30,6 @@
         <input type="submit" value="<?php _e('Submit For Approval', 'what-did-they-say') ?>" />
       </div>
     </form>
-    <script type="text/javascript">WhatDidTheySay.setup_transcript_editor('<?php echo $id ?>')</script>
-  <?php } ?>
+    <script type="text/javascript">WhatDidTheySay.setup_transcript_editor('wdts-<?php echo $new_transcript_id ?>')</script>
+  </div>
 <?php } ?>

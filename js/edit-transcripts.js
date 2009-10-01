@@ -313,26 +313,26 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
   }
 };
 
-WhatDidTheySay.setup_allow_new_transcripts = function(checkbox) {
+WhatDidTheySay.setup_allow_new_transcripts = function(checkbox, editor) {
   if (checkbox) {
     checkbox = $(checkbox);
 
     checkbox.observe('change', function(e) {
       Event.stop(e);
       
+      if (editor) { editor = $(editor); }
+
       var p = $(checkbox.parentNode.parentNode);
       if (p) {
+        top.console.log(p);
         var post_id = p.select("input[name*=[post_id]]").pop();
-        var key = p.select("input[name*=[key]]").pop();
 
-        if (post_id && key) {
+        if (post_id) {
           post_id = post_id.value;
-          key = key.value;
 
           var parameters = {
             'wdts[_nonce]': WhatDidTheySay.nonce,
             'wdts[module]': 'manage-post-transcripts',
-            'wdts[key]': key,
             'wdts[post_id]': post_id
           };
 
@@ -346,6 +346,14 @@ WhatDidTheySay.setup_allow_new_transcripts = function(checkbox) {
               'parameters': parameters,
               'onSuccess': function() {
                 new Effect.Highlight(checkbox.parentNode);
+
+                if (editor) {
+                  if (checkbox.checked) {
+                    new Effect.BlindDown(editor, { duration: 0.5 });
+                  } else {
+                    new Effect.BlindUp(editor, { duration: 0.5 });
+                  }
+                }
               }
             }
           );

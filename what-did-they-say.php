@@ -210,18 +210,11 @@ function the_media_transcript_queue_editor() {
     }
     
     $nonce = wp_create_nonce('what-did-they-say');
+    $new_transcript_id = md5(rand());
 
     ?>
-    <?php if (current_user_can('approve_transcriptions')) { ?>
-      <h3 class="wdts"><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
-      <form method="post" id="wdts-<?php echo $id = md5(rand()) ?>">
-        <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
-      </form>
-      <script type="text/javascript">
-        $('wdts-<?php echo $id ?>').observe('submit', function(e) { Event.stop(e); });
-      </script>
-    <?php } ?>
-    <?php include(dirname(__FILE__) . '/classes/partials/_manage-queued-transcripts.inc') ?>
+    <h3 class="wdts"><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
+    <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
   <?php }
 }
 
