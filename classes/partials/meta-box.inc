@@ -4,12 +4,14 @@
   <input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
 <?php } ?>
 
-<label>
-  <input id="wdts-<?php echo $checkbox_id = md5(rand()) ?>" type="checkbox" name="wdts[allow_on_post]" value="yes" <?php echo ($transcript_options->are_new_transcripts_allowed()) ? 'checked="checked"' : '' ?> />
-  <?php _e('Allow new transcripts to be submitted for this post', 'what-did-they-say') ?>
-</label>
+<input id="wdts-<?php echo $checkbox_id = md5(rand()) ?>" type="checkbox" name="wdts[allow_on_post]" value="yes" <?php echo ($transcript_options->are_new_transcripts_allowed()) ? 'checked="checked"' : '' ?> />
+<?php _e('Allow new transcripts to be submitted for this post', 'what-did-they-say') ?>
 
 <?php $approved_editor_id = md5(rand()) ?>
+
+<script type="text/javascript">
+  var queued_editors_to_attach = [];
+</script>
 
 <?php if (!is_admin()) { ?>
   <?php include(dirname(__FILE__) . '/_manage-queued-transcripts.inc') ?>
@@ -55,6 +57,10 @@
 </div>
 
 <script type="text/javascript">
+  queued_editors_to_attach.each(function(q) {
+    WhatDidTheySay.setup_transcript_action_buttons(q, 'wdts-<?php echo $approved_editor_id ?>')
+  });
+
   WhatDidTheySay.setup_transcript_editor('wdts-<?php echo $approved_editor_id ?>');
   <?php if (!is_admin()) { ?>
     <?php

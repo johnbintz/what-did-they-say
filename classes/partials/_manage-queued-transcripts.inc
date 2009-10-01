@@ -7,7 +7,7 @@
   ?>
 <?php } ?>
 <?php if (current_user_can('submit_transcriptions')) { ?>
-  <div id="wdts-<?php echo $new_transcript_id ?>" <?php echo (!$transcript_options->are_new_transcripts_allowed() ? 'style="display:none"' : '') ?>>
+  <div id="wdts-<?php echo $new_transcript_id ?>" style="zoom:1<?php echo (!$transcript_options->are_new_transcripts_allowed() ? ';display:none' : '') ?>">
     <h3 class="wdts"><?php _e('Submit a new transcript:', 'what-did-they-say') ?></h3>
     <form method="post">
       <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />

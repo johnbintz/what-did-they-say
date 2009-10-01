@@ -44,7 +44,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
             if (document.selection) {
               var range = document.selection.createRange();
               var stored_range = range.duplicate();
-              stored_range.moveToElementText(current_transcript);
+              stored_range.moveToElementText(transcript);
               stored_range.setEndPoint('EndToEnd', range);
               transcript.selectionStart = stored_range.text.length - range.text.length;
               transcript.selectionEnd = current_transcript.selectionStart + range.text.length;
@@ -140,7 +140,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
             'method': 'post',
             'parameters': parameters,
             'onSuccess': function() { update_update_message(WhatDidTheySay.messages.transcripts_updated); },
-            'onFailure': function() { update_update_message(WhatDidTheySay.messages.transcripts_failure); },
+            'onFailure': function() { update_update_message(WhatDidTheySay.messages.transcripts_failure); }
           }
         );
       });
@@ -259,8 +259,8 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
 
             var transcript = container.select('.transcript').pop();
 
-            var editor        = new Element("div", { class: 'wdts-transcript-editor' });
-            var button_holder = new Element("div", { class: 'wdts-button-holder' });
+            var editor        = new Element("div", { className: 'wdts-transcript-editor' });
+            var button_holder = new Element("div", { className: 'wdts-button-holder' });
             var textnode   = new Element('textarea', { style: 'height: 200px; width: 99%' });
             textnode.value = container.select('.queued-transcript-raw').pop().innerHTML;
 
@@ -293,7 +293,7 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
                   },
                   'onComplete': function() {
                     new Effect.Highlight(container);
-                    WhatDidTheySay.setup_transcript_action_buttons(container);
+                    WhatDidTheySay.setup_transcript_action_buttons(container, approved_editor_container);
                   }
                 });
               }
@@ -317,14 +317,11 @@ WhatDidTheySay.setup_allow_new_transcripts = function(checkbox, editor) {
   if (checkbox) {
     checkbox = $(checkbox);
 
-    checkbox.observe('change', function(e) {
-      Event.stop(e);
-      
+    checkbox.observe('click', function(e) {
       if (editor) { editor = $(editor); }
 
-      var p = $(checkbox.parentNode.parentNode);
+      var p = $(checkbox.parentNode);
       if (p) {
-        top.console.log(p);
         var post_id = p.select("input[name*=[post_id]]").pop();
 
         if (post_id) {
@@ -345,8 +342,6 @@ WhatDidTheySay.setup_allow_new_transcripts = function(checkbox, editor) {
               'method': 'post',
               'parameters': parameters,
               'onSuccess': function() {
-                new Effect.Highlight(checkbox.parentNode);
-
                 if (editor) {
                   if (checkbox.checked) {
                     new Effect.BlindDown(editor, { duration: 0.5 });

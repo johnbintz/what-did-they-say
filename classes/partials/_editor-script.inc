@@ -22,7 +22,7 @@
     'dialog': '<?php _e('Dialog') ?>',
     'approve': '<?php _e('Approve') ?>',
     'delete': '<?php _e('Delete') ?>',
-    'edit': '<?php _e('Edit') ?>',
+    'edit': '<?php _e('Edit') ?>'
   };
 
   WhatDidTheySay.can_approve = <?php echo current_user_can('approve_transcriptions') ? "true" : "false" ?>;
