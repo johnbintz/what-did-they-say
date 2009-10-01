@@ -18,7 +18,7 @@
 <?php } ?>
 
 <?php if (is_array($queued_transcripts) && !empty($queued_transcripts)) { ?>
-  <h3 class="wdts"><?php _e('Manage queued transcripts:', 'what-did-they-say') ?></h3>
+  <h3 class="wdts"><?php _e('Manage Queued Transcripts:', 'what-did-they-say') ?></h3>
   <?php
     foreach ($queued_transcripts as $transcript) {
       $user = get_userdata($transcript['user_id']);
