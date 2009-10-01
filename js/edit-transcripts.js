@@ -99,7 +99,51 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
 
         button_holder.insert(b);
       });
+    }
 
+    // submit button handling
+    var submit_button = container.select('.wdts-modify-transcript').pop();
+    var update_message = container.select('.wdts-update-message').pop();
+    var post_id = $(container.parentNode).select("input[name*=[post_id]]").shift();
+
+    if (submit_button && update_message && post_id) {
+      post_id = post_id.value;
+      submit_button.observe('click', function(e) {
+        Event.stop(e);
+
+        var parameters = {
+          'wdts[_nonce]': WhatDidTheySay.nonce,
+          'wdts[module]': 'manage-post-transcripts',
+          'wdts[post_id]': post_id
+        };
+
+        container.select('textarea').each(function(t) {
+          parameters[t.name] = t.value;
+        });
+
+        var update_update_message = function(message) {
+          update_message.update(message);
+          update_message.setOpacity(1);
+          update_message.show();
+          new Effect.Highlight(update_message, { endcolor: '#DFDFDF'} );
+
+          new PeriodicalExecuter(function(pe) {
+            pe.stop();
+            new Effect.Fade(update_message, {
+              from: 1, to: 0, duration: 0.25, afterFinish: function() { update_message.update("") }
+            });
+          }, 3);
+        }
+
+        new Ajax.Request(
+          WhatDidTheySay.ajax_url, {
+            'method': 'post',
+            'parameters': parameters,
+            'onSuccess': function() { update_update_message(WhatDidTheySay.messages.transcripts_updated); },
+            'onFailure': function() { update_update_message(WhatDidTheySay.messages.transcripts_failure); },
+          }
+        );
+      });
     }
   }
 };
@@ -108,13 +152,9 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
  * Set up action buttons for queued transcripts.
  */
 WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_editor_container) {
-  top.console.log(approved_editor_container);
-
   if (container && approved_editor_container) {
     container = $(container);
     approved_editor_container = $(approved_editor_container);
-
-  top.console.log(approved_editor_container);
 
     var actions_holder = container.select('.queued-transcript-actions').pop();
 

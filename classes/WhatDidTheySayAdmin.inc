@@ -389,6 +389,8 @@ class WhatDidTheySayAdmin {
    * @return string|false A string if a message is to be displayed, or false if no message.
    */
   function handle_update_manage_post_transcripts($info) {
+    if (!is_admin()) { $this->is_ajax = true; }
+    
     $updated = false;
     if (current_user_can('approve_transcriptions')) {
       $approved_transcript_manager = new WDTSApprovedTranscript($info['post_id']);
@@ -417,9 +419,17 @@ class WhatDidTheySayAdmin {
         foreach (array_keys($transcripts_to_delete) as $id) { $queued_transcripts->delete_transcript($id); }
       }
 
-      $updated = __('Transcripts updated.', 'what-did-they-say');
+      if (is_admin()) {
+        $updated = __('Transcripts updated.', 'what-did-they-say');
+      } else {
+        return;
+      }
     }
-    return $updated;
+    if (is_admin()) {
+      return $updated;
+    } else {
+      header('HTTP/1.1 401 Unauthorized');
+    }
   }
 
   /**

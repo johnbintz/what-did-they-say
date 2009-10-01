@@ -1,5 +1,3 @@
-<input type="hidden" name="wdts[_nonce]" value="<?php echo $nonce ?>" />
-<input type="hidden" name="wdts[module]" value="manage-post-transcripts" />
 <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 
 <label>
@@ -41,6 +39,8 @@
       } ?>
       <textarea class="edit-transcript" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 99%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
     <?php } ?>
+    <input type="button" class="wdts-modify-transcript" value="<?php _e('Update All Transcripts', 'what-did-they-say') ?>" />
+    <span class="wdts-update-message"></span>
   </div>
 </div>
 <script type="text/javascript">

@@ -11,7 +11,9 @@
     'scene_action': '<?php _e('Enter the scene action:', 'what-did-they-say') ?>',
     'dialog_name': '<?php _e('Enter the character name:', 'what-did-they-say') ?>',
     'dialog_direction': '<?php _e('Enter the direction in which the character is speaking:', 'what-did-they-say') ?>',
-    'dialog_speech': '<?php _e('Enter what the character is speaking:', 'what-did-they-say') ?>'
+    'dialog_speech': '<?php _e('Enter what the character is speaking:', 'what-did-they-say') ?>',
+    'transcripts_updated': '<?php _e('Transcripts updated.', 'what-did-they-say') ?>',
+    'transcripts_failure': '<?php _e('Transcript update failure!', 'what-did-they-say') ?>'
   };
 
   WhatDidTheySay.button_labels = {
