@@ -711,7 +711,7 @@ class WhatDidTheySayAdmin {
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
         wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
         wp_enqueue_script('scriptaculous-effects');
-        wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'), false, true);
+        wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'));
       }
     }
   }
@@ -751,8 +751,8 @@ class WhatDidTheySayAdmin {
     $language_options = new WDTSLanguageOptions();
 
     $nonce = wp_create_nonce('what-did-they-say');
-    include('partials/meta-box.inc');
     include('partials/_editor-script.inc');
+    include('partials/meta-box.inc');
   }
 }
 

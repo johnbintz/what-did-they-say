@@ -31,7 +31,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
       }
 
       [ 'scene-heading', 'scene-action', 'dialog' ].each(function(tag) {
-        var b = new Element('button').update(WhatDidTheySay.button_labels[tag]);
+        var b = new Element('button', { className: 'button' }).update(WhatDidTheySay.button_labels[tag]);
 
         var get_t = function() { return tag; };
 
