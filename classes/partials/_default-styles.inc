@@ -13,14 +13,26 @@
       </label>
       
       <label>
-        <?php _e('Include default CSS styles for transcripts:', 'what-did-they-say') ?>
         <input type="checkbox"
                name="wdts[default_styles]"
                value="yes"
-               <?php echo ($options['load_default_styles'] ? 'checked="checked"' : '') ?> /> 
+               <?php echo ($options['load_default_styles'] ? 'checked="checked"' : '') ?> />
+        <?php _e('Include default CSS styles for transcripts', 'what-did-they-say') ?>
+      </label>
+
+      <label>
+        <input type="checkbox"
+               name="wdts[use_nl2br]"
+               value="yes"
+               <?php echo ($options['use_nl2br'] ? 'checked="checked"' : '') ?> />
+        <?php _e('Turn transcript line breaks into HTML new lines (nl2br())', 'what-did-they-say') ?>
       </label>
       <input class="button" type="submit" value="<?php _e('Change default styles', 'what-did-they-say') ?>" />
     </form>
+
+    <h3><?php _e('Transcript Line Breaks', 'what-did-they-say') ?></h3>
+
+    <p><?php _e('If you\'re using short codes or HTML to construct your transcripts, you don\'t need to enable transcript line breaks.', 'what-did-they-say') ?></p>
 
     <h3><?php _e('Default CSS Selectors Information', 'what-did-they-say') ?></h3>
 

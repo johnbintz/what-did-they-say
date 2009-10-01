@@ -20,7 +20,8 @@ class WhatDidTheySayAdmin {
     'load_default_styles' => true,
     'automatic_embedding' => true,
     'search_integration' => true,
-    'excerpt_distance' => 30
+    'excerpt_distance' => 30,
+    'use_nl2br' => false
   );
   
   var $capabilities = array();
@@ -228,7 +229,10 @@ class WhatDidTheySayAdmin {
    * @return string The processed transcription text.
    */
   function the_media_transcript($transcript, $content = "") {
-    return array($transcript, '<div class="transcript">' . do_shortcode($transcript) . '</div>');
+    $content = do_shortcode($transcript);
+    $options = get_option('what-did-they-say-options');
+    if ($options['use_nl2br']) { $content = nl2br($content); }
+    return array($transcript, '<div class="transcript">' . $content . '</div>');
   }
 
   /**
@@ -499,6 +503,7 @@ class WhatDidTheySayAdmin {
       $options = get_option('what-did-they-say-options');
 
       $options['load_default_styles'] = isset($info['default_styles']);
+      $options['use_nl2br'] = isset($info['use_nl2br']);
       $options['excerpt_distance'] = !empty($info['excerpt_distance']) ? $info['excerpt_distance'] : 30;
       
       update_option('what-did-they-say-options', $options);
