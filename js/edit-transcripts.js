@@ -260,7 +260,7 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
           function(e) {
             Event.stop(e);
 
-            var transcript = container.select('.transcript').pop();
+            var transcript = container.select('.wdts-transcript').pop();
 
             var editor        = new Element("div", { className: 'wdts-transcript-editor' });
             var button_holder = new Element("div", { className: 'wdts-button-holder' });
@@ -278,6 +278,7 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
             var post_id = container.select("input[name*=[post_id]]").shift();
             var key = container.select("input[name*=[key]]").shift();
 
+            top.console.log("made it");
             var submitter  = new Element('button').update('Update Transcript');
             submitter.observe('click', function(e) {
               Event.stop(e);
@@ -302,7 +303,10 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
               }
             });
 
+            top.console.log(actions_holder);
+
             container.appendChild(submitter);
+
             actions_holder.parentNode.removeChild(actions_holder);
           }
         ]
