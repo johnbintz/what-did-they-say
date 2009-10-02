@@ -190,11 +190,11 @@ class WhatDidTheySayAdmin {
    * Filter for dialog short code.
    */
   function filter_shortcode_dialog($name, $direction, $speech, $content) {
-    $content  = '<div class="dialog"><span class="name">' . $name . '</span>';
+    $content  = '<div class="wdts-dialog"><span class="wdts-name">' . $name . '</span>';
     if (!empty($direction)) {
-      $content .= ' <span class="direction">' . $direction . '</span>';
+      $content .= ' <span class="wdts-direction">' . $direction . '</span>';
     }
-    $content .= ' <span class="speech">' . $speech . '</span></div>';
+    $content .= ' <span class="wdts-speech">' . $speech . '</span></div>';
     
     return array($name, $direction, $speech, $content);
   }
@@ -212,7 +212,7 @@ class WhatDidTheySayAdmin {
    * Filter for scene action short code.
    */
   function filter_shortcode_scene_action($description, $content) {
-    return array($description, '<div class="scene-action">' . $description . '</div>', );
+    return array($description, '<div class="wdts-scene-action">' . $description . '</div>', );
   }
 
   /**
@@ -228,7 +228,7 @@ class WhatDidTheySayAdmin {
    * Filter for scene heading short code.
    */
   function filter_shortcode_scene_heading($description, $content) {
-    return array($description, '<div class="scene-heading">' . $description . '</div>');
+    return array($description, '<div class="wdts-scene-heading">' . $description . '</div>');
   }
 
   /**
@@ -240,7 +240,7 @@ class WhatDidTheySayAdmin {
     $content = do_shortcode($transcript);
     $options = get_option('what-did-they-say-options');
     if ($options['use_nl2br']) { $content = nl2br($content); }
-    return array($transcript, '<div class="transcript">' . $content . '</div>');
+    return array($transcript, '<div class="wdts-transcript">' . $content . '</div>');
   }
 
   /**
@@ -249,7 +249,7 @@ class WhatDidTheySayAdmin {
    * @return string The processed language name.
    */
   function the_language_name($language, $content = "") {
-    return array($language, '<h3 class="transcript-language">' . $language . '</h3>');
+    return array($language, '<h3 class="wdts-transcript-language">' . $language . '</h3>');
   }
 
   /**

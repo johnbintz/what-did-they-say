@@ -8,6 +8,6 @@
     $language_options->get_language_name($transcript['language'])
   )
 ?></p>
-<div class="queued-transcript transcript"><?php echo do_shortcode($transcript['transcript']) ?></div>
+<div class="queued-transcript wdts-transcript"><?php echo do_shortcode($transcript['transcript']) ?></div>
 <pre class="queued-transcript-raw" style="display:none"><?php echo $transcript['transcript'] ?></pre>
 <div class="queued-transcript-actions"></div>

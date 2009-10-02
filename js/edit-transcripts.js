@@ -83,9 +83,11 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
                   if (new_content) {
                     var speech = prompt(WhatDidTheySay.messages.dialog_speech);
 
-                    tag += speech + "[/dialog]\n";
+                    if (speech) {
+                      tag += speech + "[/dialog]\n";
 
-                    injector.inject(tag, start);
+                      injector.inject(tag, start);
+                    }
                   } else {
                     injector.inject("[/dialog]\n", end);
                     injector.inject(tag, start);

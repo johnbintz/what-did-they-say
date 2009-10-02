@@ -1,37 +1,37 @@
-div.transcript {
+div.wdts-transcript {
   border: solid #333 1px;
   padding: 0.5em;
   margin: 0.5empx;
   background-color: #e7e7e7
 }
 
-div.transcript div, div.transcript span {
+div.wdts-transcript div, div.wdts-transcript span {
   font-family: 'Courier New'
 }
 
-div.transcript > div {
+div.wdts-transcript > div {
   margin-bottom: 0.5em
 }
 
-div.transcript div.scene-heading {
+div.wdts-transcript div.wdts-scene-heading {
   text-transform: uppercase;
   text-align: center;
   font-weight: bold; 
   margin-bottom: 0.5em
 }
 
-div.transcript div.dialog {
+div.wdts-transcript div.wdts-dialog {
   text-align: center
 }
 
-div.transcript div.dialog span {
+div.wdts-transcript div.wdts-dialog span {
   display: block 
 }
 
-div.transcript div.dialog span.name {
+div.wdts-transcript div.wdts-dialog span.wdts-name {
   text-transform: uppercase 
 }
 
-div.transcript div.dialog span.speech {
+div.wdts-transcript div.wdts-dialog span.wdts-speech {
   margin: 0.5em 1em 0
 }
