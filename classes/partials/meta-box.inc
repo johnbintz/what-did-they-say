@@ -1,13 +1,3 @@
-<?php
-  function wdts_header_wrapper($text) {
-    if (is_admin()) {
-      echo '<p><strong>' . $text . '</strong></p>';
-    } else {
-      echo '<h3 class="wdts">' . $text . '</h3>';
-    }
-  }
-?>
-
 <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 <?php if (is_admin()) { ?>
   <input type="hidden" name="wdts[module]" value="manage-post-transcripts" />
@@ -62,6 +52,7 @@
       <span class="wdts-update-message"></span>
     <?php } ?>
   </div>
+  <div class="wdts-embed-warning"><?php _e('Uh oh...there\'s a problem with automatic embedding. Enable &quot;Inject transcripts at level 100 instead of level 15&quot; on the What Did They Say?!? Misc. Options page.', 'what-did-they-say') ?></div>
 </div>
 
 <script type="text/javascript">

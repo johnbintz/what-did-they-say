@@ -85,3 +85,9 @@
 h3.wdts {
   margin: 0.75em 0 0.25em;
 }
+
+.wdts-embed-warning {
+  font-size: 115%;
+  color: #770000;
+  font-weight: bold;
+}

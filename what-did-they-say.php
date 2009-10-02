@@ -218,4 +218,12 @@ function the_media_transcript_queue_editor() {
   <?php }
 }
 
+function wdts_header_wrapper($text) {
+  if (is_admin()) {
+    echo '<p><strong>' . $text . '</strong></p>';
+  } else {
+    echo '<h3 class="wdts">' . $text . '</h3>';
+  }
+}
+
 ?>

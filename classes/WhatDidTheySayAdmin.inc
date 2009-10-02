@@ -21,7 +21,8 @@ class WhatDidTheySayAdmin {
     'automatic_embedding' => true,
     'search_integration' => true,
     'excerpt_distance' => 30,
-    'use_nl2br' => false
+    'use_nl2br' => false,
+    'high_insertion_level' => false
   );
   
   var $capabilities = array();
@@ -79,7 +80,7 @@ class WhatDidTheySayAdmin {
     }
 
     if ($options['automatic_embedding']) {
-      add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), 15);
+      add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), $options['high_insertion_level'] ? 100 : 15);
     }
 
     foreach (get_class_methods($this) as $method) {
@@ -526,6 +527,22 @@ class WhatDidTheySayAdmin {
     return $updated;
   }
     
+  /**
+   * Handle updating the insertion level.
+   */
+  function handle_update_high_insertion_level($info) {
+    $updated = false;
+    if (current_user_can('manage_options')) {
+      $options = get_option('what-did-they-say-options');
+
+      $options['high_insertion_level'] = isset($info['high_insertion_level']);
+
+      update_option('what-did-they-say-options', $options);
+      $updated = __('Insertion level updated.', 'what-did-they-say');
+    }
+    return $updated;
+  }
+
   /**
    * Handle updates to languages.
    * @param array $info The part of the $_POST array for What Did They Say?!?
