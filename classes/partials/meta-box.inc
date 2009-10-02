@@ -1,3 +1,13 @@
+<?php
+  function wdts_header_wrapper($text) {
+    if (is_admin()) {
+      echo '<p><strong>' . $text . '</strong></p>';
+    } else {
+      echo '<h3 class="wdts">' . $text . '</h3>';
+    }
+  }
+?>
+
 <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 <?php if (is_admin()) { ?>
   <input type="hidden" name="wdts[module]" value="manage-post-transcripts" />
@@ -18,7 +28,7 @@
 <?php } ?>
 
 <?php if (is_array($queued_transcripts) && !empty($queued_transcripts)) { ?>
-  <h3 class="wdts"><?php _e('Manage Queued Transcripts:', 'what-did-they-say') ?></h3>
+  <?php wdts_header_wrapper(__('Manage Queued Transcripts:', 'what-did-they-say')) ?>
   <?php
     foreach ($queued_transcripts as $transcript) {
       $user = get_userdata($transcript['user_id']);
@@ -28,9 +38,7 @@
 <?php } ?>
 
 <div id="wdts-<?php echo $approved_editor_id ?>">
-  <?php if (!is_admin()) { ?>
-    <h3 class="wdts"><?php _e('Edit Approved Transcripts:', 'what-did-they-say') ?></h3>
-  <?php } ?>
+  <?php wdts_header_wrapper(__('Edit Approved Transcripts:', 'what-did-they-say')) ?>
   <div class="wdts-transcript-editor">
     <label>
       <?php _e('Language:', 'what-did-they-say') ?>

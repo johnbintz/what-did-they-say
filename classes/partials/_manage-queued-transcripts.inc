@@ -1,4 +1,4 @@
-<?php if ((count($queued_transcripts_for_user) > 0) && !current_user_can('approve_transcriptions')) { ?>
+<?php if ((count($queued_transcripts_for_user) > 0) && !current_user_can('approve_transcriptions') && !is_admin()) { ?>
   <h3 style="margin-top: 0.5em"><?php _e('Your Submitted Transcripts:', 'what-did-they-say') ?></h3>
   <?php
     foreach ($queued_transcripts_for_user as $transcript) {
@@ -8,7 +8,7 @@
 <?php } ?>
 <?php if (current_user_can('submit_transcriptions')) { ?>
   <div id="wdts-<?php echo $new_transcript_id ?>" style="zoom:1<?php echo (!$transcript_options->are_new_transcripts_allowed() ? ';display:none' : '') ?>">
-    <h3 class="wdts"><?php _e('Submit a New Transcript:', 'what-did-they-say') ?></h3>
+    <?php wdts_hedaer_wrapper(__('Submit a New Transcript:', 'what-did-they-say')) ?>
     <form method="post">
       <input type="hidden" name="wdts[_nonce]" value="<?php echo wp_create_nonce('what-did-they-say') ?>" />
       <input type="hidden" name="wdts[module]" value="queue-transcript" />
