@@ -23,6 +23,8 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
 
         switch_transcripts();
 
+        language_selector.switch_transcripts = switch_transcripts;
+
         language_selector.observe('change', switch_transcripts);
 
         get_transcript = function() { return container.select('textarea[name*=[' + $F(language_selector) + ']]').pop(); };
@@ -164,7 +166,7 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
       [
         [ 'approve',
           function(e) {
-
+            Event.stop(e);
             var lang = container.select("input[name*=[language]]").shift();
             var post_id = container.select("input[name*=[post_id]]").shift();
             var key = container.select("input[name*=[key]]").shift();
@@ -200,12 +202,12 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
 
                         var language_selector = approved_editor_container.select('select').pop();
                         if (language_selector) {
-                          language_selector.selectedIndex = language_selector.options.length - language_selector.selectedIndex;
                           var i,il;
                           for (i = 0, il = language_selector.options.length; i < il; ++i) {
                             if (language_selector.options[i].value == lang) {
                               language_selector.selectedIndex = i;
-                              switch_transcript();
+                              language_selector.switch_transcripts();
+                              
                               break;
                             }
                           }
