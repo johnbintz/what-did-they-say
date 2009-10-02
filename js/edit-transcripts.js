@@ -108,7 +108,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
     // submit button handling
     var submit_button = container.select('.wdts-modify-transcript').pop();
     var update_message = container.select('.wdts-update-message').pop();
-    var post_id = $(container.parentNode).select("input[name*=[post_id]]").shift();
+    var post_id = $(container.parentNode.parentNode).select("input[name*=[post_id]]").shift();
 
     if (submit_button && update_message && post_id) {
       post_id = post_id.value;

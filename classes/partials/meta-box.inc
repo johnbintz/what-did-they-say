@@ -48,7 +48,7 @@
       <textarea class="edit-transcript" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 99%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
     <?php } ?>
     <?php if (!is_admin()) { ?>
-      <input type="button" class="button" class="wdts-modify-transcript" value="<?php _e('Update All Transcripts', 'what-did-they-say') ?>" />
+      <input type="button" class="wdts-modify-transcript button" value="<?php _e('Update All Transcripts', 'what-did-they-say') ?>" />
       <span class="wdts-update-message"></span>
     <?php } ?>
   </div>
