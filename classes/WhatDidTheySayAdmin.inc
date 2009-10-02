@@ -71,6 +71,8 @@ class WhatDidTheySayAdmin {
     add_filter('the_media_transcript', array(&$this, 'the_media_transcript'), 10, 2);
     add_filter('the_language_name', array(&$this, 'the_language_name'), 10, 2);
     add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
+    add_filter('the_multiple_transcript_language_name', array(&$this, 'the_multiple_transcript_language_name'), 10, 3);
+    add_filter('the_transcript_format_string', array(&$this, 'the_transcript_format_string'), 10);
     
     add_filter('template_redirect', array(&$this, 'template_redirect'));
 
@@ -250,7 +252,40 @@ class WhatDidTheySayAdmin {
    * @return string The processed language name.
    */
   function the_language_name($language, $content = "") {
-    return array($language, '<h3 class="wdts-transcript-language">' . $language . '</h3>');
+    return array($language, '<h3 class="wdts-transcript-language">' . sprintf(apply_filters('the_transcript_format_string'), $language) . '</h3>');
+  }
+
+  /**
+   * Handle showing the header above a bundle of live transcripts.
+   */
+  function the_multiple_transcript_language_name($language_format, $transcripts, $content) {
+    if (count($transcripts) == 1) {
+      $content = get_the_language_name(reset(array_keys($transcripts)));
+    } else {
+      $dropdown = array();
+      
+      $dropdown[] = '<select>';
+        foreach ($transcripts as $code => $transcript) {
+          $dropdown[] = '<option value="' . $code . '"' . (($code == $default_language) ? ' selected="selected"' : '') . '>'
+                      . get_the_language_name($code)
+                      . '</option>';
+        }
+      $dropdown[] = '</select>';
+
+      $content = implode("", $dropdown);
+    }
+
+    if (is_null($language_format)) { $language_format = apply_filters('the_transcript_format_string', ''); }
+
+    return '<h3 class="wdts-transcript-language">' . sprintf($language_format, $content) . '</h3>';
+
+  }
+
+  /**
+   * The format string used to display ither a single or multiple language transcript header.
+   */
+  function the_transcript_format_string($content) {
+    return __('Transcript: %s', 'what-did-they-say');
   }
 
   /**

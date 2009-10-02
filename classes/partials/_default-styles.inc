@@ -77,7 +77,10 @@
 
       <dt><code>the_matching_transcript_excerpts($transcripts, $search_string, $content)</code></dt>
       <dd><?php _e('Output <code>$content</code> contains the HTML for all the provided <code>$transcripts</code> that match <code>$search_string</code>.', 'what-did-they-say') ?></dd>
-    </dl>
+
+      <dt><code>the_transcript_format_string($content)</code></dt>
+      <dd><?php _e('Output <code>$content</code> contains the sprintf() format string for how transcript headers will be spelled. The default is <code>Transcript: %s</code>.', 'what-did-they-say') ?></dd>
+  </dl>
 
     <p>
       <?php _e('A filter in your theme that would change the display of langauge names would look like the following:', 'what-did-they-say') ?>

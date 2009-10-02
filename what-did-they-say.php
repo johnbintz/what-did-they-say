@@ -122,11 +122,8 @@ function the_language_name($language = null) {
  * @param string $dropdown_message If set, the text that appears to the left of the language dropdown.
  * @param string $single_language_message If set, the text that appears when only one transcript exists for this post.
  */
-function transcripts_display($dropdown_message = null, $single_language_message = null) {
+function transcripts_display($language_format = null) {
   global $post;
-  
-  if (is_null($dropdown_message)) { $dropdown_message = __('Select a language:', 'what-did-they-say'); }
-  if (is_null($single_language_message)) { $single_language_message = __('%s transcript:', 'what-did-they-say'); }
   
   $output = array();
   
@@ -150,28 +147,15 @@ function transcripts_display($dropdown_message = null, $single_language_message 
       $default_language = $language_options->get_default_language();
 
       $output[] = '<div class="transcript-bundle">';
-      
-      if (count($transcripts) == 1) {
-        list($code, $transcript) = each($transcripts);
-        $output[] = end(apply_filters('the_language_name', get_the_language_name($code)));
-        $output[] = end(apply_filters('the_media_transcript', $transcript));
-      } else {
-        $output[] = $dropdown_message;
-        $output[] = '<select>';
-          foreach($transcripts as $code => $transcript) {
-            $output[] = '<option value="' . $code . '"' . (($code == $default_language) ? ' selected="selected"' : '') . '>'
-                      . get_the_language_name($code)
-                      . '</option>';
-          }
-        $output[] = '</select>';
-        foreach ($transcripts as $code => $transcript) {
-          $language_name = end(apply_filters('the_language_name', get_the_language_name($code)));
-          $transcript    = end(apply_filters('the_media_transcript', $transcript));
 
-          $output[] = '<div '
-                    . (($code == $default_language) ? 'style="display:none"' : '')
-                    . ' class="transcript-holder ' . $code . '">' . $language_name . $transcript . '</div>';
-        }
+      $output[] = apply_filters('the_multiple_transcript_language_name', $language_format, $transcripts, '');
+      
+      foreach ($transcripts as $code => $transcript) {
+        $transcript    = end(apply_filters('the_media_transcript', $transcript));
+
+        $output[] = '<div '
+                  . (($code == $default_language) ? 'style="display:none"' : '')
+                  . ' class="transcript-holder ' . $code . '">' . $language_name . $transcript . '</div>';
       }
       $output[] = '</div>';
     }
@@ -213,8 +197,23 @@ function the_media_transcript_queue_editor() {
     $new_transcript_id = md5(rand());
 
     ?>
-    <h3 class="wdts"><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
-    <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
+    <p>[ <a id="wdts-opener-<?php echo $id = md5(rand()) ?>" href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]</p>
+    <div id="wdts-<?php echo $id ?>" style="display:none">
+      <h3 class="wdts"><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
+      <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
+    </div>
+    <script type="text/javascript">
+      $('wdts-opener-<?php echo $id ?>').observe('click', function(e) {
+        Event.stop(e);
+
+        var target = $('wdts-<?php echo $id ?>');
+        if (target.visible()) {
+          new Effect.BlindUp(target, { duration: 0.25 });
+        } else {
+          new Effect.BlindDown(target, { duration: 0.25 });
+        }
+      });
+    </script>
   <?php }
 }
 
