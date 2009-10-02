@@ -60,6 +60,8 @@
     WhatDidTheySay.setup_transcript_action_buttons(q, 'wdts-<?php echo $approved_editor_id ?>')
   });
 
+  $$('.wdts-embed-warning').invoke('hide');
+
   WhatDidTheySay.setup_transcript_editor('wdts-<?php echo $approved_editor_id ?>');
   <?php if (!is_admin()) { ?>
     <?php
