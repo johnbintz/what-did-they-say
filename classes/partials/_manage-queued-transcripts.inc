@@ -27,7 +27,7 @@
         <div class="wdts-button-holder"></div>
 
         <textarea style="height: 200px; width: 99%" name="wdts[transcript]"></textarea>
-        <input type="submit" value="<?php _e('Submit For Approval', 'what-did-they-say') ?>" />
+        <input type="submit" class="button" value="<?php _e('Submit For Approval', 'what-did-they-say') ?>" />
       </div>
     </form>
   </div>
