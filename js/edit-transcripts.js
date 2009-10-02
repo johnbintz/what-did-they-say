@@ -199,6 +199,11 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
                       'onSuccess': function() {
                         container.update(WhatDidTheySay.messages.approved);
                         new Effect.Highlight(container);
+                        new PeriodicalExecuter(function(pe) {
+                          new Effect.Fade(container, {
+                            from: 1, to: 0, duration: 0.25, afterFinish: function() { container.hide(); }
+                          });
+                        }, 3);
 
                         var language_selector = approved_editor_container.select('select').pop();
                         if (language_selector) {
