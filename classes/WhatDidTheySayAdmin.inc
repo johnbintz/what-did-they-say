@@ -53,6 +53,14 @@ class WhatDidTheySayAdmin {
     $options = get_option('what-did-they-say-options');
     if (!is_array($options)) {
       $this->install();
+    } else {
+      $any_changes = false;
+      foreach ($this->default_options as $key => $value) {
+        if (!isset($options[$key])) {
+          $any_changes = true; $options[$key] = $value;
+        }
+      }
+      if ($any_changes) { update_option('what-did-they-say-options', $options); }
     }
     
     add_action('admin_menu', array(&$this, 'admin_menu'));
@@ -363,7 +371,13 @@ class WhatDidTheySayAdmin {
         }
       }
     }
-    return $updated;
+
+    if (!is_admin()) {
+      header('Location: ' . $_SERVER['HTTP_REFERER']);
+      exit(0);
+    } else {
+      return $updated;
+    }
   }
 
   function handle_update_update_queued_transcript($info) {
