@@ -71,7 +71,7 @@ class WhatDidTheySayAdmin {
     add_filter('the_media_transcript', array(&$this, 'the_media_transcript'), 10, 2);
     add_filter('the_language_name', array(&$this, 'the_language_name'), 10, 2);
     add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
-    add_filter('the_multiple_transcript_language_name', array(&$this, 'the_multiple_transcript_language_name'), 10, 3);
+    add_filter('the_transcript_language_name', array(&$this, 'the_transcript_language_name'), 10, 3);
     add_filter('the_transcript_format_string', array(&$this, 'the_transcript_format_string'), 10);
     
     add_filter('template_redirect', array(&$this, 'template_redirect'));
@@ -109,6 +109,7 @@ class WhatDidTheySayAdmin {
 
   function include_editor_javascript() {
     $nonce = wp_create_nonce('what-did-they-say');
+    $language_options = new WDTSLanguageOptions();
     
     include(dirname(__FILE__) . '/partials/_editor-script.inc');
   }
@@ -258,27 +259,12 @@ class WhatDidTheySayAdmin {
   /**
    * Handle showing the header above a bundle of live transcripts.
    */
-  function the_multiple_transcript_language_name($language_format, $transcripts, $content) {
-    if (count($transcripts) == 1) {
-      $content = get_the_language_name(reset(array_keys($transcripts)));
-    } else {
-      $dropdown = array();
-      
-      $dropdown[] = '<select>';
-        foreach ($transcripts as $code => $transcript) {
-          $dropdown[] = '<option value="' . $code . '"' . (($code == $default_language) ? ' selected="selected"' : '') . '>'
-                      . get_the_language_name($code)
-                      . '</option>';
-        }
-      $dropdown[] = '</select>';
-
-      $content = implode("", $dropdown);
-    }
-
+  function the_transcript_language_name($language_format, $code, $content) {
     if (is_null($language_format)) { $language_format = apply_filters('the_transcript_format_string', ''); }
-
-    return '<h3 class="wdts-transcript-language">' . sprintf($language_format, $content) . '</h3>';
-
+    
+    $language_options = new WDTSLanguageOptions();
+    
+    return array($language_format, $code, '<h3 class="wdts-transcript-language">' . sprintf($language_format, $language_options->get_language_name($code)) . '</h3>');
   }
 
   /**

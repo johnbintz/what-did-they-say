@@ -12,8 +12,9 @@
     'dialog_name': '<?php _e('Enter the character name:', 'what-did-they-say') ?>',
     'dialog_direction': '<?php _e('Enter the direction in which the character is speaking:', 'what-did-they-say') ?>',
     'dialog_speech': '<?php _e('Enter what the character is speaking:', 'what-did-they-say') ?>',
-    'transcripts_updated': '<?php _e('Transcripts updated.', 'what-did-they-say') ?>',
-    'transcripts_failure': '<?php _e('Transcript update failure!', 'what-did-they-say') ?>'
+    'transcripts_updated': '<?php _e('Transcripts updated. Reload to see them on page.', 'what-did-they-say') ?>',
+    'transcripts_failure': '<?php _e('Transcript update failure!', 'what-did-they-say') ?>',
+    'bundle_header': '<?php echo apply_filters('the_transcript_format_string', '') ?>'
   };
 
   WhatDidTheySay.button_labels = {
@@ -26,4 +27,14 @@
   };
 
   WhatDidTheySay.can_approve = <?php echo current_user_can('approve_transcriptions') ? "true" : "false" ?>;
+
+  <?php
+    $language_output = array();
+    foreach ($language_options->get_languages() as $code => $info) {
+      $language_output[] = "${code}: '" . addslashes($info['name']) . "'";
+    }
+  ?>
+  WhatDidTheySay.languages = { <?php echo implode(",", $language_output) ?> };
+
+  WhatDidTheySay.default_language = '<?php echo $language_options->get_default_language() ?>';
 </script>

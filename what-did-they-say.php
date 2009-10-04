@@ -148,14 +148,12 @@ function transcripts_display($language_format = null) {
 
       $output[] = '<div class="transcript-bundle">';
 
-      $output[] = apply_filters('the_multiple_transcript_language_name', $language_format, $transcripts, '');
-      
       foreach ($transcripts as $code => $transcript) {
-        $transcript    = end(apply_filters('the_media_transcript', $transcript));
+        $transcript = end(apply_filters('the_media_transcript', $transcript));
 
-        $output[] = '<div '
-                  . (($code == $default_language) ? 'style="display:none"' : '')
-                  . ' class="transcript-holder ' . $code . '">' . $language_name . $transcript . '</div>';
+        $output[] = end(apply_filters('the_transcript_language_name', $language_format, $code, ''));
+
+        $output[] = '<div class="transcript-holder ' . $code . '">' . $transcript . '</div>';
       }
       $output[] = '</div>';
     }
