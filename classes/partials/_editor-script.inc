@@ -37,3 +37,5 @@ WhatDidTheySay.can_approve = <?php echo current_user_can('approve_transcriptions
 WhatDidTheySay.languages = { <?php echo implode(",", $language_output) ?> };
 
 WhatDidTheySay.default_language = '<?php echo $language_options->get_default_language() ?>';
+
+WhatDidTheySay.use_transcript_effects = <?php echo ($options['transcript_effects'] ? "true" : "false") ?>;

@@ -26,7 +26,8 @@ class WhatDidTheySayAdmin {
     'hide_transcript' => array(
       'home' => true,
       'single' => false
-    )
+    ),
+    'transcript_effects' => false
   );
   
   var $capabilities = array();
@@ -193,6 +194,7 @@ class WhatDidTheySayAdmin {
   function template_redirect() {
     wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
     wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype', 'wdts-script'), false, true);
+
     if (current_user_can('submit_transcriptions')) {
       wp_enqueue_script('scriptaculous-effects');
       wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
@@ -201,7 +203,11 @@ class WhatDidTheySayAdmin {
     
     $options = get_option('what-did-they-say-options');
     if (!empty($options['load_default_styles'])) {
-      wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+      wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');      
+    }
+
+    if ($options['transcript_effects']) {
+      wp_enqueue_script('scriptaculous-effects');
     }
   }
 
@@ -565,9 +571,9 @@ class WhatDidTheySayAdmin {
     if (current_user_can('edit_themes')) {
       $options = get_option('what-did-they-say-options');
 
-      $options['load_default_styles'] = isset($info['default_styles']);
-      $options['use_nl2br'] = isset($info['use_nl2br']);
-      $options['excerpt_distance'] = !empty($info['excerpt_distance']) ? $info['excerpt_distance'] : 30;
+      foreach (array('load_default_styles', 'use_nl2br', 'transcript_effects') as $field) {
+        $options[$field] = isset($info[$field]);
+      }
       
       update_option('what-did-they-say-options', $options);
       $updated = __('Default styles option updated.', 'what-did-they-say');

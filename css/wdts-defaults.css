@@ -35,3 +35,7 @@ div.wdts-transcript div.wdts-dialog span.wdts-name {
 div.wdts-transcript div.wdts-dialog span.wdts-speech {
   margin: 0.5em 1em 0
 }
+
+.wdts-transcript-opener {
+  margin: 0.5em 0;
+}

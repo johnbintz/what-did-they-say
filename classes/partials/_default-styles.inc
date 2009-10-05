@@ -14,10 +14,18 @@
 
       <label>
         <input type="checkbox"
-               name="wdts[default_styles]"
+               name="wdts[load_default_styles]"
                value="yes"
                <?php echo ($options['load_default_styles'] ? 'checked="checked"' : '') ?> />
         <?php _e('Include default CSS styles for transcripts', 'what-did-they-say') ?>
+      </label>
+
+      <label>
+        <input type="checkbox"
+               name="wdts[transcript_effects]"
+               value="yes"
+               <?php echo ($options['transcript_effects'] ? 'checked="checked"' : '') ?> />
+        <?php _e('Enable fancy transcript open/close transitions. Increases page download size.', 'what-did-they-say') ?>
       </label>
 
       <label>

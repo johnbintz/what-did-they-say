@@ -20,9 +20,17 @@ WhatDidTheySay.build_bundle_header = function(bundle) {
   var show_only_this_code = function(code) {
     transcript_holders.each(function(t) {
       if (t.hasClassName(code)) {
-        t.show();
+        if (WhatDidTheySay.use_transcript_effects) {
+          new Effect.BlindDown(t, { duration: 0.25 });
+        } else {
+          t.show();
+        }
       } else {
-        t.hide();
+        if (WhatDidTheySay.use_transcript_effects) {
+          new Effect.BlindUp(t, { duration: 0.25 });
+        } else {
+          t.hide();
+        }
       }
     });
   };
@@ -72,26 +80,28 @@ $$('.wdts-transcript-container').each(function(d) {
 
     if (opener && closer) {
       opener.observe('click', function(e) {
-        opener.hide();
-        closer.show();
-        bundle.show();
+        opener.hide(); closer.show();
+        if (WhatDidTheySay.use_transcript_effects) {
+          new Effect.BlindDown(bundle, { duration: 0.25 });
+        } else {
+          bundle.show();
+        }
       });
 
       closer.observe('click', function(e) {
-        closer.hide();
-        opener.show();
-        bundle.hide();
+        closer.hide(); opener.show();
+        if (WhatDidTheySay.use_transcript_effects) {
+          new Effect.BlindUp(bundle, { duration: 0.25 });
+        } else {
+          bundle.hide();
+        }
       });
     }
 
     if (d.hasClassName('wdts-start-hidden')) {
-      bundle.hide();
-      closer.hide();
-      opener.show();
+      bundle.hide(); closer.hide(); opener.show();
     } else {
-      bundle.show();
-      closer.show();
-      opener.hide();
+      bundle.show(); closer.show(); opener.hide();
     }
   }
 });
