@@ -60,6 +60,25 @@ WhatDidTheySay.build_bundle_header = function(bundle) {
   bundle.insert({ top: new_header })
 }
 
-$$('.transcript-bundle').each(function(d) {
+$$('.wdts-transcript-bundle').each(function(d) {
+  if (d.hasClassName('wdts-hide-transcript')) {
+    d.hide();
+
+    var opener = new Element("a", { 'href': '#', 'className': 'wdts-transcript-opener' }).update(WhatDidTheySay.messages.show_transcripts);
+    opener.observe('click', function(e) {
+      Event.stop(e);
+
+      if (d.visible()) {
+        d.hide();
+        opener.update(WhatDidTheySay.messages.show_transcripts);
+      } else {
+        d.show();
+        opener.update(WhatDidTheySay.messages.hide_transcripts);
+      }
+    });
+
+    d.insert({before: opener});
+  }
+
   WhatDidTheySay.build_bundle_header(d);
 });

@@ -11,7 +11,7 @@
                value="<?php echo $options['excerpt_distance'] ?>"
                size="3" />
       </label>
-      
+
       <label>
         <input type="checkbox"
                name="wdts[default_styles]"
@@ -27,6 +27,26 @@
                <?php echo ($options['use_nl2br'] ? 'checked="checked"' : '') ?> />
         <?php _e('Turn transcript line breaks into HTML new lines (nl2br())', 'what-did-they-say') ?>
       </label>
+
+      <p>By default, transcripts should be hidden on these types of pages:</p>
+
+      <div style="margin: 0 2em">
+        <label>
+          <input type="checkbox"
+                 name="wdts[hide_transcript][home]"
+                 value="yes"
+                 <?php echo ($options['hide_transcript']['home'] ? 'checked="checked"' : '') ?> />
+          <?php _e('On the home page', 'what-did-they-say') ?>
+        </label>
+
+        <label>
+          <input type="checkbox"
+                 name="wdts[hide_transcript][single]"
+                 value="yes"
+                 <?php echo ($options['hide_transcript']['single'] ? 'checked="checked"' : '') ?> />
+          <?php _e('On individual post pages', 'what-did-they-say') ?>
+        </label>
+      </div>
       <input class="button" type="submit" value="<?php _e('Change default styles', 'what-did-they-say') ?>" />
     </form>
 

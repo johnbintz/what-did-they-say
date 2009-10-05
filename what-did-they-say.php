@@ -122,7 +122,7 @@ function the_language_name($language = null) {
  * @param string $dropdown_message If set, the text that appears to the left of the language dropdown.
  * @param string $single_language_message If set, the text that appears when only one transcript exists for this post.
  */
-function transcripts_display($language_format = null) {
+function transcripts_display($language_format = null, $show_transcripts_string = null, $hide_transcripts_string = null) {
   global $post;
   
   $output = array();
@@ -142,11 +142,21 @@ function transcripts_display($language_format = null) {
     }
 
     $language_options = new WDTSLanguageOptions();
+    $options = get_option('what-did-they-say-options');
 
     if (count($transcripts) > 0) {
       $default_language = $language_options->get_default_language();
 
-      $output[] = '<div class="transcript-bundle">';
+      $do_hide = false;
+      if (is_home() || is_single()) {
+        foreach ($options['hide_transcript'] as $type => $do_hide) {
+          if ($do_hide && call_user_func("is_${type}")) {
+            $do_hide = true; break;
+          }
+        }
+      }
+
+      $output[] = '<div class="wdts-transcript-bundle' . ($do_hide ? ' wdts-hide-transcript' : '') . '">';
 
       foreach ($transcripts as $code => $transcript) {
         $transcript = end(apply_filters('the_media_transcript', $transcript));
@@ -156,6 +166,7 @@ function transcripts_display($language_format = null) {
         $output[] = '<div class="transcript-holder ' . $code . '">' . $transcript . '</div>';
       }
       $output[] = '</div>';
+
     }
   }
 

@@ -22,7 +22,11 @@ class WhatDidTheySayAdmin {
     'search_integration' => true,
     'excerpt_distance' => 30,
     'use_nl2br' => false,
-    'high_insertion_level' => false
+    'high_insertion_level' => false,
+    'hide_transcript' => array(
+      'home' => true,
+      'single' => false
+    )
   );
   
   var $capabilities = array();
@@ -92,11 +96,22 @@ class WhatDidTheySayAdmin {
       }
     }
 
+    if (current_user_can('submit_transcriptions')) {
+      add_action('wp_footer', array(&$this, 'wp_footer'));
+    }
+
     add_filter('filter_shortcode_dialog', array(&$this, 'filter_shortcode_dialog'), 10, 4);
     add_filter('filter_shortcode_scene_action', array(&$this, 'filter_shortcode_scene_action'), 10, 2);
     add_filter('filter_shortcode_scene_heading', array(&$this, 'filter_shortcode_scene_heading'), 10, 2);
 
     if (isset($_REQUEST['wdts'])) {
+      if (isset($_REQUEST['wdts']['script'])) {
+        $language_options = new WDTSLanguageOptions();
+        
+        include('partials/_editor-script.inc');
+        exit(0);
+      }
+      
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
           $this->handle_update($_REQUEST['wdts']);
@@ -107,11 +122,13 @@ class WhatDidTheySayAdmin {
     }
   }
 
-  function include_editor_javascript() {
+  function wp_footer() {
     $nonce = wp_create_nonce('what-did-they-say');
-    $language_options = new WDTSLanguageOptions();
     
-    include(dirname(__FILE__) . '/partials/_editor-script.inc');
+    echo '<script type="text/javascript">';
+      echo 'WhatDidTheySay.ajax_url = "' . addslashes($_SERVER['REQUEST_URI']) . '";';
+      echo 'WhatDidTheySay.nonce = "' . $nonce . '";';
+    echo '</script>';
   }
 
   /**
@@ -163,13 +180,12 @@ class WhatDidTheySayAdmin {
    * Action for when a non-admin page is displayed.
    */
   function template_redirect() {
-    wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype'), false, true);
+    wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
+    wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype', 'wdts-script'), false, true);
     if (current_user_can('submit_transcriptions')) {
       wp_enqueue_script('scriptaculous-effects');
-      wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'));
+      wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
       wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
-
-      add_action('wp_head', array(&$this, 'include_editor_javascript'));
     }
     
     $options = get_option('what-did-they-say-options');
@@ -732,6 +748,8 @@ class WhatDidTheySayAdmin {
   function admin_menu() { 
     global $pagenow, $plugin_page;
 
+    wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
+
     if (current_user_can('submit_transcriptions')) {
       add_options_page(
         __('What Did They Say?!?', 'what-did-they-say'),
@@ -768,7 +786,7 @@ class WhatDidTheySayAdmin {
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
         wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
         wp_enqueue_script('scriptaculous-effects');
-        wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects'));
+        wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
       }
     }
   }
@@ -808,7 +826,6 @@ class WhatDidTheySayAdmin {
     $language_options = new WDTSLanguageOptions();
 
     $nonce = wp_create_nonce('what-did-they-say');
-    include('partials/_editor-script.inc');
     include('partials/meta-box.inc');
   }
 }

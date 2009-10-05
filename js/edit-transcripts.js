@@ -1,5 +1,3 @@
-var WhatDidTheySay = Class.create({});
-
 /**
  * Set up a transcript editor widget.
  */
