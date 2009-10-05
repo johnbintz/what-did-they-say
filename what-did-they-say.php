@@ -156,17 +156,20 @@ function transcripts_display($language_format = null, $show_transcripts_string =
         }
       }
 
-      $output[] = '<div class="wdts-transcript-bundle' . ($do_hide ? ' wdts-hide-transcript' : '') . '">';
+      $output[] = '<div class="wdts-transcript-container' . ($do_hide ? " wdts-start-hidden" : "") . '">';
+        $output[] = apply_filters('the_transcript_opener', '');
 
-      foreach ($transcripts as $code => $transcript) {
-        $transcript = end(apply_filters('the_media_transcript', $transcript));
+        $output[] = '<div class="wdts-transcript-bundle' . ($do_hide ? ' wdts-hide-transcript' : '') . '">';
 
-        $output[] = end(apply_filters('the_transcript_language_name', $language_format, $code, ''));
+        foreach ($transcripts as $code => $transcript) {
+          $transcript = end(apply_filters('the_media_transcript', $transcript));
 
-        $output[] = '<div class="transcript-holder ' . $code . '">' . $transcript . '</div>';
-      }
+          $output[] = end(apply_filters('the_transcript_language_name', $language_format, $code, ''));
+
+          $output[] = '<div class="transcript-holder ' . $code . '">' . $transcript . '</div>';
+        }
+        $output[] = '</div>';
       $output[] = '</div>';
-
     }
   }
 

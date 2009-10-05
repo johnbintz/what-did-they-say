@@ -60,25 +60,38 @@ WhatDidTheySay.build_bundle_header = function(bundle) {
   bundle.insert({ top: new_header })
 }
 
-$$('.wdts-transcript-bundle').each(function(d) {
-  if (d.hasClassName('wdts-hide-transcript')) {
-    d.hide();
+$$('.wdts-transcript-container').each(function(d) {
+  var bundle = d.select('.wdts-transcript-bundle').pop();
+  var opener_container = d.select('.wdts-transcript-opener').pop();
 
-    var opener = new Element("a", { 'href': '#', 'className': 'wdts-transcript-opener' }).update(WhatDidTheySay.messages.show_transcripts);
-    opener.observe('click', function(e) {
-      Event.stop(e);
+  if (bundle && opener_container) {
+    WhatDidTheySay.build_bundle_header(bundle);
 
-      if (d.visible()) {
-        d.hide();
-        opener.update(WhatDidTheySay.messages.show_transcripts);
-      } else {
-        d.show();
-        opener.update(WhatDidTheySay.messages.hide_transcripts);
-      }
-    });
+    var opener = opener_container.select('.wdts-opener').pop();
+    var closer = opener_container.select('.wdts-closer').pop();
 
-    d.insert({before: opener});
+    if (opener && closer) {
+      opener.observe('click', function(e) {
+        opener.hide();
+        closer.show();
+        bundle.show();
+      });
+
+      closer.observe('click', function(e) {
+        closer.hide();
+        opener.show();
+        bundle.hide();
+      });
+    }
+
+    if (d.hasClassName('wdts-start-hidden')) {
+      bundle.hide();
+      closer.hide();
+      opener.show();
+    } else {
+      bundle.show();
+      closer.show();
+      opener.hide();
+    }
   }
-
-  WhatDidTheySay.build_bundle_header(d);
 });

@@ -76,7 +76,9 @@ class WhatDidTheySayAdmin {
     add_filter('the_language_name', array(&$this, 'the_language_name'), 10, 2);
     add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
     add_filter('the_transcript_language_name', array(&$this, 'the_transcript_language_name'), 10, 3);
-    add_filter('the_transcript_format_string', array(&$this, 'the_transcript_format_string'), 10);
+    add_filter('the_transcript_format_string', array(&$this, 'the_transcript_format_string'));
+
+    add_filter('the_transcript_opener', array(&$this, 'the_transcript_opener'));
     
     add_filter('template_redirect', array(&$this, 'template_redirect'));
 
@@ -139,6 +141,15 @@ class WhatDidTheySayAdmin {
     transcripts_display();
     the_media_transcript_queue_editor();
     return $content . ob_get_clean();
+  }
+
+  function the_transcript_opener($content = '') {
+    ob_start(); ?>
+    <div class="wdts-transcript-opener"> [
+      <a href="#" class="wdts-opener"><?php _e('Show transcripts') ?></a>
+      <a href="#" class="wdts-closer"><?php _e('Hide transcripts') ?></a>
+    ] </div>
+    <?php return ob_get_clean();
   }
 
   /**
