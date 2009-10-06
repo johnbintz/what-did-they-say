@@ -27,7 +27,8 @@ class WhatDidTheySayAdmin {
       'home' => true,
       'single' => false
     ),
-    'transcript_effects' => false
+    'transcript_effects' => false,
+    'allow_html' => false
   );
   
   var $capabilities = array();
@@ -514,9 +515,29 @@ class WhatDidTheySayAdmin {
     if (isset($info['module'])) {
       $method_name = "handle_update_" . str_replace("-", "_", $info['module']);
       if (method_exists($this, $method_name)) {
+        $info = $this->_clean_child($info);
+      
         $result = $this->{$method_name}($info);
         if (!empty($result)) { $this->notices[] = $result; }
       }
+    }
+  }
+
+  function _clean_child($node) {
+    if (is_array($node)) {
+      $new_nodes = array();
+      foreach ($node as $key => $n) {
+        $new_nodes[$key] = $this->_clean_child($n);
+      }
+      return $new_nodes;
+    } else {
+      $options = get_option('what-did-they-say-options');
+
+      $node = (string)$node;
+      foreach (array('script', 'style', 'link') as $tag) { $node = preg_replace("#<${tag}.*/${tag}>#", '', $node); }
+      if (!$options['allow_html']) { $node = strip_tags($node); }
+      
+      return $node;
     }
   }
 

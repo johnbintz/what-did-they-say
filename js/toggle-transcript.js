@@ -80,6 +80,7 @@ $$('.wdts-transcript-container').each(function(d) {
 
     if (opener && closer) {
       opener.observe('click', function(e) {
+        Event.stop(e);
         opener.hide(); closer.show();
         if (WhatDidTheySay.use_transcript_effects) {
           new Effect.BlindDown(bundle, { duration: 0.25 });
@@ -89,6 +90,7 @@ $$('.wdts-transcript-container').each(function(d) {
       });
 
       closer.observe('click', function(e) {
+        Event.stop(e);
         closer.hide(); opener.show();
         if (WhatDidTheySay.use_transcript_effects) {
           new Effect.BlindUp(bundle, { duration: 0.25 });

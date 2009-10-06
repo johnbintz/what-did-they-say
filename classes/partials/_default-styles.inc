@@ -36,6 +36,14 @@
         <?php _e('Turn transcript line breaks into HTML new lines (nl2br())', 'what-did-they-say') ?>
       </label>
 
+      <label>
+        <input type="checkbox"
+               name="wdts[allow_html]"
+               value="yes"
+               <?php echo ($options['allow_html'] ? 'checked="checked"' : '') ?> />
+        <?php _e('Allow HTML in transcripts. If disabled, only short codes are allowed. Script and style tags are always filtered out.', 'what-did-they-say') ?>
+      </label>
+
       <p>By default, transcripts should be hidden on these types of pages:</p>
 
       <div style="margin: 0 2em">
