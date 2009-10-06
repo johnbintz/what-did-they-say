@@ -51,12 +51,14 @@ class WhatDidTheySayAdmin {
    * Initialize the object.
    */
   function init() {
+    // set up capabilities
     $this->capabilities = array(
       'submit_transcriptions'  => __('Submit transcriptions to a post', 'what-did-they-say'),
       'approve_transcriptions' => __('Approve transcriptions to a post', 'what-did-they-say'),
       'change_languages'      => __('Change the available languages', 'what-did-they-say')
     );
-    
+
+    // does this copy of wdts?!? reference new options?
     $options = get_option('what-did-they-say-options');
     if (!is_array($options)) {
       $this->install();
@@ -69,11 +71,16 @@ class WhatDidTheySayAdmin {
       }
       if ($any_changes) { update_option('what-did-they-say-options', $options); }
     }
-    
+
+    // pages
     add_action('admin_menu', array(&$this, 'admin_menu'));
     add_action('admin_notices', array(&$this, 'admin_notices'));
+    add_action('template_redirect', array(&$this, 'template_redirect'));
 
+    // capabilities
     add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
+
+    // display effects
     add_filter('the_media_transcript', array(&$this, 'the_media_transcript'), 10, 2);
     add_filter('the_language_name', array(&$this, 'the_language_name'), 10, 2);
     add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
@@ -82,17 +89,7 @@ class WhatDidTheySayAdmin {
     add_filter('the_transcript_opener', array(&$this, 'the_transcript_opener'));
     add_filter('the_transcript_transition_effect', array(&$this, 'the_transcript_transition_effect'), 10, 2);
 
-    add_filter('template_redirect', array(&$this, 'template_redirect'));
-
-    if ($options['search_integration']) {
-      add_filter('posts_where', array(&$this, 'posts_where'));
-      add_filter('posts_join', array(&$this, 'posts_join'));
-    }
-
-    if ($options['automatic_embedding']) {
-      add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), $options['high_insertion_level'] ? 100 : 15);
-    }
-
+    // short codes
     foreach (get_class_methods($this) as $method) {
       if (strpos($method, "shortcode_") === 0) {
         $shortcode_name = str_replace("_", "-", str_replace("shortcode_", "", $method));
@@ -100,14 +97,27 @@ class WhatDidTheySayAdmin {
       }
     }
 
-    if (current_user_can('submit_transcriptions')) {
-      add_action('wp_footer', array(&$this, 'wp_footer'));
-    }
-
     add_filter('filter_shortcode_dialog', array(&$this, 'filter_shortcode_dialog'), 10, 4);
     add_filter('filter_shortcode_scene_action', array(&$this, 'filter_shortcode_scene_action'), 10, 2);
     add_filter('filter_shortcode_scene_heading', array(&$this, 'filter_shortcode_scene_heading'), 10, 2);
 
+    // search transcripts, too?
+    if ($options['search_integration']) {
+      add_filter('posts_where', array(&$this, 'posts_where'));
+      add_filter('posts_join', array(&$this, 'posts_join'));
+    }
+
+    // try to automatically embed editors?
+    if ($options['automatic_embedding']) {
+      add_filter('the_content', array(&$this, 'the_content_automatic_embedding'), $options['high_insertion_level'] ? 100 : 15);
+    }
+
+    // add extra script bits if this user can edit
+    if (current_user_can('submit_transcriptions')) {
+      add_action('wp_footer', array(&$this, 'wp_footer'));
+    }
+
+    // handle form submission
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['script'])) {
         $language_options = new WDTSLanguageOptions();
