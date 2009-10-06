@@ -6,6 +6,7 @@ Description: Manage and display text transcriptions of comics, videos, or other 
 Version: 0.1
 Author: John Bintz
 Author URI: http://www.coswellproductions.com/wordpress/
+Text Domain: what-did-they-say
 
 Copyright 2009  John Bintz  (email : john@coswellproductions.com)
 

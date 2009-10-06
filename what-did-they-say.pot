@@ -1,0 +1,706 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: what-did-they-say 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-04 23:19-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: what-did-they-say.php:213
+msgid "Edit/Add Transcripts"
+msgstr ""
+
+#: what-did-they-say.php:215
+msgid "Manage Transcripts:"
+msgstr ""
+
+#: classes/partials/_misc-options.inc:2
+msgid "Force a High Insertion Level for Automatic Transcript Embedding"
+msgstr ""
+
+#: classes/partials/_misc-options.inc:3
+msgid ""
+"If you are using automatic transcript embedding and got a message stating "
+"that controls could not be loaded, enable this option."
+msgstr ""
+
+#: classes/partials/_misc-options.inc:4
+msgid ""
+"This is potentially impolite to other plugins and themes, so if you don't "
+"need it, disable it."
+msgstr ""
+
+#: classes/partials/_misc-options.inc:14
+msgid "Inject transcripts at level 100 instead of level 15"
+msgstr ""
+
+#: classes/partials/_misc-options.inc:17
+msgid "Change Insertion Level"
+msgstr ""
+
+#: classes/partials/_misc-options.inc:20
+msgid "Reset Settings to Default"
+msgstr ""
+
+#: classes/partials/_misc-options.inc:21
+msgid ""
+"Click the button below to reset capabilities and languages to their "
+"defaults. This will not affect any transcriptions you have already created, "
+"but some transcriptions may become inaccessible if you don't redefine the "
+"original language."
+msgstr ""
+
+#: classes/partials/_misc-options.inc:25
+msgid "Reset What Did They Say?!?"
+msgstr ""
+
+#: classes/partials/_misc-options.inc:32
+msgid "Are you sure? You could leave transcriptions inaccessible."
+msgstr ""
+
+#: classes/partials/meta-box.inc:8
+msgid "Allow new transcripts to be submitted for this post"
+msgstr ""
+
+#: classes/partials/meta-box.inc:21
+msgid "Manage Queued Transcripts:"
+msgstr ""
+
+#: classes/partials/meta-box.inc:31
+msgid "Edit Approved Transcripts:"
+msgstr ""
+
+#: classes/partials/meta-box.inc:34
+#: classes/partials/_manage-queued-transcripts.inc:19
+msgid "Language:"
+msgstr ""
+
+#: classes/partials/meta-box.inc:51
+msgid "Update All Transcripts"
+msgstr ""
+
+#: classes/partials/meta-box.inc:55
+msgid ""
+"Uh oh...there's a problem with automatic embedding. Enable &quot;Inject "
+"transcripts at level 100 instead of level 15&quot; on the What Did They "
+"Say?!? Misc. Options page."
+msgstr ""
+
+#: classes/partials/_queued-transcript-contents.inc:6
+#, php-format
+msgid "From <strong>%s</strong> in <strong>%s</strong>:"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:4
+msgid "This will overwrite the current transcript. Are you sure?"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:5
+msgid "This will delete the queued transcript. Are you sure?"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:6
+msgid "Transcript approved and posted. You can further edit it below."
+msgstr ""
+
+#: classes/partials/_editor-script.inc:7
+msgid "Transcript deleted."
+msgstr ""
+
+#: classes/partials/_editor-script.inc:8
+msgid "Enter the scene heading:"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:9
+msgid "Enter the scene action:"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:10
+msgid "Enter the character name:"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:11
+msgid "Enter the direction in which the character is speaking:"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:12
+msgid "Enter what the character is speaking:"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:13
+msgid "Transcripts updated. Reload to see them on page."
+msgstr ""
+
+#: classes/partials/_editor-script.inc:14
+msgid "Transcript update failure!"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:16 classes/WhatDidTheySayAdmin.inc:153
+msgid "Show transcripts"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:17 classes/WhatDidTheySayAdmin.inc:154
+msgid "Hide transcripts"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:21
+msgid "Scene Heading"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:22
+msgid "Scene Action"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:23
+msgid "Dialog"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:24
+msgid "Approve"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:25
+#: classes/partials/_change-languages.inc:51
+msgid "Delete"
+msgstr ""
+
+#: classes/partials/_editor-script.inc:26
+msgid "Edit"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:3
+msgid "Transcript Style and Display Settings"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:8
+msgid "Number of excerpt context characters in search results:"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:20
+msgid "Include default CSS styles for transcripts"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:28
+msgid ""
+"Enable fancy transcript open/close transitions. Increases page download size."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:36
+msgid "Turn transcript line breaks into HTML new lines (nl2br())"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:47
+msgid "On the home page"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:55
+msgid "On individual post pages"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:58
+msgid "Change default styles"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:61
+msgid "Transcript Line Breaks"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:63
+msgid ""
+"If you're using short codes or HTML to construct your transcripts, you don't "
+"need to enable transcript line breaks."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:65
+msgid "Default CSS Selectors Information"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:67
+msgid ""
+"By default, the following CSS selectors are used by <strong>What Did They "
+"Say?!?</strong>:"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:70
+msgid "The container for the transcript"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:72
+msgid "Character dialog"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:74
+msgid "The character's name"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:76
+msgid ""
+"The direction the characters is speaking in/from (off-stage, to another "
+"character)"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:78
+msgid "A scene heading"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:80
+msgid "Action within a scene"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:83
+msgid "Overriding Filters"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:86
+msgid ""
+"If you want to override how transcript HTML is structured, create hooks in "
+"your theme that implement the following filters."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:87
+msgid ""
+"All of them return the same parameters that are passed in as an array(), "
+"with the return <code>$content</code> containing the filter output."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:92
+msgid "Output <code>$content</code> contains the HTML for dialog blocks."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:95
+msgid "Output <code>$content</code> contains the HTML for scene action blocks."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:98
+msgid ""
+"Ouptut <code>$content</code> contains the HTML for scene heading blocks."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:101
+msgid "Output <code>$content</code> contains the HTML for a single transcript."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:104
+msgid "Output <code>$content</code> contains the HTML for a language name."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:107
+msgid ""
+"Output <code>$content</code> contains the HTML for all the provided <code>"
+"$transcripts</code> that match <code>$search_string</code>."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:110
+#, php-format
+msgid ""
+"Output <code>$content</code> contains the sprintf() format string for how "
+"transcript headers will be spelled. The default is <code>Transcript: %s</"
+"code>."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:113
+msgid ""
+"Output <code>$content</code> contains three elements: a container (.wdts-"
+"transcript-opener), and an opener &amp; closer in the container (.wdts-"
+"opener and .wdts-container)."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:117
+msgid ""
+"A filter in your theme that would change the display of langauge names would "
+"look like the following:"
+msgstr ""
+
+#: classes/partials/_introduction.inc:2 classes/partials/admin.inc:3
+msgid "Introduction"
+msgstr ""
+
+#: classes/partials/_introduction.inc:5
+msgid ""
+"<strong>What Did They Say?!?</strong> gives you great control over adding "
+"and managing transcripts for your comics, videos, or audio."
+msgstr ""
+
+#: classes/partials/_introduction.inc:6
+msgid ""
+"Adding transcripts to your posts gives you better search engine visibility "
+"and helps disabled users enjoy your content."
+msgstr ""
+
+#: classes/partials/_introduction.inc:13
+msgid "Getting Started"
+msgstr ""
+
+#: classes/partials/_introduction.inc:17
+msgid ""
+"<strong>What Did They Say?!?</strong> can attempt to embed excerpts into "
+"your posts automatically:"
+msgstr ""
+
+#: classes/partials/_introduction.inc:24
+msgid "Enable automatic transcript embedding"
+msgstr ""
+
+#: classes/partials/_introduction.inc:26 classes/partials/_introduction.inc:62
+msgid "Submit"
+msgstr ""
+
+#: classes/partials/_introduction.inc:30
+msgid ""
+"<strong>What Did They Say?!?</strong> is set to attempt to embed excerpts "
+"into your posts automatically."
+msgstr ""
+
+#: classes/partials/_introduction.inc:32
+msgid ""
+"<strong>What Did They Say?!?</strong> will not attempt to embed excerpts "
+"into your posts automatically."
+msgstr ""
+
+#: classes/partials/_introduction.inc:38
+msgid ""
+"If the automatic embedding method doesn't work or you desire more control, "
+"you can add the following Template Tags to the appropriate location in your "
+"posts Loop:"
+msgstr ""
+
+#: classes/partials/_introduction.inc:48
+msgid "Search Results"
+msgstr ""
+
+#: classes/partials/_introduction.inc:51
+msgid ""
+"When someone searches your site, <strong>What Did They Say?!?</strong> can "
+"search your transcripts, too."
+msgstr ""
+
+#: classes/partials/_introduction.inc:60
+msgid "Enable transcript search integration"
+msgstr ""
+
+#: classes/partials/_introduction.inc:66
+msgid ""
+"<strong>What Did They Say?!?</strong> is set to search transcripts when your "
+"site is searched."
+msgstr ""
+
+#: classes/partials/_introduction.inc:68
+msgid ""
+"<strong>What Did They Say?!?</strong> will not search transcripts when your "
+"site is searched."
+msgstr ""
+
+#: classes/partials/_introduction.inc:74
+msgid ""
+"If you want transcript excerpts to appear in your search results, add the "
+"following Template Tag to your search results Loop:"
+msgstr ""
+
+#: classes/partials/_introduction.inc:84 classes/partials/admin.inc:5
+msgid "Styles"
+msgstr ""
+
+#: classes/partials/_introduction.inc:85
+#, php-format
+msgid ""
+"You can set the number of characters to show in context in search results on "
+"the %s page."
+msgstr ""
+
+#: classes/partials/_change-languages.inc:3 classes/partials/admin.inc:6
+msgid "Languages"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:7
+msgid "Language"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:8
+msgid "Rename?"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:9
+msgid "Make default?"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:10
+msgid "Delete?"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:19
+msgid "(default)"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:30
+msgid "Rename"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:42
+msgid "Default"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:57
+msgid "Add new:"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:69
+msgid "Add New Language"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:80
+msgid ""
+"You are about to delete this language from the available list. Continue?"
+msgstr ""
+
+#: classes/partials/admin.inc:4 classes/partials/_capabilities.inc:5
+msgid "Capabilities"
+msgstr ""
+
+#: classes/partials/admin.inc:7 classes/partials/_shortcodes-info.inc:2
+msgid "Shortcodes Info"
+msgstr ""
+
+#: classes/partials/admin.inc:8
+msgid "Misc. Options"
+msgstr ""
+
+#: classes/partials/admin.inc:14 classes/partials/admin.inc:47
+#: classes/WhatDidTheySayAdmin.inc:775 classes/WhatDidTheySayAdmin.inc:776
+msgid "What Did They Say?!?"
+msgstr ""
+
+#: classes/partials/admin.inc:48
+#, php-format
+msgid "Might I suggest a $%0.2f donation?"
+msgstr ""
+
+#: classes/partials/_manage-queued-transcripts.inc:2
+msgid "Your Submitted Transcripts:"
+msgstr ""
+
+#: classes/partials/_manage-queued-transcripts.inc:11
+msgid "Submit a New Transcript:"
+msgstr ""
+
+#: classes/partials/_manage-queued-transcripts.inc:30
+msgid "Submit For Approval"
+msgstr ""
+
+#: classes/partials/_capabilities.inc:7
+msgid ""
+"Determine who can do what with transcripts by setting the minimum role "
+"requirements below."
+msgstr ""
+
+#: classes/partials/_capabilities.inc:11
+msgid "Capability"
+msgstr ""
+
+#: classes/partials/_capabilities.inc:12
+msgid "Role Needed"
+msgstr ""
+
+#: classes/partials/_capabilities.inc:27
+msgid "Change capabilities"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:5
+msgid ""
+"you can easily use these shortcodes with the appropriate buttons above all "
+"transcript editors"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:8
+msgid "Sample Transcript"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:25
+msgid "Shortcode Details"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:27
+msgid ""
+"Transcripts can be entered either using straight HTML or by using shortcodes "
+"built for <strong>What Did They Say?!?</strong>"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:28
+msgid "Using shortcodes will make your transcripts easier to style."
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:29
+msgid ""
+"The default styles that come with <strong>What Did They Say?!?</strong> make "
+"your transcripts look like a screenplay."
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:31
+msgid "Available Shortcodes"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:33
+msgid "[scene-heading]"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:34
+msgid "The text that indicates a new scene:"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:36
+msgid ""
+"<code>[scene-heading]Ext. The Old Man's House[/scene-heading]</code> becomes:"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:37
+msgid "Ext. The Old Man's House"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:40
+msgid "[scene-action]"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:41
+msgid ""
+"The text that indicates action taking place in a scene. One usually occurs "
+"underneath of a scene heading:"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:43
+msgid ""
+"<code>[scene-action]John is walking down to the car parked in the driveway.[/"
+"scene-action]</code> becomes:"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:44
+msgid "John is walking down to the car parked in the driveway."
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:47
+msgid "[dialog]"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:48
+msgid "The text for when a character is speaking in a scene:"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:50
+msgid ""
+"<code>[dialog name=\"John\" direction=\"(towards the house)\"]Hey, where are "
+"the keys?[/dialog]</code> becomes:"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:53
+msgid "John"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:54
+msgid "(towards the house)"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:55
+msgid "Hey, where are the keys?"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:54
+msgid "Submit transcriptions to a post"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:55
+msgid "Approve transcriptions to a post"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:56
+msgid "Change the available languages"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:310
+#, php-format
+msgid "Transcript: %s"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:328
+#, php-format
+msgid "%s transcript excerpt:"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:426
+msgid "Transcript added to queue."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:428
+msgid "Transcript not added to queue."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:499
+msgid "Transcripts updated."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:582
+msgid "Default styles option updated."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:598
+msgid "Insertion level updated."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:616
+#, php-format
+msgid "%s deleted."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:618
+msgid "Language not deleted!"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:625
+#, php-format
+msgid "%s added."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:627
+msgid "Language not added!"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:633
+#, php-format
+msgid "%s set as default."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:635
+msgid "Language not set as default!"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:641
+#, php-format
+msgid "%1$s renamed to %2$s."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:643
+msgid "Language not renamed!"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:666
+msgid "User capabilities updated."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:685
+msgid "<strong>What Did They Say?!?</strong> options reset."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:704
+msgid "<strong>What Did They Say?!?</strong> core options changed."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:799
+msgid "Manage Transcripts"
+msgstr ""

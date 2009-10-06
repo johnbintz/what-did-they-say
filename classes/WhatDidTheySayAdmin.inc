@@ -78,9 +78,9 @@ class WhatDidTheySayAdmin {
     add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
     add_filter('the_transcript_language_name', array(&$this, 'the_transcript_language_name'), 10, 3);
     add_filter('the_transcript_format_string', array(&$this, 'the_transcript_format_string'));
-
     add_filter('the_transcript_opener', array(&$this, 'the_transcript_opener'));
-    
+    add_filter('the_transcript_transition_effect', array(&$this, 'the_transcript_transition_effect'), 10, 2);
+
     add_filter('template_redirect', array(&$this, 'template_redirect'));
 
     if ($options['search_integration']) {
@@ -144,6 +144,9 @@ class WhatDidTheySayAdmin {
     return $content . ob_get_clean();
   }
 
+  /**
+   * Build the opener/closer for transcripts.
+   */
   function the_transcript_opener($content = '') {
     ob_start(); ?>
     <div class="wdts-transcript-opener"> [
@@ -305,6 +308,17 @@ class WhatDidTheySayAdmin {
    */
   function the_transcript_format_string($content) {
     return __('Transcript: %s', 'what-did-they-say');
+  }
+
+  /**
+   * The script.aculo.us effects to use when fancy effects are enabled.
+   */
+  function the_transcript_transition_effect($is_opening = true, $content) {
+    if ($is_opening) {
+      return array(true, "function(t) { new Effect.BlindDown(t, { duration: 0.25 }); }");
+    } else {
+      return array(false, "function(t) { new Effect.BlindUp(t, { duration: 0.25 }); }");
+    }
   }
 
   /**

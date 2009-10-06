@@ -108,7 +108,10 @@
 
       <dt><code>the_transcript_format_string($content)</code></dt>
       <dd><?php _e('Output <code>$content</code> contains the sprintf() format string for how transcript headers will be spelled. The default is <code>Transcript: %s</code>.', 'what-did-they-say') ?></dd>
-  </dl>
+
+      <dt><code>the_transcript_opener($content)</code></dt>
+      <dd><?php _e('Output <code>$content</code> contains three elements: a container (.wdts-transcript-opener), and an opener &amp; closer in the container (.wdts-opener and .wdts-container).', 'what-did-they-say') ?></dd>
+    </dl>
 
     <p>
       <?php _e('A filter in your theme that would change the display of langauge names would look like the following:', 'what-did-they-say') ?>

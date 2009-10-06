@@ -39,3 +39,8 @@ WhatDidTheySay.languages = { <?php echo implode(",", $language_output) ?> };
 WhatDidTheySay.default_language = '<?php echo $language_options->get_default_language() ?>';
 
 WhatDidTheySay.use_transcript_effects = <?php echo ($options['transcript_effects'] ? "true" : "false") ?>;
+
+WhatDidTheySay.transcript_effects = {
+  open: <?php echo end(apply_filters('the_transcript_transition_effect', true, '')) ?>,
+  close: <?php echo end(apply_filters('the_transcript_transition_effect', false, '')) ?>
+};

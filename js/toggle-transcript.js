@@ -21,13 +21,13 @@ WhatDidTheySay.build_bundle_header = function(bundle) {
     transcript_holders.each(function(t) {
       if (t.hasClassName(code)) {
         if (WhatDidTheySay.use_transcript_effects) {
-          new Effect.BlindDown(t, { duration: 0.25 });
+          WhatDidTheySay.transcript_effects.open(t);
         } else {
           t.show();
         }
       } else {
         if (WhatDidTheySay.use_transcript_effects) {
-          new Effect.BlindUp(t, { duration: 0.25 });
+          WhatDidTheySay.transcript_effects.close(t);
         } else {
           t.hide();
         }
