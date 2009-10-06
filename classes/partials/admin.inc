@@ -4,7 +4,7 @@
     'capabilities' => array(__('Capabilities', 'what-did-they-say'), 'edit_users'),
     'default-styles' => array(__('Styles', 'what-did-they-say'), 'edit_themes'),
     'change-languages' => array(__('Languages', 'what-did-they-say'), 'change_languages'),
-    'shortcodes-info' => array(__('Shortcodes Info', 'what-did-they-say'), 'submit_transcriptions'),
+    'shortcodes-info' => array(__('Short codes Info', 'what-did-they-say'), 'submit_transcriptions'),
     'misc-options' => array(__('Misc. Options', 'what-did-they-say'), 'manage_options'),
   );
 
@@ -45,7 +45,7 @@
 
     <p>
       <a href="<?php echo $PluginURI ?>"><?php _e('What Did They Say?!?', 'what-did-they-say') ?></a> Version <?php echo $Version ?> is &copy; 2009 <?php echo $Author ?>.
-      <?php printf(__('Might I suggest a $%0.2f donation?', 'what-did-they-say'), $suggested_amount) ?>
+      <?php printf(__('Might I suggest a $%1$0.2f donation for your %2$d transcripts?', 'what-did-they-say'), $suggested_amount, $transcript_count) ?>
     </p>
   </div>
 </div>

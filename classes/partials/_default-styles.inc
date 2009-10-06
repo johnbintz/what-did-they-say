@@ -33,7 +33,7 @@
                name="wdts[use_nl2br]"
                value="yes"
                <?php echo ($options['use_nl2br'] ? 'checked="checked"' : '') ?> />
-        <?php _e('Turn transcript line breaks into HTML new lines (nl2br())', 'what-did-they-say') ?>
+        <?php _e('Turn transcript line breaks into HTML new lines (uses <a href="http://us2.php.net/nl2br" target="external">nl2br()</a>)', 'what-did-they-say') ?>
       </label>
 
       <label>
@@ -41,10 +41,10 @@
                name="wdts[allow_html]"
                value="yes"
                <?php echo ($options['allow_html'] ? 'checked="checked"' : '') ?> />
-        <?php _e('Allow HTML in transcripts. If disabled, only short codes are allowed. Script and style tags are always filtered out.', 'what-did-they-say') ?>
+        <?php _e('Allow HTML in transcripts. If disabled, only short codes are allowed, which is <strong>recommended</strong>. Script, style, and link tags are <strong>always</strong> filtered out.', 'what-did-they-say') ?>
       </label>
 
-      <p>By default, transcripts should be hidden on these types of pages:</p>
+      <p><?php _e('By default, transcripts should start hidden on these types of pages:', 'what-did-they-say') ?></p>
 
       <div style="margin: 0 2em">
         <label>

@@ -884,8 +884,9 @@ class WhatDidTheySayAdmin {
     $options = get_option('what-did-they-say-options');
 
     $nonce = wp_create_nonce('what-did-they-say');
+    $transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
 
-    $suggested_amount = 20 + ((int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'")) * 0.1);
+    $suggested_amount = 20 + ($transcript_count * 0.1);
     
     include('partials/admin.inc');
   }
