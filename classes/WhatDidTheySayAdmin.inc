@@ -125,6 +125,8 @@ class WhatDidTheySayAdmin {
     }
   }
 
+  /** Actions **/
+
   function wp_footer() {
     $nonce = wp_create_nonce('what-did-they-say');
     
@@ -133,6 +135,104 @@ class WhatDidTheySayAdmin {
       echo 'WhatDidTheySay.nonce = "' . $nonce . '";';
     echo '</script>';
   }
+
+  /**
+   * Action for when a non-admin page is displayed.
+   */
+  function template_redirect() {
+    wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
+    wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype', 'wdts-script'), false, true);
+
+    if (current_user_can('submit_transcriptions')) {
+      wp_enqueue_script('scriptaculous-effects');
+      wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
+      wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+    }
+
+    $options = get_option('what-did-they-say-options');
+    if (!empty($options['load_default_styles'])) {
+      wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+    }
+
+    if ($options['transcript_effects']) {
+      wp_enqueue_script('scriptaculous-effects');
+    }
+  }
+
+  /**
+   * Handle show_admin action.
+   */
+  function admin_notices() {
+    if (!empty($this->notices)) {
+      echo '<div class="updated fade">';
+        foreach ($this->notices as $notice) { echo "<p>" . $notice . "</p>"; }
+      echo '</div>';
+    }
+  }
+
+  /**
+   * Handle plugin installation.
+   */
+  function install() {
+    $this->read_language_file();
+    $options = get_option('what-did-they-say-options');
+    if (empty($options)) {
+      $this->default_options['languages'] = $this->build_default_languages();
+      ksort($this->default_options['languages']);
+      update_option('what-did-they-say-options', $this->default_options);
+    }
+  }
+
+  /**
+   * Handle admin_menu action.
+   */
+  function admin_menu() {
+    global $pagenow, $plugin_page;
+
+    wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
+
+    if (current_user_can('submit_transcriptions')) {
+      add_options_page(
+        __('What Did They Say?!?', 'what-did-they-say'),
+        __('What Did They Say?!?', 'what-did-they-say'),
+        'submit_transcriptions',
+        'manage-wdts',
+        array(&$this, 'manage_admin')
+      );
+
+      if ($plugin_page == "manage-wdts") {
+        $this->read_language_file();
+        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+        wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+
+        $this->plugin_data = get_plugin_data($this->_parent_file);
+      }
+
+      wp_enqueue_script('scriptaculous-effects');
+
+      add_action('wp_head', array(&$this, 'include_editor_javascript'));
+    }
+
+    if (current_user_can('approve_transcriptions')) {
+      if (strpos($pagenow, "post") === 0) {
+        add_meta_box(
+          'manage-transcriptions',
+          __('Manage Transcripts', 'what-did-they-say'),
+          array(&$this, 'manage_transcriptions_meta_box'),
+          'post',
+          'normal',
+          'low'
+        );
+
+        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+        wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+        wp_enqueue_script('scriptaculous-effects');
+        wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
+      }
+    }
+  }
+
+  /** Display Filters **/
 
   /**
    * Attempt to automatically embed transcripts in posts.
@@ -154,121 +254,6 @@ class WhatDidTheySayAdmin {
       <a href="#" class="wdts-closer"><?php _e('Hide transcripts') ?></a>
     ] </div>
     <?php return ob_get_clean();
-  }
-
-  /**
-   * Filter for WP_Query#get_posts to add searching for transcripts.
-   */
-  function posts_where($where) {
-    global $wpdb;
-    
-    $search = get_query_var('s');
-    if (!empty($search)) {
-      $query = $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts_words');
-      $search = addslashes_gpc($search);
-      $query .= " AND $wpdb->postmeta.meta_value LIKE '%$search%') ";
-
-      $exact = get_query_var('exact');
-      $n = !empty($exact) ? '' : '%';
-
-      $where = preg_replace("#(\($wpdb->posts.post_title LIKE '{$n}{$search}{$n}'\))#", '\1' . $query, $where);
-    }
-
-    return $where;
-  }
-
-  /**
-   * Filter for WP_Query#get_posts to add searching for transcripts.
-   */
-  function posts_join($join) {
-    global $wpdb;
-    
-    $search = get_query_var('s');
-    if (!empty($search)) {
-      $join .=  " JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) ";
-    }
-    
-    return $join;
-  }
-
-  /**
-   * Action for when a non-admin page is displayed.
-   */
-  function template_redirect() {
-    wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
-    wp_enqueue_script('toggle-transcript', plugin_dir_url(dirname(__FILE__)) . 'js/toggle-transcript.js', array('prototype', 'wdts-script'), false, true);
-
-    if (current_user_can('submit_transcriptions')) {
-      wp_enqueue_script('scriptaculous-effects');
-      wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
-      wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
-    }
-    
-    $options = get_option('what-did-they-say-options');
-    if (!empty($options['load_default_styles'])) {
-      wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');      
-    }
-
-    if ($options['transcript_effects']) {
-      wp_enqueue_script('scriptaculous-effects');
-    }
-  }
-
-  /**
-   * Dialog short code.
-   */
-  function shortcode_dialog($atts, $speech) {
-    extract(shortcode_atts(array(
-      'name' => 'Nobody',
-      'direction' => ''
-    ), $atts));
-    
-    return end(apply_filters('filter_shortcode_dialog', $name, $direction, $speech, ""));
-  }
-
-  /**
-   * Filter for dialog short code.
-   */
-  function filter_shortcode_dialog($name, $direction, $speech, $content) {
-    $content  = '<div class="wdts-dialog"><span class="wdts-name">' . $name . '</span>';
-    if (!empty($direction)) {
-      $content .= ' <span class="wdts-direction">' . $direction . '</span>';
-    }
-    $content .= ' <span class="wdts-speech">' . $speech . '</span></div>';
-    
-    return array($name, $direction, $speech, $content);
-  }
-
-  /**
-   * Scene action short code.
-   */
-  function shortcode_scene_action($atts, $description) {
-    extract(shortcode_atts(array(), $atts));
-    
-    return end(apply_filters('filter_shortcode_scene_action', $description, ""));
-  }
-
-  /**
-   * Filter for scene action short code.
-   */
-  function filter_shortcode_scene_action($description, $content) {
-    return array($description, '<div class="wdts-scene-action">' . $description . '</div>', );
-  }
-
-  /**
-   * Scene heading short code.
-   */
-  function shortcode_scene_heading($atts, $description) {
-    extract(shortcode_atts(array(), $atts));
-    
-    return end(apply_filters('filter_shortcode_scene_heading', $description, ""));
-  }
-
-  /**
-   * Filter for scene heading short code.
-   */
-  function filter_shortcode_scene_heading($description, $content) {
-    return array($description, '<div class="wdts-scene-heading">' . $description . '</div>');
   }
 
   /**
@@ -297,9 +282,9 @@ class WhatDidTheySayAdmin {
    */
   function the_transcript_language_name($language_format, $code, $content) {
     if (is_null($language_format)) { $language_format = apply_filters('the_transcript_format_string', ''); }
-    
+
     $language_options = new WDTSLanguageOptions();
-    
+
     return array($language_format, $code, '<h3 class="wdts-transcript-language">' . sprintf($language_format, $language_options->get_language_name($code)) . '</h3>');
   }
 
@@ -366,6 +351,106 @@ class WhatDidTheySayAdmin {
     return array($transcripts, $search_string, ob_get_clean());
   }
   
+
+  /** Transcript Search Filters **/
+
+  /**
+   * Filter for WP_Query#get_posts to add searching for transcripts.
+   */
+  function posts_where($where) {
+    global $wpdb;
+    
+    $search = get_query_var('s');
+    if (!empty($search)) {
+      $query = $wpdb->prepare(" OR ($wpdb->postmeta.meta_key = %s ", 'approved_transcripts_words');
+      $search = addslashes_gpc($search);
+      $query .= " AND $wpdb->postmeta.meta_value LIKE '%$search%') ";
+
+      $exact = get_query_var('exact');
+      $n = !empty($exact) ? '' : '%';
+
+      $where = preg_replace("#(\($wpdb->posts.post_title LIKE '{$n}{$search}{$n}'\))#", '\1' . $query, $where);
+    }
+
+    return $where;
+  }
+
+  /**
+   * Filter for WP_Query#get_posts to add searching for transcripts.
+   */
+  function posts_join($join) {
+    global $wpdb;
+    
+    $search = get_query_var('s');
+    if (!empty($search)) {
+      $join .=  " JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) ";
+    }
+    
+    return $join;
+  }
+
+  /** Short codes and their filters **/
+
+  /**
+   * Dialog short code.
+   */
+  function shortcode_dialog($atts, $speech) {
+    extract(shortcode_atts(array(
+      'name' => 'Nobody',
+      'direction' => ''
+    ), $atts));
+    
+    return end(apply_filters('filter_shortcode_dialog', $name, $direction, $speech, ""));
+  }
+
+  /**
+   * Filter for dialog short code.
+   */
+  function filter_shortcode_dialog($name, $direction, $speech, $content) {
+    $content  = '<div class="wdts-dialog"><span class="wdts-name">' . $name . '</span>';
+    if (!empty($direction)) {
+      $content .= ' <span class="wdts-direction">' . $direction . '</span>';
+    }
+    $content .= ' <span class="wdts-speech">' . $speech . '</span></div>';
+    
+    return array($name, $direction, $speech, $content);
+  }
+
+  /**
+   * Scene action short code.
+   */
+  function shortcode_scene_action($atts, $description) {
+    extract(shortcode_atts(array(), $atts));
+    
+    return end(apply_filters('filter_shortcode_scene_action', $description, ""));
+  }
+
+  /**
+   * Filter for scene action short code.
+   */
+  function filter_shortcode_scene_action($description, $content) {
+    return array($description, '<div class="wdts-scene-action">' . $description . '</div>', );
+  }
+
+  /**
+   * Scene heading short code.
+   */
+  function shortcode_scene_heading($atts, $description) {
+    extract(shortcode_atts(array(), $atts));
+    
+    return end(apply_filters('filter_shortcode_scene_heading', $description, ""));
+  }
+
+  /**
+   * Filter for scene heading short code.
+   */
+  function filter_shortcode_scene_heading($description, $content) {
+    return array($description, '<div class="wdts-scene-heading">' . $description . '</div>');
+  }
+
+
+  /** Capabilities **/
+
   /**
    * Handle the user_has_cap filter.
    * @param array $capabilities The capabilities the user already has.
@@ -396,15 +481,30 @@ class WhatDidTheySayAdmin {
   }
 
   /**
-   * Handle show_admin action.
+   * Check if the current user can edit the specified transcript.
    */
-  function admin_notices() {
-    if (!empty($this->notices)) {
-      echo '<div class="updated fade">';
-        foreach ($this->notices as $notice) { echo "<p>" . $notice . "</p>"; }
-      echo '</div>'; 
+  function current_user_can_edit_this_transcript($post_id, $transcript_id) {
+    if (current_user_can('approve_transcriptions')) {
+      $ok = true;
+    } else {
+      $ok = false;
+      if (current_user_can('submit_transcriptions')) {
+        $queued_transcript_manager  = new WDTSQueuedTranscript($post_id);
+        $user = wp_get_current_user();
+
+        $transcripts = $queued_transcript_manager->get_transcripts_for_user($user->ID);
+        foreach ($transcripts as $transcript) {
+          if ($transcript['key'] == $transcript_id) {
+            $ok = true; break;
+          }
+        }
+      }
     }
+    return $ok;
   }
+
+
+  /** Handle data updates **/
 
   /**
    * Handle an update to options.
@@ -436,7 +536,7 @@ class WhatDidTheySayAdmin {
         if ($queued_transcript_manager->save_transcript($info)) {
           $updated = __('Transcript added to queue.', 'what-did-they-say');
         } else {
-          $updated = __('Transcript not added to queue.', 'what-did-they-say');          
+          $updated = __('Transcript not added to queue.', 'what-did-they-say');
         }
       }
     }
@@ -539,26 +639,6 @@ class WhatDidTheySayAdmin {
     header('HTTP/1.1 401 Unauthorized');
   }
 
-  function current_user_can_edit_this_transcript($post_id, $transcript_id) {
-    if (current_user_can('approve_transcriptions')) {
-      $ok = true;
-    } else {
-      $ok = false;
-      if (current_user_can('submit_transcriptions')) {
-        $queued_transcript_manager  = new WDTSQueuedTranscript($post_id);
-        $user = wp_get_current_user();
-
-        $transcripts = $queued_transcript_manager->get_transcripts_for_user($user->ID);
-        foreach ($transcripts as $transcript) {
-          if ($transcript['key'] == $transcript_id) {
-            $ok = true; break;
-          }
-        }
-      }
-    }
-    return $ok;
-  }
-
   /**
    * Handle transcript deletion.
    */
@@ -574,7 +654,7 @@ class WhatDidTheySayAdmin {
       header('HTTP/1.1 500 Internal Server Error');
       return;
     }
-    header('HTTP/1.1 401 Unauthorized');    
+    header('HTTP/1.1 401 Unauthorized');
   }
 
   /**
@@ -716,6 +796,8 @@ class WhatDidTheySayAdmin {
     }
     return $updated;
   }
+
+  /** Language management **/
   
   /**
    * Read a data file containing all the known languages on Earth.
@@ -730,22 +812,9 @@ class WhatDidTheySayAdmin {
         $language = trim($language);
         list($code, $date_added, $name) = explode("\t", $language);
         $this->all_languages[$code] = $name;
-      } 
+      }
     }
     return $this->all_languages;
-  }
-
-  /**
-   * Handle plugin installation.
-   */
-  function install() {
-    $this->read_language_file();
-    $options = get_option('what-did-they-say-options');
-    if (empty($options)) {
-      $this->default_options['languages'] = $this->build_default_languages();
-      ksort($this->default_options['languages']);
-      update_option('what-did-they-say-options', $this->default_options);
-    }
   }
 
   /**
@@ -773,54 +842,7 @@ class WhatDidTheySayAdmin {
     return $full_default_language_info;
   }
 
-  /**
-   * Handle admin_menu action.
-   */
-  function admin_menu() { 
-    global $pagenow, $plugin_page;
-
-    wp_enqueue_script('wdts-script', get_bloginfo('url') . '?wdts[script]=true', array('prototype'));
-
-    if (current_user_can('submit_transcriptions')) {
-      add_options_page(
-        __('What Did They Say?!?', 'what-did-they-say'),
-        __('What Did They Say?!?', 'what-did-they-say'),
-        'submit_transcriptions',
-        'manage-wdts',
-        array(&$this, 'manage_admin')
-      );
-      
-      if ($plugin_page == "manage-wdts") {
-        $this->read_language_file();
-        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
-        wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
-
-        $this->plugin_data = get_plugin_data($this->_parent_file);
-      }
-  
-      wp_enqueue_script('scriptaculous-effects');
-
-      add_action('wp_head', array(&$this, 'include_editor_javascript'));
-    }
-
-    if (current_user_can('approve_transcriptions')) {
-      if (strpos($pagenow, "post") === 0) {
-        add_meta_box(
-          'manage-transcriptions',
-          __('Manage Transcripts', 'what-did-they-say'),
-          array(&$this, 'manage_transcriptions_meta_box'),
-          'post',
-          'normal',
-          'low'
-        );
-
-        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
-        wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
-        wp_enqueue_script('scriptaculous-effects');
-        wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
-      }
-    }
-  }
+  /** What Did They Say?!? administration screens **/
 
   /**
    * Show the admin page.
