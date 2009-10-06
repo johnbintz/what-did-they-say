@@ -260,7 +260,7 @@ class WhatDidTheySayAdmin {
    */
   function the_transcript_opener($content = '') {
     ob_start(); ?>
-    <div class="wdts-transcript-opener"> [
+    <div class="wdts-transcript-opener" style="display:none"> [
       <a href="#" class="wdts-opener"><?php _e('Show transcripts') ?></a>
       <a href="#" class="wdts-closer"><?php _e('Hide transcripts') ?></a>
     ] </div>

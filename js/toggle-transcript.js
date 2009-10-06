@@ -105,5 +105,7 @@ $$('.wdts-transcript-container').each(function(d) {
     } else {
       bundle.show(); closer.show(); opener.hide();
     }
+
+    opener_container.show();
   }
 });

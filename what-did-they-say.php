@@ -210,12 +210,18 @@ function the_media_transcript_queue_editor() {
     $new_transcript_id = md5(rand());
 
     ?>
-    <p>[ <a id="wdts-opener-<?php echo $id = md5(rand()) ?>" href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]</p>
+    <div style="display:none">
+      [ <a id="wdts-opener-<?php echo $id = md5(rand()) ?>" href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]
+    </div>
+    <noscript>
+      <p>JavaScript is required to edit transcripts.</p>
+    </noscript>
     <div id="wdts-<?php echo $id ?>" style="display:none">
       <h3 class="wdts"><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
       <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
     </div>
     <script type="text/javascript">
+      $($('wdts-opener-<?php echo $id ?>').parentNode).show();
       $('wdts-opener-<?php echo $id ?>').observe('click', function(e) {
         Event.stop(e);
 

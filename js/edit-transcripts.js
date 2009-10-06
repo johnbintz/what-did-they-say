@@ -47,7 +47,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
               stored_range.moveToElementText(transcript);
               stored_range.setEndPoint('EndToEnd', range);
               transcript.selectionStart = stored_range.text.length - range.text.length;
-              transcript.selectionEnd = current_transcript.selectionStart + range.text.length;
+              transcript.selectionEnd = transcript.selectionStart + range.text.length;
             }
 
             var start = transcript.selectionStart;
@@ -63,7 +63,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
               case 'scene-action':
                 var message = tag.replace('-', '_');
                 if (new_content) {
-                  var content = prompt(WhatDidTheySay.messages[message]);
+                  var content = prompt(WhatDidTheySay.messages[message], '');
                   if (content) {
                     injector.inject('[' + tag + ']' + content + "[/" + tag + "]\n", start);
                   }
@@ -73,15 +73,15 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
                 }
                 break;
               case 'dialog':
-                var name = prompt(WhatDidTheySay.messages.dialog_name);
+                var name = prompt(WhatDidTheySay.messages.dialog_name, '');
                 if (name) {
-                  var direction = prompt(WhatDidTheySay.messages.dialog_direction);
+                  var direction = prompt(WhatDidTheySay.messages.dialog_direction, '');
                   var tag = '[dialog name="' + name + '"';
                   if (direction) { tag += ' direction="' + direction + '"'; }
                   tag += ']';
 
                   if (new_content) {
-                    var speech = prompt(WhatDidTheySay.messages.dialog_speech);
+                    var speech = prompt(WhatDidTheySay.messages.dialog_speech, '');
 
                     if (speech) {
                       tag += speech + "[/dialog]\n";
