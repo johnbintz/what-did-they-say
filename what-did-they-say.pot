@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-06 07:01-0400\n"
+"POT-Creation-Date: 2009-10-06 07:11-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,13 +196,20 @@ msgid ""
 msgstr ""
 
 #: classes/partials/_default-styles.inc:36
-msgid "Turn transcript line breaks into HTML new lines (nl2br())"
+msgid ""
+"Turn transcript line breaks into HTML new lines (uses <a href=\"http://us2."
+"php.net/nl2br\" target=\"external\">nl2br()</a>)"
 msgstr ""
 
 #: classes/partials/_default-styles.inc:44
 msgid ""
-"Allow HTML in transcripts. If disabled, only short codes are allowed. Script "
-"and style tags are always filtered out."
+"Allow HTML in transcripts. If disabled, only short codes are allowed, which "
+"is <strong>recommended</strong>. Script, style, and link tags are "
+"<strong>always</strong> filtered out."
+msgstr ""
+
+#: classes/partials/_default-styles.inc:47
+msgid "By default, transcripts should start hidden on these types of pages:"
 msgstr ""
 
 #: classes/partials/_default-styles.inc:55
@@ -472,8 +479,8 @@ msgstr ""
 msgid "Capabilities"
 msgstr ""
 
-#: classes/partials/admin.inc:7 classes/partials/_shortcodes-info.inc:2
-msgid "Shortcodes Info"
+#: classes/partials/admin.inc:7
+msgid "Short codes Info"
 msgstr ""
 
 #: classes/partials/admin.inc:8
@@ -487,7 +494,7 @@ msgstr ""
 
 #: classes/partials/admin.inc:48
 #, php-format
-msgid "Might I suggest a $%0.2f donation?"
+msgid "Might I suggest a $%1$0.2f donation for your %2$d transcripts?"
 msgstr ""
 
 #: classes/partials/_manage-queued-transcripts.inc:2
@@ -518,6 +525,10 @@ msgstr ""
 
 #: classes/partials/_capabilities.inc:27
 msgid "Change capabilities"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:2
+msgid "Shortcodes Info"
 msgstr ""
 
 #: classes/partials/_shortcodes-info.inc:5

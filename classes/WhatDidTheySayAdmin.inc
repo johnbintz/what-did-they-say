@@ -7,10 +7,7 @@ class WhatDidTheySayAdmin {
   var $default_options = array(
     'languages' => array(
       array('code' => 'en', 'default' => true),
-      'fr',
-      'es',
-      'it',
-      'de'
+      'fr', 'es', 'it', 'de'
     ),
     'capabilities' => array(
       'submit_transcriptions' => 'administrator',
@@ -28,7 +25,8 @@ class WhatDidTheySayAdmin {
       'single' => false
     ),
     'transcript_effects' => false,
-    'allow_html' => false
+    'allow_html' => false,
+    'filters_to_use' => 'simple'
   );
   
   var $capabilities = array();
@@ -36,6 +34,7 @@ class WhatDidTheySayAdmin {
   var $language_file;
   var $all_languages = array();
   var $notices = array();
+  var $override_filter_info = false;
 
   var $is_ajax = false;
 
@@ -46,6 +45,10 @@ class WhatDidTheySayAdmin {
   function WhatDidTheySayAdmin() {
     $this->language_file = dirname(__FILE__) . '/../data/lsr-language.txt';
   }
+
+  // just in case things need to be unit tested...
+  function get_filters_dir() { return WP_CONTENT_DIR . '/transcript-filters'; }
+  function _get_abspath()    { return ABSPATH; }
   
   /**
    * Initialize the object.
@@ -81,13 +84,52 @@ class WhatDidTheySayAdmin {
     add_filter('user_has_cap', array(&$this, 'user_has_cap'), 5, 3);
 
     // display effects
-    add_filter('the_media_transcript', array(&$this, 'the_media_transcript'), 10, 2);
-    add_filter('the_language_name', array(&$this, 'the_language_name'), 10, 2);
-    add_filter('the_matching_transcript_excerpts', array(&$this, 'the_matching_transcript_excerpts'), 10, 3);
-    add_filter('the_transcript_language_name', array(&$this, 'the_transcript_language_name'), 10, 3);
-    add_filter('the_transcript_format_string', array(&$this, 'the_transcript_format_string'));
-    add_filter('the_transcript_opener', array(&$this, 'the_transcript_opener'));
-    add_filter('the_transcript_transition_effect', array(&$this, 'the_transcript_transition_effect'), 10, 2);
+    $filters = new WDTSDisplayFilters();
+    $reset_filter_value = true;
+
+    if (is_string($options['filters_to_use'])) {
+      $target = $this->get_filters_dir() . '/' . preg_replace('#[^a-z0-9_-]#', '', strtolower($options['filters_to_use']));
+      if (is_dir($target)) {
+        $this->override_filter_info = array();
+        foreach (glob($target . '/*') as $file) {
+          if (preg_match('#\.(php|inc)$#', $file) > 0) { $this->override_filter_info['php'] = $file; }
+          if (preg_match('#\.(css)$#', $file) > 0)     { $this->override_filter_info['css'] = $file; }
+        }
+
+        if (isset($this->override_filter_info['php'])) {
+          $class_name = preg_replace('#\..*$#', '', basename($this->override_filter_info['php']));
+          require_once($this->override_filter_info['php']);
+
+          if (class_exists($class_name)) {
+            $filters = new $class_name();
+            $reset_filter_value = false;
+          }
+        }
+      }
+    }
+
+    if ($reset_filter_value) {
+      // $options['filters_to_use'] = false;
+    }
+
+    foreach (array(
+      array('the_media_transcript', 2),
+      array('the_language_name', 2),
+      array('the_matching_transcript_excerpts', 3),
+      array('the_transcript_language_name', 3),
+      array('the_transcript_format_string', 1),
+      array('the_transcript_opener', 1),
+      array('the_transcript_transition_effect', 2),
+      array('filter_shortcode_dialog', 4),
+      array('filter_shortcode_scene_action', 2),
+      array('filter_shortcode_scene_heading', 2)
+    ) as $filter_info) {
+      list($method, $parameters) = $filter_info;
+
+      if (method_exists($filters, $method)) {
+        add_filter($method, array(&$filters, $method), 10, $parameters);
+      }
+    }
 
     // short codes
     foreach (get_class_methods($this) as $method) {
@@ -96,10 +138,6 @@ class WhatDidTheySayAdmin {
         add_shortcode($shortcode_name, array(&$this, $method));
       }
     }
-
-    add_filter('filter_shortcode_dialog', array(&$this, 'filter_shortcode_dialog'), 10, 4);
-    add_filter('filter_shortcode_scene_action', array(&$this, 'filter_shortcode_scene_action'), 10, 2);
-    add_filter('filter_shortcode_scene_heading', array(&$this, 'filter_shortcode_scene_heading'), 10, 2);
 
     // search transcripts, too?
     if ($options['search_integration']) {
@@ -163,6 +201,10 @@ class WhatDidTheySayAdmin {
     $options = get_option('what-did-they-say-options');
     if (!empty($options['load_default_styles'])) {
       wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+    }
+
+    if (isset($this->override_filter_info['css'])) {
+      wp_enqueue_style('wdts-override', str_replace(realpath($this->_get_abspath()), '', realpath($this->override_filter_info['css'])));
     }
 
     if ($options['transcript_effects']) {
@@ -237,6 +279,10 @@ class WhatDidTheySayAdmin {
 
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
         wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
+        if (isset($this->override_filter_info['css'])) {
+          wp_enqueue_style('wdts-override', str_replace(realpath($this->_get_abspath()), '', realpath($this->override_filter_info['css'])));
+        }
+
         wp_enqueue_script('scriptaculous-effects');
         wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
       }
@@ -255,113 +301,6 @@ class WhatDidTheySayAdmin {
     return $content . ob_get_clean();
   }
 
-  /**
-   * Build the opener/closer for transcripts.
-   */
-  function the_transcript_opener($content = '') {
-    ob_start(); ?>
-    <div class="wdts-transcript-opener" style="display:none"> [
-      <a href="#" class="wdts-opener"><?php _e('Show transcripts') ?></a>
-      <a href="#" class="wdts-closer"><?php _e('Hide transcripts') ?></a>
-    ] </div>
-    <?php return ob_get_clean();
-  }
-
-  /**
-   * Handle the_media_transcript filter.
-   * @param string $transcript The transcription text.
-   * @return string The processed transcription text.
-   */
-  function the_media_transcript($transcript, $content = "") {
-    $content = do_shortcode($transcript);
-    $options = get_option('what-did-they-say-options');
-    if ($options['use_nl2br']) { $content = nl2br($content); }
-    return array($transcript, '<div class="wdts-transcript">' . $content . '</div>');
-  }
-
-  /**
-   * Handle the_language_name filter.
-   * @param string $language The name of the language.
-   * @return string The processed language name.
-   */
-  function the_language_name($language, $content = "") {
-    return array($language, '<h3 class="wdts-transcript-language">' . sprintf(apply_filters('the_transcript_format_string'), $language) . '</h3>');
-  }
-
-  /**
-   * Handle showing the header above a bundle of live transcripts.
-   */
-  function the_transcript_language_name($language_format, $code, $content) {
-    if (is_null($language_format)) { $language_format = apply_filters('the_transcript_format_string', ''); }
-
-    $language_options = new WDTSLanguageOptions();
-
-    return array($language_format, $code, '<h3 class="wdts-transcript-language">' . sprintf($language_format, $language_options->get_language_name($code)) . '</h3>');
-  }
-
-  /**
-   * The format string used to display ither a single or multiple language transcript header.
-   */
-  function the_transcript_format_string($content) {
-    return __('Transcript: %s', 'what-did-they-say');
-  }
-
-  /**
-   * The script.aculo.us effects to use when fancy effects are enabled.
-   */
-  function the_transcript_transition_effect($is_opening = true, $content) {
-    if ($is_opening) {
-      return array(true, "function(t) { new Effect.BlindDown(t, { duration: 0.25 }); }");
-    } else {
-      return array(false, "function(t) { new Effect.BlindUp(t, { duration: 0.25 }); }");
-    }
-  }
-
-  /**
-   * Handle the_matching_transcript_excerpts.
-   */
-  function the_matching_transcript_excerpts($transcripts, $search_string = '', $content = "") {
-    $options = get_option('what-did-they-say-options');
-    ob_start();
-    if ($options['search_integration']) {
-      if (!empty($search_string)) {
-        $language_options = new WDTSLanguageOptions();
-        $options = get_option('what-did-they-say-options');
-
-        foreach ($transcripts as $transcript) {
-          if (($pos = strpos($transcript['transcript'], $search_string)) !== false) {
-            $l = strlen($transcript['transcript']) - 1;
-            echo '<div class="transcript-match">';
-              echo '<h4>' . sprintf(__("%s transcript excerpt:", 'what-did-they-say'), $language_options->get_language_name($transcript['language'])) . '</h4>';
-              echo '<p>';
-                $start_ellipsis = $end_ellipsis = true;
-                foreach (array(
-                  'start' => -1,
-                  'end'   => 1
-                ) as $variable => $direction) {
-                  ${$variable} = $pos + ($options['excerpt_distance'] * $direction);
-
-                  if ($variable == "end") { ${$variable} += strlen($search_string); }
-
-                  if (${$variable} < 0) { ${$variable} = 0; $start_ellipsis = false; }
-                  if (${$variable} > $l) { ${$variable} = $l; $end_ellipsis = false; }
-                }
-
-                $output = "";
-                if ($start_ellipsis) { $output .= "..."; }
-                $output .= str_replace($search_string, "<strong>" . $search_string . "</strong>", trim(substr($transcript['transcript'], $start, $end - $start)));
-                if ($end_ellipsis) { $output .= "..."; }
-
-                echo $output;
-              echo '</p>';
-            echo '</div>';
-          }
-        }
-      }
-    }
-    return array($transcripts, $search_string, ob_get_clean());
-  }
-  
 
   /** Transcript Search Filters **/
 
@@ -400,7 +339,8 @@ class WhatDidTheySayAdmin {
     return $join;
   }
 
-  /** Short codes and their filters **/
+
+  /** Short codes **/
 
   /**
    * Dialog short code.
@@ -415,19 +355,6 @@ class WhatDidTheySayAdmin {
   }
 
   /**
-   * Filter for dialog short code.
-   */
-  function filter_shortcode_dialog($name, $direction, $speech, $content) {
-    $content  = '<div class="wdts-dialog"><span class="wdts-name">' . $name . '</span>';
-    if (!empty($direction)) {
-      $content .= ' <span class="wdts-direction">' . $direction . '</span>';
-    }
-    $content .= ' <span class="wdts-speech">' . $speech . '</span></div>';
-    
-    return array($name, $direction, $speech, $content);
-  }
-
-  /**
    * Scene action short code.
    */
   function shortcode_scene_action($atts, $description) {
@@ -437,26 +364,12 @@ class WhatDidTheySayAdmin {
   }
 
   /**
-   * Filter for scene action short code.
-   */
-  function filter_shortcode_scene_action($description, $content) {
-    return array($description, '<div class="wdts-scene-action">' . $description . '</div>', );
-  }
-
-  /**
    * Scene heading short code.
    */
   function shortcode_scene_heading($atts, $description) {
     extract(shortcode_atts(array(), $atts));
     
     return end(apply_filters('filter_shortcode_scene_heading', $description, ""));
-  }
-
-  /**
-   * Filter for scene heading short code.
-   */
-  function filter_shortcode_scene_heading($description, $content) {
-    return array($description, '<div class="wdts-scene-heading">' . $description . '</div>');
   }
 
 
@@ -696,10 +609,16 @@ class WhatDidTheySayAdmin {
     if (current_user_can('edit_themes')) {
       $options = get_option('what-did-they-say-options');
 
-      foreach (array('load_default_styles', 'use_nl2br', 'transcript_effects') as $field) {
-        $options[$field] = isset($info[$field]);
+      foreach (array('load_default_styles', 'use_nl2br', 'transcript_effects', 'allow_html') as $field) { $options[$field] = isset($info[$field]);  }
+      $options['excerpt_distance'] = !empty($info['excerpt_distance']) ? $info['excerpt_distance'] : 30;
+      foreach (array_keys($options['hide_transcript']) as $type) {
+        $options['hide_transcript'][$type] = isset($info['hide_transcript'][$type]);
       }
-      
+
+      if (isset($info['filters_to_use'])) {
+        $options['filters_to_use'] = preg_replace('#[^a-z0-9_-]#', '', strtolower($info['filters_to_use']));
+      }
+
       update_option('what-did-they-say-options', $options);
       $updated = __('Default styles option updated.', 'what-did-they-say');
     }
@@ -875,6 +794,24 @@ class WhatDidTheySayAdmin {
 
   /** What Did They Say?!? administration screens **/
 
+  function _get_available_override_filters() {
+    $available_filters = array();
+    if (is_dir($this->get_filters_dir())) {
+      foreach (glob($this->get_filters_dir() . '/*') as $dir) {
+        if (is_dir($dir)) {
+          if (basename($dir) == preg_replace('#[^a-z0-9_-]#', '', strtolower(basename($dir)))) {
+            foreach (glob($dir . '/*') as $file) {
+              if (preg_match('#^(.*)\.(inc|php)$#', basename($file), $matches) > 0) {
+                $available_filters[] = basename($dir);
+              }
+            }
+          }
+        }
+      }
+    }
+    return $available_filters;
+  }
+
   /**
    * Show the admin page.
    */
@@ -884,10 +821,12 @@ class WhatDidTheySayAdmin {
     $options = get_option('what-did-they-say-options');
 
     $nonce = wp_create_nonce('what-did-they-say');
-    $transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
-
-    $suggested_amount = 20 + ($transcript_count * 0.1);
     
+    $transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
+    $suggested_amount = 20 + ($transcript_count * 0.1);
+
+    $available_filters = $this->_get_available_override_filters();
+
     include('partials/admin.inc');
   }
 
