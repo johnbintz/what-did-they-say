@@ -4,7 +4,7 @@
     'capabilities' => array(__('Capabilities', 'what-did-they-say'), 'edit_users'),
     'default-styles' => array(__('Styles', 'what-did-they-say'), 'edit_themes'),
     'change-languages' => array(__('Languages', 'what-did-they-say'), 'change_languages'),
-    'shortcodes-info' => array(__('Short codes Info', 'what-did-they-say'), 'submit_transcriptions'),
+    'shortcodes-info' => array(__('Short Codes Info', 'what-did-they-say'), 'submit_transcriptions'),
     'misc-options' => array(__('Misc. Options', 'what-did-they-say'), 'manage_options'),
   );
 

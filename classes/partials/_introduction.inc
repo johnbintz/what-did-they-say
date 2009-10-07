@@ -75,7 +75,7 @@
     </p>
 
   <pre>
-&lt;php if (function_exists('the_matching_transcript_excerpts')) {
+&lt;?php if (function_exists('the_matching_transcript_excerpts')) {
   the_matching_transcript_excerpts();
 } ?&gt;</pre>
 

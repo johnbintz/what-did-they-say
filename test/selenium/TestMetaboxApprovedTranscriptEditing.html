@@ -3,15 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://comicpress.local/" />
-<title>TestWhatDidTheySay</title>
+<link rel="selenium.base" href="" />
+<title>TestMetaboxApprovedTranscriptEditing</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">TestWhatDidTheySay</td></tr>
+<tr><td rowspan="1" colspan="3">TestMetaboxApprovedTranscriptEditing</td></tr>
 </thead><tbody>
-<!--Meta Box-->
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Add New</td>
@@ -37,7 +36,6 @@
 	<td>post_ID</td>
 	<td>post_id</td>
 </tr>
-<!--Edit Two Transcriptions-->
 <tr>
 	<td>assertSelectedLabel</td>
 	<td>wdts-language</td>
@@ -78,7 +76,6 @@
 	<td>wdts-transcripts-de</td>
 	<td>Dies ist ein Test transcript.</td>
 </tr>
-<!--Delete post-->
 <tr>
 	<td>click</td>
 	<td>link=Delete</td>
@@ -92,22 +89,6 @@
 <tr>
 	<td>waitForPageToLoad</td>
 	<td>30000</td>
-	<td></td>
-</tr>
-<!--Deactivate Plugin-->
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Installed</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//a[contains(@href,'what-did-they-say') and contains(@href,'deactivate')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Plugin deactivated.</td>
 	<td></td>
 </tr>
 

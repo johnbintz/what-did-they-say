@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://comicpress.local/" />
+<title>TestActivation</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestActivation</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/wp-admin/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(@href,'manage-wdts')]</td>
+	<td>not_activated</td>
+</tr>
+<tr>
+	<td>gotoIf</td>
+	<td>!${not_activated}</td>
+	<td>not_activated</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@href=&quot;plugins.php&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href,&quot;what-did-they-say&quot;) and contains(@href,&quot;deactivate&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Plugin deactivated.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>label</td>
+	<td>not_activated</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Installed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>What Did They Say?!?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href,'what-did-they-say') and contains(@href,'activate')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Plugin activated.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//a[contains(text(), &quot;What Did They Say?!?&quot;)]</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
