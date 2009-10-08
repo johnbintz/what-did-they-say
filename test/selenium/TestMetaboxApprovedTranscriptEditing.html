@@ -12,48 +12,43 @@
 <tr><td rowspan="1" colspan="3">TestMetaboxApprovedTranscriptEditing</td></tr>
 </thead><tbody>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Add New</td>
+	<td>open</td>
+	<td>/wp-admin/post.php?action=edit&amp;post=${post_id}</td>
 	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>title</td>
-	<td>WDTS Test Post</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>publish</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Post published.</td>
-	<td></td>
-</tr>
-<tr>
-	<td>storeValue</td>
-	<td>post_ID</td>
-	<td>post_id</td>
 </tr>
 <tr>
 	<td>assertSelectedLabel</td>
-	<td>wdts-language</td>
+	<td>//select[@name=&quot;wdts[language]&quot;]</td>
 	<td>English</td>
 </tr>
 <tr>
+	<td>assertVisible</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
-	<td>wdts-transcripts-en</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
 	<td>This is a test transcript.</td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>wdts-language</td>
+	<td>//select[@name=&quot;wdts[language]&quot;]</td>
 	<td>label=German</td>
 </tr>
 <tr>
+	<td>assertVisible</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][de]&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
-	<td>wdts-transcripts-de</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][de]&quot;]</td>
 	<td>Dies ist ein Test transcript.</td>
 </tr>
 <tr>
@@ -68,28 +63,13 @@
 </tr>
 <tr>
 	<td>assertValue</td>
-	<td>wdts-transcripts-en</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
 	<td>This is a test transcript.</td>
 </tr>
 <tr>
 	<td>assertValue</td>
-	<td>wdts-transcripts-de</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][de]&quot;]</td>
 	<td>Dies ist ein Test transcript.</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Delete</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertConfirmation</td>
-	<td>You are about to delete this post 'WDTS Test Post'<br />&nbsp;&nbsp;'Cancel' to stop, 'OK' to delete.</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForPageToLoad</td>
-	<td>30000</td>
-	<td></td>
 </tr>
 
 </tbody></table>
