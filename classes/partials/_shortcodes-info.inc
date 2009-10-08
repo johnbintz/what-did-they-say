@@ -1,3 +1,11 @@
+<?php
+
+$sample_transcript   = array();
+$sample_transcript[] = '[scene-heading]Ext. The Old Man\'s House[/scene-heading]';
+$sample_transcript[] = '[scene-action]John is walking down to the car parked in the driveway.[/scene-action]';
+$sample_transcript[] = '[dialog name="John" direction="(towards the house)"]Hey, where are the keys?[/dialog]';
+
+?>
 <?php if (current_user_can('submit_transcriptions')) { ?>
   <h3><?php _e('Shortcodes Info', 'what-did-they-say') ?></h3>
 
@@ -6,20 +14,10 @@
   </p>
   
   <h4><?php _e('Sample Transcript', 'what-did-they-say') ?></h4>
-  <pre>
-    [scene-heading]Ext. The Old Man's House[/scene-heading]
-    [scene-action]John is walking down to the car parked in the driveway.[/scene-action]
-    [dialog name="John" direction="(towards the house)"]Hey, where are the keys?[/dialog]
-  </pre>
+  <pre><?php echo implode("\n", $sample_transcript) ?></pre>
 
-  <div class="transcript">
-    <div class="scene-heading">Ext. The Old Man's House</div>
-    <div class="scene-action">John is walking down to the car parked in the driveway.</div>
-    <div class="dialog">
-      <span class="name">John</span>
-      <span class="direction">(towards the house)</span>
-      <span class="speech">Hey, where are the keys?</span>
-    </div>
+  <div class="wdts-transcript">
+    <?php echo do_shortcode(implode("\n", $sample_transcript)) ?>
   </div>
   
   <h4><?php _e('Shortcode Details', 'what-did-they-say') ?></h4>

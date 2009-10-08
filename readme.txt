@@ -77,6 +77,8 @@ short codes into your transcripts.
 == Screenshots ==
 
 1. The **What Did They Say?!?** admin screen, with tabs running across the top.
+2. The Manage Transcripts meta box, including the short codes buttons.
+3. The Language management screen.
 
 == Changelog ==
 
