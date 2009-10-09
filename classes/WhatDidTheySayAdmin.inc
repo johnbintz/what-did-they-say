@@ -855,6 +855,7 @@ class WhatDidTheySayAdmin {
     }
 
     $transcript_options = new WDTSTranscriptOptions($post->ID);    
+    $queued_transcripts = new WDTSQueuedTranscript($post->ID);
 
     $language_options = new WDTSLanguageOptions();
 

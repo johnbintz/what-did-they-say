@@ -184,7 +184,7 @@ function the_media_transcript_queue_editor() {
   global $post;
 
   if (current_user_can('submit_transcriptions')) {
-    $queued_transcripts = new WDTSQueuedTranscript($post->ID);
+    $queued_transcript_object = new WDTSQueuedTranscript($post->ID);
 
     $language_options = new WDTSLanguageOptions();
 
@@ -204,7 +204,7 @@ function the_media_transcript_queue_editor() {
 
     ?>
     <div style="display:none">
-      [ <a id="wdts-opener-<?php echo $id = md5(rand()) ?>" href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]
+      <span id="wdts-opener-<?php echo $id = md5(rand()) ?>">[ <a href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]</span>
     </div>
     <noscript>
       <p>JavaScript is required to edit transcripts.</p>

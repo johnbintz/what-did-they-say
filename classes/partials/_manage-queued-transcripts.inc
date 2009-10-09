@@ -1,16 +1,14 @@
 <?php
-
-
 	$transcripts_to_show = array();
 
 	if (current_user_can('approve_transcriptions')) {
-		$transcripts_to_show = $queued_transcripts->get_transcripts();
+		$transcripts_to_show = $queued_transcript_object->get_transcripts();
 		$title = __('All Submitted Transcripts', 'what-did-they-say');
 	} else {
 		if (!is_admin()) {
 	    $user = wp_get_current_user();
 	    if (!empty($user)) {
-	      $transcripts_to_show = $queued_transcripts->get_transcripts_for_user($user->ID);
+	      $transcripts_to_show = $queued_transcript_object->get_transcripts_for_user($user->ID);
 				$title = __('Your Submitted Transcripts', 'what-did-they-say');
 	    }
 		}
@@ -21,7 +19,7 @@
   <h3 style="margin-top: 0.5em"><?php echo $title ?></h3>
   <?php
     foreach ($transcripts_to_show as $transcript) {
-      include(dirname(__FILE__) . '/classes/partials/_display-queued-transcript.inc');
+      include('_display-queued-transcript.inc');
     }
   ?>
 <?php } ?>
