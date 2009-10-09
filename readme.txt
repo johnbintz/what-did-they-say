@@ -80,6 +80,10 @@ short codes into your transcripts.
 2. The Manage Transcripts meta box, including the short codes buttons.
 3. The Language management screen.
 
+== Credits ==
+
+Language tags are from the subtag registry at [http://www.langtag.net/](http://www.langtag.net/).
+
 == Changelog ==
 
 = 0.9 =

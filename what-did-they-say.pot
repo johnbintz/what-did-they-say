@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-08 21:58-0400\n"
+"POT-Creation-Date: 2009-10-09 10:58-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,6 +222,11 @@ msgstr ""
 
 #: classes/partials/_default-styles.inc:69
 msgid "Use the selected transcript filter set:"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:71
+#: classes/partials/_change-languages.inc:19
+msgid "(default)"
 msgstr ""
 
 #: classes/partials/_default-styles.inc:79
@@ -454,10 +459,6 @@ msgstr ""
 msgid "Delete?"
 msgstr ""
 
-#: classes/partials/_change-languages.inc:19
-msgid "(default)"
-msgstr ""
-
 #: classes/partials/_change-languages.inc:30
 msgid "Rename"
 msgstr ""
@@ -468,6 +469,10 @@ msgstr ""
 
 #: classes/partials/_change-languages.inc:57
 msgid "Add new:"
+msgstr ""
+
+#: classes/partials/_change-languages.inc:64
+msgid "-- select --"
 msgstr ""
 
 #: classes/partials/_change-languages.inc:69
@@ -495,14 +500,23 @@ msgstr ""
 msgid "Misc. Options"
 msgstr ""
 
-#: classes/partials/admin.inc:15 classes/partials/admin.inc:48
-#: classes/WhatDidTheySayAdmin.inc:258 classes/WhatDidTheySayAdmin.inc:259
+#: classes/partials/admin.inc:15 classes/partials/admin.inc:51
+#: classes/WhatDidTheySayAdmin.inc:262 classes/WhatDidTheySayAdmin.inc:263
 msgid "What Did They Say?!?"
 msgstr ""
 
-#: classes/partials/admin.inc:49
+#: classes/partials/admin.inc:50
+#, php-format
+msgid "%1$s Version %2$s is &copy; 2009 %3$s."
+msgstr ""
+
+#: classes/partials/admin.inc:56
 #, php-format
 msgid "Might I suggest a $%1$0.2f donation for your %2$d transcripts?"
+msgstr ""
+
+#: classes/partials/admin.inc:57
+msgid "File a bug"
 msgstr ""
 
 #: classes/partials/_how-it-works.inc:5
@@ -634,6 +648,22 @@ msgstr ""
 msgid "Change capabilities"
 msgstr ""
 
+#: classes/partials/_shortcodes-info.inc:4
+msgid "[scene-heading]Ext. The Old Man's House[/scene-heading]"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:5
+msgid ""
+"[scene-action]John is walking down to the car parked in the driveway.[/scene-"
+"action]"
+msgstr ""
+
+#: classes/partials/_shortcodes-info.inc:6
+msgid ""
+"[dialog name=\"John\" direction=\"(towards the house)\"]Hey, where are the "
+"keys?[/dialog]"
+msgstr ""
+
 #: classes/partials/_shortcodes-info.inc:10
 msgid "Shortcodes Info"
 msgstr ""
@@ -735,95 +765,109 @@ msgstr ""
 msgid "Hey, where are the keys?"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:59
+#: classes/WhatDidTheySayAdmin.inc:61
 msgid "Submit transcriptions to a post"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:60
+#: classes/WhatDidTheySayAdmin.inc:62
 msgid "Approve transcriptions to a post"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:61
+#: classes/WhatDidTheySayAdmin.inc:63
 msgid "Change the available languages"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:159
+#: classes/WhatDidTheySayAdmin.inc:157
 msgid "What Did They Say?!? Transcript"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:159
+#: classes/WhatDidTheySayAdmin.inc:157
 msgid "Show the transcript for the current post."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:282
+#: classes/WhatDidTheySayAdmin.inc:277
+msgid ""
+"Welcome to <strong>What Did They Say?!?</strong> To get started, read the "
+"<strong>Introduction</strong>, and then <strong>How It Works</strong>."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:279
+msgid ""
+"Is <strong>What Did They Say?!?</strong> working out for you? Let John know "
+"via email (<a href=\"mailto:john@coswellproductions.com"
+"\">john@coswellproductions.com</a>) or Twitter (<a href=\"http://twitter.com/"
+"JohnBintz\">@JohnBintz</a>)."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:292
 msgid "Manage Transcripts"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:490
+#: classes/WhatDidTheySayAdmin.inc:502
 msgid "Transcript added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:492
+#: classes/WhatDidTheySayAdmin.inc:504
 msgid "Transcript not added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:563
+#: classes/WhatDidTheySayAdmin.inc:575
 msgid "Transcripts updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:632
+#: classes/WhatDidTheySayAdmin.inc:644
 msgid "Default styles option updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:648
+#: classes/WhatDidTheySayAdmin.inc:660
 msgid "Insertion level updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:666
+#: classes/WhatDidTheySayAdmin.inc:678
 #, php-format
 msgid "%s deleted."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:668
+#: classes/WhatDidTheySayAdmin.inc:680
 msgid "Language not deleted!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:675
+#: classes/WhatDidTheySayAdmin.inc:687
 #, php-format
 msgid "%s added."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:677
+#: classes/WhatDidTheySayAdmin.inc:689
 msgid "Language not added!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:683
+#: classes/WhatDidTheySayAdmin.inc:695
 #, php-format
 msgid "%s set as default."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:685
+#: classes/WhatDidTheySayAdmin.inc:697
 msgid "Language not set as default!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:691
+#: classes/WhatDidTheySayAdmin.inc:703
 #, php-format
 msgid "%1$s renamed to %2$s."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:693
+#: classes/WhatDidTheySayAdmin.inc:705
 msgid "Language not renamed!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:716
+#: classes/WhatDidTheySayAdmin.inc:728
 msgid "User capabilities updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:735
+#: classes/WhatDidTheySayAdmin.inc:747
 msgid "<strong>What Did They Say?!?</strong> options reset."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:754
+#: classes/WhatDidTheySayAdmin.inc:766
 msgid "<strong>What Did They Say?!?</strong> core options changed."
 msgstr ""
 
