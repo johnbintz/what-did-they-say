@@ -1,7 +1,26 @@
-<?php if ((count($queued_transcripts_for_user) > 0) && !current_user_can('approve_transcriptions') && !is_admin()) { ?>
-  <h3 style="margin-top: 0.5em"><?php _e('Your Submitted Transcripts:', 'what-did-they-say') ?></h3>
+<?php
+
+
+	$transcripts_to_show = array();
+
+	if (current_user_can('approve_transcriptions')) {
+		$transcripts_to_show = $queued_transcripts->get_transcripts();
+		$title = __('All Submitted Transcripts', 'what-did-they-say');
+	} else {
+		if (!is_admin()) {
+	    $user = wp_get_current_user();
+	    if (!empty($user)) {
+	      $transcripts_to_show = $queued_transcripts->get_transcripts_for_user($user->ID);
+				$title = __('Your Submitted Transcripts', 'what-did-they-say');
+	    }
+		}
+	}
+?>
+
+<?php if (!empty($transcripts_to_show)) { ?>
+  <h3 style="margin-top: 0.5em"><?php echo $title ?></h3>
   <?php
-    foreach ($queued_transcripts_for_user as $transcript) {
+    foreach ($transcripts_to_show as $transcript) {
       include(dirname(__FILE__) . '/classes/partials/_display-queued-transcript.inc');
     }
   ?>

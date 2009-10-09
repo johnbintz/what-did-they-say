@@ -1,6 +1,7 @@
 <?php
   $pages = array(
     'introduction' => __('Introduction', 'what-did-they-say'),
+    'how-it-works' => __('How It Works', 'what-did-they-say'),
     'capabilities' => array(__('Capabilities', 'what-did-they-say'), 'edit_users'),
     'default-styles' => array(__('Styles', 'what-did-they-say'), 'edit_themes'),
     'change-languages' => array(__('Languages', 'what-did-they-say'), 'change_languages'),

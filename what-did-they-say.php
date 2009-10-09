@@ -184,14 +184,7 @@ function the_media_transcript_queue_editor() {
   global $post;
 
   if (current_user_can('submit_transcriptions')) {
-    $queued_transcripts_for_user = false;
-
     $queued_transcripts = new WDTSQueuedTranscript($post->ID);
-
-    $user = wp_get_current_user();
-    if (!empty($user)) {
-      $queued_transcripts_for_user = $queued_transcripts->get_transcripts_for_user($user->ID);
-    }
 
     $language_options = new WDTSLanguageOptions();
 
