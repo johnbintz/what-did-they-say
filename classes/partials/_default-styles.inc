@@ -68,7 +68,7 @@
         <label>
           <?php _e('Use the selected transcript filter set:', 'what-did-they-say') ?>
           <select name="wdts[filters_to_use]">
-            <option value="__default__">(default)</option>
+            <option value="__default__"><?php _e('(default)', 'what-did-they-say') ?></option>
             <?php foreach ($available_filters as $filter_name) { ?>
               <option value="<?php echo $filter_name ?>"<?php echo ($options['filters_to_use'] == $filter_name) ? ' selected="selected"' : '' ?>><?php echo $filter_name ?></option>
             <?php } ?>

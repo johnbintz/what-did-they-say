@@ -45,8 +45,16 @@
     </form>
 
     <p>
-      <a href="<?php echo $PluginURI ?>"><?php _e('What Did They Say?!?', 'what-did-they-say') ?></a> Version <?php echo $Version ?> is &copy; 2009 <?php echo $Author ?>.
-      <?php printf(__('Might I suggest a $%1$0.2f donation for your %2$d transcripts?', 'what-did-they-say'), $suggested_amount, $transcript_count) ?>
+			<?php
+			  printf(
+				  __('%1$s Version %2$s is &copy; 2009 %3$s.', 'what-did-they-say'),
+					'<a href="' . $PluginURI . '">' . __('What Did They Say?!?', 'what-did-they-say') . '</a>',
+					$Version,
+					$Author
+			  );
+		  ?>
+      <?php printf(__('Might I suggest a $%1$0.2f donation for your %2$d transcripts?', 'what-did-they-say'), $suggested_amount, $this->transcript_count) ?> |
+			<a href="http://bugs.comicpress.org/index.php?project=3&amp;do=index"><?php _e('File a bug', 'what-did-they-say') ?></a>
     </p>
   </div>
 </div>

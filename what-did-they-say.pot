@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-08 11:44-0400\n"
+"POT-Creation-Date: 2009-10-08 21:58-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: what-did-they-say.php:214
+#: what-did-they-say.php:207
 msgid "Edit/Add Transcripts"
 msgstr ""
 
-#: what-did-they-say.php:220
+#: what-did-they-say.php:213
 msgid "Manage Transcripts:"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgid "Edit Approved Transcripts:"
 msgstr ""
 
 #: classes/partials/meta-box.inc:34
-#: classes/partials/_manage-queued-transcripts.inc:19
+#: classes/partials/_manage-queued-transcripts.inc:36
 msgid "Language:"
 msgstr ""
 
@@ -96,7 +96,7 @@ msgid ""
 "Say?!? Misc. Options page."
 msgstr ""
 
-#: classes/partials/_queued-transcript-contents.inc:6
+#: classes/partials/_queued-transcript-contents.inc:7
 #, php-format
 msgid "From <strong>%s</strong> in <strong>%s</strong>:"
 msgstr ""
@@ -423,7 +423,7 @@ msgid ""
 "following Template Tag to your search results Loop:"
 msgstr ""
 
-#: classes/partials/_introduction.inc:84 classes/partials/admin.inc:5
+#: classes/partials/_introduction.inc:84 classes/partials/admin.inc:6
 msgid "Styles"
 msgstr ""
 
@@ -434,7 +434,7 @@ msgid ""
 "the %s page."
 msgstr ""
 
-#: classes/partials/_change-languages.inc:3 classes/partials/admin.inc:6
+#: classes/partials/_change-languages.inc:3 classes/partials/admin.inc:7
 msgid "Languages"
 msgstr ""
 
@@ -479,37 +479,140 @@ msgid ""
 "You are about to delete this language from the available list. Continue?"
 msgstr ""
 
-#: classes/partials/admin.inc:4 classes/partials/_capabilities.inc:5
+#: classes/partials/admin.inc:4 classes/partials/_how-it-works.inc:2
+msgid "How It Works"
+msgstr ""
+
+#: classes/partials/admin.inc:5 classes/partials/_capabilities.inc:5
 msgid "Capabilities"
 msgstr ""
 
-#: classes/partials/admin.inc:7
+#: classes/partials/admin.inc:8
 msgid "Short Codes Info"
 msgstr ""
 
-#: classes/partials/admin.inc:8
+#: classes/partials/admin.inc:9
 msgid "Misc. Options"
 msgstr ""
 
-#: classes/partials/admin.inc:14 classes/partials/admin.inc:47
-#: classes/WhatDidTheySayAdmin.inc:249 classes/WhatDidTheySayAdmin.inc:250
+#: classes/partials/admin.inc:15 classes/partials/admin.inc:48
+#: classes/WhatDidTheySayAdmin.inc:258 classes/WhatDidTheySayAdmin.inc:259
 msgid "What Did They Say?!?"
 msgstr ""
 
-#: classes/partials/admin.inc:48
+#: classes/partials/admin.inc:49
 #, php-format
 msgid "Might I suggest a $%1$0.2f donation for your %2$d transcripts?"
 msgstr ""
 
-#: classes/partials/_manage-queued-transcripts.inc:2
-msgid "Your Submitted Transcripts:"
+#: classes/partials/_how-it-works.inc:5
+msgid ""
+"<strong>What Did They Say?!?</strong> uses a wspecial workflow to handle the "
+"submission and approval of transcripts."
 msgstr ""
 
-#: classes/partials/_manage-queued-transcripts.inc:11
+#: classes/partials/_how-it-works.inc:6
+msgid ""
+"Below are the typical usage patterns of <strong>What Did They Say?!?</"
+"strong>:"
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:11
+msgid "A single user updating their own transcripts"
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:14
+msgid ""
+"If you're the only user of the site, you would edit the <strong>Approved "
+"transcripts</strong> of each post. You don't need to enable transcript "
+"submissions for any of your posts."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:15 classes/partials/_how-it-works.inc:24
+msgid ""
+"All users need to have enough permissions to <strong>Approve Transcripts</"
+"strong>."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:20
+msgid "Multiple users who directly update transcripts on posts"
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:23
+msgid ""
+"If you trust the other users on your site, you all would edit the "
+"<strong>Approved transcripts</strong> of each post. Again, you don't need to "
+"enable transcript submissions for any of your posts."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:29
+msgid ""
+"Multiple users, some of which submit transcripts and some that approve "
+"transcripts"
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:32
+msgid ""
+"The users who are allowed to submit transcripts get the <strong>Submit "
+"Transcripts</strong> capability."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:33
+msgid ""
+"The users who aprove transcripts get the <strong>Approve Transcripts</"
+"strong> capability."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:37
+msgid ""
+"For posts where users are allowed to submit transcripts, a user with Approve "
+"Transcripts needs to enable <strong>Allow new transcripts for this post</"
+"strong>."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:41
+msgid ""
+"Transcript submitters need to submit transcripts from the post directly, not "
+"from the Admin interface."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:42
+msgid ""
+"Transcript submitters submit their transcripts to the queue, making them "
+"<strong>Queued Transcripts</strong>."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:43
+msgid ""
+"Submitters can edit and delete their own transcripts while they're in the "
+"queue. Once they're approved, they can no longer be edited by the submitter."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:47
+msgid ""
+"Transcript approvers can approve, edit, or delete queued transcripts of any "
+"users."
+msgstr ""
+
+#: classes/partials/_how-it-works.inc:48
+msgid ""
+"Once a transcript is approved, it's removed from the queue and made live on "
+"the site."
+msgstr ""
+
+#: classes/partials/_manage-queued-transcripts.inc:6
+msgid "All Submitted Transcripts"
+msgstr ""
+
+#: classes/partials/_manage-queued-transcripts.inc:12
+msgid "Your Submitted Transcripts"
+msgstr ""
+
+#: classes/partials/_manage-queued-transcripts.inc:28
 msgid "Submit a New Transcript:"
 msgstr ""
 
-#: classes/partials/_manage-queued-transcripts.inc:30
+#: classes/partials/_manage-queued-transcripts.inc:47
 msgid "Submit For Approval"
 msgstr ""
 
@@ -644,75 +747,83 @@ msgstr ""
 msgid "Change the available languages"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:273
+#: classes/WhatDidTheySayAdmin.inc:159
+msgid "What Did They Say?!? Transcript"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:159
+msgid "Show the transcript for the current post."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:282
 msgid "Manage Transcripts"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:481
+#: classes/WhatDidTheySayAdmin.inc:490
 msgid "Transcript added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:483
+#: classes/WhatDidTheySayAdmin.inc:492
 msgid "Transcript not added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:554
+#: classes/WhatDidTheySayAdmin.inc:563
 msgid "Transcripts updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:623
+#: classes/WhatDidTheySayAdmin.inc:632
 msgid "Default styles option updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:639
+#: classes/WhatDidTheySayAdmin.inc:648
 msgid "Insertion level updated."
-msgstr ""
-
-#: classes/WhatDidTheySayAdmin.inc:657
-#, php-format
-msgid "%s deleted."
-msgstr ""
-
-#: classes/WhatDidTheySayAdmin.inc:659
-msgid "Language not deleted!"
 msgstr ""
 
 #: classes/WhatDidTheySayAdmin.inc:666
 #, php-format
-msgid "%s added."
+msgid "%s deleted."
 msgstr ""
 
 #: classes/WhatDidTheySayAdmin.inc:668
+msgid "Language not deleted!"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:675
+#, php-format
+msgid "%s added."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:677
 msgid "Language not added!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:674
+#: classes/WhatDidTheySayAdmin.inc:683
 #, php-format
 msgid "%s set as default."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:676
+#: classes/WhatDidTheySayAdmin.inc:685
 msgid "Language not set as default!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:682
+#: classes/WhatDidTheySayAdmin.inc:691
 #, php-format
 msgid "%1$s renamed to %2$s."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:684
+#: classes/WhatDidTheySayAdmin.inc:693
 msgid "Language not renamed!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:707
+#: classes/WhatDidTheySayAdmin.inc:716
 msgid "User capabilities updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:726
+#: classes/WhatDidTheySayAdmin.inc:735
 msgid "<strong>What Did They Say?!?</strong> options reset."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:745
+#: classes/WhatDidTheySayAdmin.inc:754
 msgid "<strong>What Did They Say?!?</strong> core options changed."
 msgstr ""
 

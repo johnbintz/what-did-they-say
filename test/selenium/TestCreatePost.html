@@ -22,6 +22,21 @@
 	<td>WDTS Test Post</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
+	<td>This is a test transcript inserted on creation.</td>
+</tr>
+<tr>
+	<td>fireEvent</td>
+	<td>title</td>
+	<td>blur</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>publish</td>
 	<td></td>
@@ -30,6 +45,11 @@
 	<td>assertTextPresent</td>
 	<td>Post published.</td>
 	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
+	<td>This is a test transcript inserted on creation.</td>
 </tr>
 <tr>
 	<td>storeValue</td>

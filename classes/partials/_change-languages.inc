@@ -61,7 +61,7 @@
             <input type="hidden" name="wdts[action]" value="add" />
             <input type="hidden" name="wdts[module]" value="languages" />
             <select name="wdts[code]">
-              <option value="">-- select --</option>
+              <option value=""><?php _e('-- select --', 'what-did-they-say') ?></option>
               <?php foreach ($this->all_languages as $code => $language) { ?>
                 <option value="<?php echo $code ?>"><?php echo $language ?></option>
               <?php } ?>

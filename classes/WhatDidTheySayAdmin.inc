@@ -54,6 +54,8 @@ class WhatDidTheySayAdmin {
    * Initialize the object.
    */
   function init() {
+		global $wpdb;
+		
     // set up capabilities
     $this->capabilities = array(
       'submit_transcriptions'  => __('Submit transcriptions to a post', 'what-did-they-say'),
@@ -106,10 +108,6 @@ class WhatDidTheySayAdmin {
           }
         }
       }
-    }
-
-    if ($reset_filter_value) {
-      // $options['filters_to_use'] = false;
     }
 
     foreach (array(
@@ -169,13 +167,19 @@ class WhatDidTheySayAdmin {
       
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
+					if (($_REQUEST['wdts']['post_id'] <= 0) && ($_POST['post_ID'] > 0)) {
+						$_REQUEST['wdts']['post_id'] = $_POST['post_ID'];
+					}
+
           $this->handle_update($_REQUEST['wdts']);
           
           if ($this->is_ajax) { exit(0); }
         }
       }
     }
-  }
+
+    $this->transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
+	}
 
 	/** Widget **/
 
@@ -268,6 +272,12 @@ class WhatDidTheySayAdmin {
         wp_enqueue_style('wdts-defaults', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css');
 
         $this->plugin_data = get_plugin_data($this->_parent_file);
+
+				if ($this->transcript_count == 0) {
+					$this->notices[] = __('Welcome to <strong>What Did They Say?!?</strong> To get started, read the <strong>Introduction</strong>, and then <strong>How It Works</strong>.', 'what-did-they-say');
+				} elseif ($this->transcript_count < 10) {
+					$this->notices[] = __('Is <strong>What Did They Say?!?</strong> working out for you? Let John know via email (<a href="mailto:john@coswellproductions.com">john@coswellproductions.com</a>) or Twitter (<a href="http://twitter.com/JohnBintz">@JohnBintz</a>).', 'what-did-they-say');
+				}
       }
 
       wp_enqueue_script('scriptaculous-effects');
@@ -294,7 +304,9 @@ class WhatDidTheySayAdmin {
 
         wp_enqueue_script('scriptaculous-effects');
         wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
-      }
+
+	      add_action('wp_head', array(&$this, 'include_editor_javascript'));
+			}
     }
   }
 
@@ -831,10 +843,8 @@ class WhatDidTheySayAdmin {
 
     $nonce = wp_create_nonce('what-did-they-say');
     
-    $transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
-    $suggested_amount = 20 + ($transcript_count * 0.1);
-
     $available_filters = $this->_get_available_override_filters();
+    $suggested_amount = 20 + ($this->transcript_count * 0.1);
 
     include('partials/admin.inc');
   }
