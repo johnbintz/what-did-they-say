@@ -2,7 +2,7 @@
   <h3><?php _e('How It Works', 'what-did-they-say') ?></h3>
 
   <p>
-    <?php _e('<strong>What Did They Say?!?</strong> uses a wspecial workflow to handle the submission and approval of transcripts.', 'what-did-they-say') ?>
+    <?php _e('<strong>What Did They Say?!?</strong> uses a special workflow to handle the submission and approval of transcripts.', 'what-did-they-say') ?>
     <?php _e('Below are the typical usage patterns of <strong>What Did They Say?!?</strong>:', 'what-did-they-say') ?>
   </p>
 
