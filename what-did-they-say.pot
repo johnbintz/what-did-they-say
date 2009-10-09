@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-07 12:43-0400\n"
+"POT-Creation-Date: 2009-10-08 11:44-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -531,104 +531,104 @@ msgstr ""
 msgid "Change capabilities"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:2
+#: classes/partials/_shortcodes-info.inc:10
 msgid "Shortcodes Info"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:5
+#: classes/partials/_shortcodes-info.inc:13
 msgid ""
 "you can easily use these shortcodes with the appropriate buttons above all "
 "transcript editors"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:8
+#: classes/partials/_shortcodes-info.inc:16
 msgid "Sample Transcript"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:25
+#: classes/partials/_shortcodes-info.inc:23
 msgid "Shortcode Details"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:27
+#: classes/partials/_shortcodes-info.inc:25
 msgid ""
 "Transcripts can be entered either using straight HTML or by using shortcodes "
 "built for <strong>What Did They Say?!?</strong>"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:28
+#: classes/partials/_shortcodes-info.inc:26
 msgid "Using shortcodes will make your transcripts easier to style."
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:29
+#: classes/partials/_shortcodes-info.inc:27
 msgid ""
 "The default styles that come with <strong>What Did They Say?!?</strong> make "
 "your transcripts look like a screenplay."
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:31
+#: classes/partials/_shortcodes-info.inc:29
 msgid "Available Shortcodes"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:33
+#: classes/partials/_shortcodes-info.inc:31
 msgid "[scene-heading]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:34
+#: classes/partials/_shortcodes-info.inc:32
 msgid "The text that indicates a new scene:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:36
+#: classes/partials/_shortcodes-info.inc:34
 msgid ""
 "<code>[scene-heading]Ext. The Old Man's House[/scene-heading]</code> becomes:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:37
+#: classes/partials/_shortcodes-info.inc:35
 msgid "Ext. The Old Man's House"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:40
+#: classes/partials/_shortcodes-info.inc:38
 msgid "[scene-action]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:41
+#: classes/partials/_shortcodes-info.inc:39
 msgid ""
 "The text that indicates action taking place in a scene. One usually occurs "
 "underneath of a scene heading:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:43
+#: classes/partials/_shortcodes-info.inc:41
 msgid ""
 "<code>[scene-action]John is walking down to the car parked in the driveway.[/"
 "scene-action]</code> becomes:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:44
+#: classes/partials/_shortcodes-info.inc:42
 msgid "John is walking down to the car parked in the driveway."
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:47
+#: classes/partials/_shortcodes-info.inc:45
 msgid "[dialog]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:48
+#: classes/partials/_shortcodes-info.inc:46
 msgid "The text for when a character is speaking in a scene:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:50
+#: classes/partials/_shortcodes-info.inc:48
 msgid ""
 "<code>[dialog name=\"John\" direction=\"(towards the house)\"]Hey, where are "
 "the keys?[/dialog]</code> becomes:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:53
+#: classes/partials/_shortcodes-info.inc:51
 msgid "John"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:54
+#: classes/partials/_shortcodes-info.inc:52
 msgid "(towards the house)"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:55
+#: classes/partials/_shortcodes-info.inc:53
 msgid "Hey, where are the keys?"
 msgstr ""
 

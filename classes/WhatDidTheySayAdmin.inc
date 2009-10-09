@@ -155,6 +155,9 @@ class WhatDidTheySayAdmin {
       add_action('wp_footer', array(&$this, 'wp_footer'));
     }
 
+		// sidebar widget
+	  wp_register_sidebar_widget('what-did-they-say', __('What Did They Say?!? Transcript', 'what-did-they-say'), array(&$this, 'transcript_sidebar_widget'), array('description' => __('Show the transcript for the current post.', 'what-did-they-say')));
+
     // handle form submission
     if (isset($_REQUEST['wdts'])) {
       if (isset($_REQUEST['wdts']['script'])) {
@@ -173,6 +176,12 @@ class WhatDidTheySayAdmin {
       }
     }
   }
+
+	/** Widget **/
+
+	function transcript_sidebar_widget() {
+		transcripts_display();
+	}
 
   /** Actions **/
 
