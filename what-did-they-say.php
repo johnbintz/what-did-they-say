@@ -3,7 +3,7 @@
 Plugin Name: What Did They Say?!?
 Plugin URI: http://www.coswellproductions.com/wordpress/wordpress-plugins/
 Description: Manage and display text transcriptions of comics, videos, or other media.
-Version: 0.9
+Version: 0.9.1
 Author: John Bintz
 Author URI: http://www.coswellproductions.com/wordpress/
 Text Domain: what-did-they-say

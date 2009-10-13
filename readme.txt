@@ -4,7 +4,7 @@ Donate link: http://www.coswellproductions.com/wordpress/wordpress-plugins
 Tags: admin, comics, webcomics, transcript, video, audio
 Requires at least: 2.8
 Tested up to: 2.8.4
-Stable tag: 0.9
+Stable tag: 0.9.1
 
 What Did They Say?!? lets your users provide multilingual transcriptions to your media, in their language, quickly and securely.
 
@@ -84,7 +84,12 @@ short codes into your transcripts.
 
 Language tags are from the subtag registry at [http://www.langtag.net/](http://www.langtag.net/).
 
+Thanks to @mindfaucet, @Frumph, and @ChibiJen for early testing and bug reporting.
+
 == Changelog ==
 
+= 0.9.1 =
+* Bugfixes for transcript submission and theme editor global variable name collision.
+* Improve transcript submission feedback.
 = 0.9 =
 * Initial release, primarily for testing purposes.

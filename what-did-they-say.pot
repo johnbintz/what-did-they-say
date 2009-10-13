@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: what-did-they-say 0.9\n"
+"Project-Id-Version: what-did-they-say 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-09 10:58-0400\n"
+"POT-Creation-Date: 2009-10-13 19:00-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,6 @@ msgstr ""
 
 #: what-did-they-say.php:207
 msgid "Edit/Add Transcripts"
-msgstr ""
-
-#: what-did-they-say.php:213
-msgid "Manage Transcripts:"
 msgstr ""
 
 #: classes/partials/_misc-options.inc:2
@@ -68,28 +64,28 @@ msgstr ""
 msgid "Are you sure? You could leave transcriptions inaccessible."
 msgstr ""
 
-#: classes/partials/meta-box.inc:8
+#: classes/partials/meta-box.inc:9
 msgid "Allow new transcripts to be submitted for this post"
 msgstr ""
 
-#: classes/partials/meta-box.inc:21
+#: classes/partials/meta-box.inc:24
 msgid "Manage Queued Transcripts:"
 msgstr ""
 
-#: classes/partials/meta-box.inc:31
+#: classes/partials/meta-box.inc:34
 msgid "Edit Approved Transcripts:"
 msgstr ""
 
-#: classes/partials/meta-box.inc:34
-#: classes/partials/_manage-queued-transcripts.inc:36
+#: classes/partials/meta-box.inc:37
+#: classes/partials/_manage-queued-transcripts.inc:37
 msgid "Language:"
 msgstr ""
 
-#: classes/partials/meta-box.inc:51
+#: classes/partials/meta-box.inc:54
 msgid "Update All Transcripts"
 msgstr ""
 
-#: classes/partials/meta-box.inc:55
+#: classes/partials/meta-box.inc:58
 msgid ""
 "Uh oh...there's a problem with automatic embedding. Enable &quot;Inject "
 "transcripts at level 100 instead of level 15&quot; on the What Did They "
@@ -501,7 +497,7 @@ msgid "Misc. Options"
 msgstr ""
 
 #: classes/partials/admin.inc:15 classes/partials/admin.inc:51
-#: classes/WhatDidTheySayAdmin.inc:262 classes/WhatDidTheySayAdmin.inc:263
+#: classes/WhatDidTheySayAdmin.inc:276 classes/WhatDidTheySayAdmin.inc:277
 msgid "What Did They Say?!?"
 msgstr ""
 
@@ -521,7 +517,7 @@ msgstr ""
 
 #: classes/partials/_how-it-works.inc:5
 msgid ""
-"<strong>What Did They Say?!?</strong> uses a wspecial workflow to handle the "
+"<strong>What Did They Say?!?</strong> uses a special workflow to handle the "
 "submission and approval of transcripts."
 msgstr ""
 
@@ -622,11 +618,11 @@ msgstr ""
 msgid "Your Submitted Transcripts"
 msgstr ""
 
-#: classes/partials/_manage-queued-transcripts.inc:28
+#: classes/partials/_manage-queued-transcripts.inc:29
 msgid "Submit a New Transcript:"
 msgstr ""
 
-#: classes/partials/_manage-queued-transcripts.inc:47
+#: classes/partials/_manage-queued-transcripts.inc:48
 msgid "Submit For Approval"
 msgstr ""
 
@@ -777,21 +773,21 @@ msgstr ""
 msgid "Change the available languages"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:157
+#: classes/WhatDidTheySayAdmin.inc:160
 msgid "What Did They Say?!? Transcript"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:157
+#: classes/WhatDidTheySayAdmin.inc:160
 msgid "Show the transcript for the current post."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:277
+#: classes/WhatDidTheySayAdmin.inc:291
 msgid ""
 "Welcome to <strong>What Did They Say?!?</strong> To get started, read the "
 "<strong>Introduction</strong>, and then <strong>How It Works</strong>."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:279
+#: classes/WhatDidTheySayAdmin.inc:293
 msgid ""
 "Is <strong>What Did They Say?!?</strong> working out for you? Let John know "
 "via email (<a href=\"mailto:john@coswellproductions.com"
@@ -799,75 +795,75 @@ msgid ""
 "JohnBintz\">@JohnBintz</a>)."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:292
+#: classes/WhatDidTheySayAdmin.inc:306
 msgid "Manage Transcripts"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:502
+#: classes/WhatDidTheySayAdmin.inc:516
 msgid "Transcript added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:504
+#: classes/WhatDidTheySayAdmin.inc:518
 msgid "Transcript not added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:575
+#: classes/WhatDidTheySayAdmin.inc:594
 msgid "Transcripts updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:644
+#: classes/WhatDidTheySayAdmin.inc:663
 msgid "Default styles option updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:660
+#: classes/WhatDidTheySayAdmin.inc:679
 msgid "Insertion level updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:678
+#: classes/WhatDidTheySayAdmin.inc:697
 #, php-format
 msgid "%s deleted."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:680
+#: classes/WhatDidTheySayAdmin.inc:699
 msgid "Language not deleted!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:687
+#: classes/WhatDidTheySayAdmin.inc:706
 #, php-format
 msgid "%s added."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:689
+#: classes/WhatDidTheySayAdmin.inc:708
 msgid "Language not added!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:695
+#: classes/WhatDidTheySayAdmin.inc:714
 #, php-format
 msgid "%s set as default."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:697
+#: classes/WhatDidTheySayAdmin.inc:716
 msgid "Language not set as default!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:703
+#: classes/WhatDidTheySayAdmin.inc:722
 #, php-format
 msgid "%1$s renamed to %2$s."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:705
+#: classes/WhatDidTheySayAdmin.inc:724
 msgid "Language not renamed!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:728
+#: classes/WhatDidTheySayAdmin.inc:747
 msgid "User capabilities updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:747
+#: classes/WhatDidTheySayAdmin.inc:766
 msgid "<strong>What Did They Say?!?</strong> options reset."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:766
+#: classes/WhatDidTheySayAdmin.inc:785
 msgid "<strong>What Did They Say?!?</strong> core options changed."
 msgstr ""
 
