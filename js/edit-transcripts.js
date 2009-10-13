@@ -283,7 +283,6 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
             var post_id = container.select("input[name*=[post_id]]").shift();
             var key = container.select("input[name*=[key]]").shift();
 
-            top.console.log("made it");
             var submitter  = new Element('button').update('Update Transcript');
             submitter.observe('click', function(e) {
               Event.stop(e);
@@ -307,8 +306,6 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
                 });
               }
             });
-
-            top.console.log(actions_holder);
 
             container.appendChild(submitter);
 
@@ -391,4 +388,22 @@ var WDTSInjector = Class.create({
       range.select();
     }
   }
+});
+
+Event.observe(window, 'load', function() {
+  $$('.wdts-updated').each(function(up) {
+    up.hide();
+    up.style.top = document.viewport.getScrollOffsets().top + "px";
+    new Effect.BlindDown(up, {
+      duration: 0.25,
+      afterFinish: function() {
+        new PeriodicalExecuter(function(pe) {
+          pe.stop();
+          new Effect.BlindUp(up, {
+            duration: 0.25
+          });
+        }, 3);
+      }
+    });
+  });
 });

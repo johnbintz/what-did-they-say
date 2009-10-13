@@ -91,3 +91,20 @@ h3.wdts {
   color: #770000;
   font-weight: bold;
 }
+
+.wdts-updated {
+  width: 100%;
+  position: absolute;
+  background-color: #E4F2FD;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: solid black 1px;
+}
+
+.wdts-updated div {
+  padding: 0.75em;
+}
+
+body {
+  overflow-x: hidden
+}

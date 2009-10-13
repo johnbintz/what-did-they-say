@@ -25,12 +25,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-foreach (glob(dirname(__FILE__) . '/classes/*.inc') as $file) { require_once($file); }
+foreach (glob(dirname(__FILE__) . '/classes/*.inc') as $__file) { require_once($__file); }
 
-$what_did_they_say_admin = new WhatDidTheySayAdmin(&$what_did_they_say);
-$what_did_they_say_admin->_parent_file = __FILE__;
+$__what_did_they_say_admin = new WhatDidTheySayAdmin(&$__what_did_they_say);
+$__what_did_they_say_admin->_parent_file = __FILE__;
 
-add_action('init', array(&$what_did_they_say_admin, 'init'));
+add_action('init', array(&$__what_did_they_say_admin, 'init'));
 
 // template tags
 // please, if you use any of these, wrap them in function_exists() so your site doesn't
@@ -210,11 +210,11 @@ function the_media_transcript_queue_editor() {
       <p>JavaScript is required to edit transcripts.</p>
     </noscript>
     <div id="wdts-<?php echo $id ?>" style="display:none">
-      <h3 class="wdts"><?php _e('Manage Transcripts:', 'what-did-they-say') ?></h3>
       <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
     </div>
     <script type="text/javascript">
       $($('wdts-opener-<?php echo $id ?>').parentNode).show();
+      
       $('wdts-opener-<?php echo $id ?>').observe('click', function(e) {
         Event.stop(e);
 
@@ -225,6 +225,17 @@ function the_media_transcript_queue_editor() {
           new Effect.BlindDown(target, { duration: 0.25 });
         }
       });
+
+      <?php
+        if (isset($_SESSION['what-did-they-say'])) {
+          if (isset($_SESSION['what-did-they-say']['post_id'])) {
+            if ($post->ID == $_SESSION['what-did-they-say']['post_id']) { ?>
+              $('wdts-<?php echo $id ?>').show();
+              $('wdts-<?php echo $id ?>').scrollIntoView();
+            <?php }
+          }
+        }
+      ?>
     </script>
   <?php }
 }

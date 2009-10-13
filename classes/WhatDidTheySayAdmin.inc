@@ -77,6 +77,9 @@ class WhatDidTheySayAdmin {
       if ($any_changes) { update_option('what-did-they-say-options', $options); }
     }
 
+    // sessions
+    if (!session_id()) { session_start(); }
+
     // pages
     add_action('admin_menu', array(&$this, 'admin_menu'));
     add_action('admin_notices', array(&$this, 'admin_notices'));
@@ -178,7 +181,9 @@ class WhatDidTheySayAdmin {
       }
     }
 
-    $this->transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
+    if (is_admin()) {
+      $this->transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
+    }
 	}
 
 	/** Widget **/
@@ -196,6 +201,15 @@ class WhatDidTheySayAdmin {
       echo 'WhatDidTheySay.ajax_url = "' . addslashes($_SERVER['REQUEST_URI']) . '";';
       echo 'WhatDidTheySay.nonce = "' . $nonce . '";';
     echo '</script>';
+
+    if (isset($_SESSION['what-did-they-say'])) {
+      if (isset($_SESSION['what-did-they-say']['updated'])) {
+        echo '<div class="wdts-updated"><div>' . $_SESSION['what-did-they-say']['updated'] . '</div></div>';
+      }
+    }
+
+    // clear out our session variable, we only need it briefly
+    unset($_SESSION['what-did-they-say']);
   }
 
   /**
@@ -507,6 +521,11 @@ class WhatDidTheySayAdmin {
     }
 
     if (!is_admin()) {
+      $_SESSION['what-did-they-say'] = array(
+        'action'  => 'queue-transcript',
+        'post_id' => $info['post_id'],
+        'updated' => $updated
+      );
       header('Location: ' . $_SERVER['HTTP_REFERER']);
       exit(0);
     } else {

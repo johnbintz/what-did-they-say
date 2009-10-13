@@ -15,15 +15,16 @@
 	}
 ?>
 
-<?php if (!empty($transcripts_to_show)) { ?>
-  <h3 style="margin-top: 0.5em"><?php echo $title ?></h3>
-  <?php
-    foreach ($transcripts_to_show as $transcript) {
-      include('_display-queued-transcript.inc');
-    }
-  ?>
-<?php } ?>
 <?php if (current_user_can('submit_transcriptions')) { ?>
+  <?php if (!empty($transcripts_to_show)) { ?>
+    <h3 style="margin-top: 0.5em"><?php echo $title ?></h3>
+    <?php
+      foreach ($transcripts_to_show as $transcript) {
+        include('_display-queued-transcript.inc');
+      }
+    ?>
+  <?php } ?>
+
   <div id="wdts-<?php echo $new_transcript_id ?>" style="zoom:1<?php echo (!$transcript_options->are_new_transcripts_allowed() ? ';display:none' : '') ?>">
     <?php wdts_header_wrapper(__('Submit a New Transcript:', 'what-did-they-say')) ?>
     <form method="post">
