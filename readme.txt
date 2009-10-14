@@ -51,7 +51,7 @@ If you're using the `wp-content/transcript-filters` directory, use the following
 
 * Create a new directory for your filter, using only lowercase characters, the numbers 0-9, dashes, and underscores.
 * Inside of this directory place one .php/.inc file and/or one .css file.
-* If you're overriding filters, create a new class in the PHP file that extends `WDTSDisplayFilters  (defined in `classes/WDTSDisplayFilters.inc`) and override functions as necessary.
+* If you're overriding filters, create a new class in the PHP file that extends `WDTSDisplayFilters` (defined in `classes/WDTSDisplayFilters.inc`) and override functions as necessary.
 * If done correctly, the new filter will be available under the *Styles* tab.
 
 = How does the transcript workflow work? =
@@ -90,6 +90,7 @@ Thanks to @mindfaucet, @Frumph, and @ChibiJen for early testing and bug reportin
 
 = 0.9.1 =
 * Bugfixes for transcript submission and theme editor global variable name collision.
-* Improve transcript submission feedback.
+* Improved transcript submission feedback.
+* Improved support for working with and previewing transcript filters.
 = 0.9 =
 * Initial release, primarily for testing purposes.
