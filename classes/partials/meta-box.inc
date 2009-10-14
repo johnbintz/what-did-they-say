@@ -63,7 +63,7 @@
   queued_editors_to_attach.each(function(q) {
     <?php
       $params = array('q');
-      if (current_user_can('approve_transcriptions')) { $params[] = 'wdts-' . $approved_editor_id; }
+      if (current_user_can('approve_transcriptions')) { $params[] = '"wdts-' . $approved_editor_id . '"'; }
     ?>
     WhatDidTheySay.setup_transcript_action_buttons(<?php echo implode(',', $params) ?>);
   });
