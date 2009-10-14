@@ -92,8 +92,18 @@ class WhatDidTheySayAdmin {
     $filters = new WDTSDisplayFilters();
     $reset_filter_value = true;
 
-    if (is_string($options['filters_to_use'])) {
-      $target = $this->get_filters_dir() . '/' . preg_replace('#[^a-z0-9_-]#', '', strtolower($options['filters_to_use']));
+    $filter_to_use = false;
+    if (is_string($options['filters_to_use'])) { $filter_to_use = $options['filters_to_use']; }
+    if (current_user_can('submit_transcriptions')) {
+      if (isset($_REQUEST['wdts'])) {
+        if (isset($_REQUEST['wdts']['filter_preview'])) {
+          $filter_to_use = $_REQUEST['wdts']['filter_preview'];
+        }
+      }
+    }
+
+    if ($filter_to_use) {
+      $target = $this->get_filters_dir() . '/' . preg_replace('#[^a-z0-9_-]#', '', strtolower($filter_to_use));
       if (is_dir($target)) {
         $this->override_filter_info = array();
         foreach (glob($target . '/*') as $file) {
@@ -113,6 +123,7 @@ class WhatDidTheySayAdmin {
       }
     }
 
+    // short codes
     foreach (array(
       array('the_media_transcript', 2),
       array('the_language_name', 2),
@@ -132,7 +143,6 @@ class WhatDidTheySayAdmin {
       }
     }
 
-    // short codes
     foreach (get_class_methods($this) as $method) {
       if (strpos($method, "shortcode_") === 0) {
         $shortcode_name = str_replace("_", "-", str_replace("shortcode_", "", $method));
@@ -167,7 +177,23 @@ class WhatDidTheySayAdmin {
         include('partials/_editor-script.inc');
         exit(0);
       }
-      
+
+      if (isset($_REQUEST['wdts']['filter_preview'])) {
+        $styles_to_include = array(
+          plugin_dir_url(dirname(__FILE__)) . 'css/wdts-defaults.css'
+        );
+
+        if (isset($this->override_filter_info['css'])) {
+          if (($path = realpath($this->override_filter_info['css'])) !== false) {
+            $styles_to_include[] = str_replace(realpath($this->_get_abspath()), '', $path);
+          }
+        }
+
+        include('partials/_sample-transcript.inc');
+        include('partials/_show-sample-transcript.inc');
+        exit(0);
+      }
+
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
 					if (($_REQUEST['wdts']['post_id'] <= 0) && ($_POST['post_ID'] > 0)) {
@@ -231,7 +257,9 @@ class WhatDidTheySayAdmin {
     }
 
     if (isset($this->override_filter_info['css'])) {
-      wp_enqueue_style('wdts-override', str_replace(realpath($this->_get_abspath()), '', realpath($this->override_filter_info['css'])));
+      if (($path = realpath($this->override_filter_info['css'])) !== false) {
+        wp_enqueue_style('wdts-override', str_replace(realpath($this->_get_abspath()), '', $path));
+      }
     }
 
     if ($options['transcript_effects']) {

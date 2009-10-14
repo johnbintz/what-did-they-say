@@ -67,7 +67,7 @@
       <?php if (!empty($available_filters)) { ?>
         <label>
           <?php _e('Use the selected transcript filter set:', 'what-did-they-say') ?>
-          <select name="wdts[filters_to_use]">
+          <select id="wdts-filters-to-use" name="wdts[filters_to_use]">
             <option value="__default__"><?php _e('(default)', 'what-did-they-say') ?></option>
             <?php foreach ($available_filters as $filter_name) { ?>
               <option value="<?php echo $filter_name ?>"<?php echo ($options['filters_to_use'] == $filter_name) ? ' selected="selected"' : '' ?>><?php echo $filter_name ?></option>
@@ -75,6 +75,8 @@
           </select>
         </label>
       <?php } ?>
+
+      <div id="wdts-sample-transcript-holder"></div>
       
       <input class="button" type="submit" value="<?php _e('Change default styles', 'what-did-they-say') ?>" />
     </form>

@@ -97,6 +97,19 @@
     });
   });
 
+  var iframe_url = '<?php echo plugin_dir_url(realpath(dirname(__FILE__) . '/../..'))  . 'what-did-they-say.php' ?>';
+
+  var load_sample_transcript = function() {
+    var which = $('wdts-filters-to-use').options[$('wdts-filters-to-use').selectedIndex].value;
+    $('wdts-sample-transcript-holder').innerHTML = '';
+    var iframe = new Element('iframe', { width: "100%", height: "200px", src: iframe_url + '?wdts[filter_preview]=' + which });
+    $('wdts-sample-transcript-holder').insert(iframe);
+  };
+
+  $('wdts-filters-to-use').observe('change', load_sample_transcript);
+
+  Event.observe(window, 'load', load_sample_transcript);
+
   <?php if (isset($_POST['wdts']['return_page'])) { ?>
     make_active($('<?php echo str_replace('-page-', '-tab-', $_POST['wdts']['return_page']) ?>'));
   <?php } else { ?>
