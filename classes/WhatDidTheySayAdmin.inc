@@ -49,6 +49,11 @@ class WhatDidTheySayAdmin {
   // just in case things need to be unit tested...
   function get_filters_dir() { return WP_CONTENT_DIR . '/transcript-filters'; }
   function _get_abspath()    { return ABSPATH; }
+  function _glob($pattern)   {
+    $result = glob($pattern);
+    if ($result === false) { $result = array(); }
+    return $result;
+  }
   
   /**
    * Initialize the object.
@@ -108,7 +113,7 @@ class WhatDidTheySayAdmin {
       $filter_to_use = preg_replace('#[^a-z0-9_-]#', '', strtolower($filter_to_use));
 
       if (isset($all_filters[$filter_to_use])) {
-        foreach (glob($all_filters[$filter_to_use] . '/*') as $file) {
+        foreach ($this->_glob($all_filters[$filter_to_use] . '/*') as $file) {
           if (preg_match('#\.(php|inc)$#', $file) > 0) { $this->override_filter_info['php'] = $file; }
           if (preg_match('#\.(css)$#', $file) > 0)     { $this->override_filter_info['css'] = $file; }
         }
@@ -873,10 +878,10 @@ class WhatDidTheySayAdmin {
 
     foreach ($search_path as $target) {
       if (is_dir($target)) {
-        foreach (glob($target . '/*') as $dir) {
+        foreach ($this->_glob($target . '/*') as $dir) {
           if (is_dir($dir)) {
             if (basename($dir) == preg_replace('#[^a-z0-9_-]#', '', strtolower(basename($dir)))) {
-              foreach (glob($dir . '/*') as $file) {
+              foreach ($this->_glob($dir . '/*') as $file) {
                 if (preg_match('#^(.*)\.(inc|php)$#', basename($file), $matches) > 0) {
                   $available_filters[basename($dir)] = $dir;
                 }
