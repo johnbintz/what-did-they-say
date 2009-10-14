@@ -103,10 +103,12 @@ class WhatDidTheySayAdmin {
     }
 
     if ($filter_to_use) {
-      $target = $this->get_filters_dir() . '/' . preg_replace('#[^a-z0-9_-]#', '', strtolower($filter_to_use));
-      if (is_dir($target)) {
-        $this->override_filter_info = array();
-        foreach (glob($target . '/*') as $file) {
+      $all_filters = $this->_get_available_override_filters();
+
+      $filter_to_use = preg_replace('#[^a-z0-9_-]#', '', strtolower($filter_to_use));
+
+      if (isset($all_filters[$filter_to_use])) {
+        foreach (glob($all_filters[$filter_to_use] . '/*') as $file) {
           if (preg_match('#\.(php|inc)$#', $file) > 0) { $this->override_filter_info['php'] = $file; }
           if (preg_match('#\.(css)$#', $file) > 0)     { $this->override_filter_info['css'] = $file; }
         }
@@ -864,19 +866,27 @@ class WhatDidTheySayAdmin {
 
   function _get_available_override_filters() {
     $available_filters = array();
-    if (is_dir($this->get_filters_dir())) {
-      foreach (glob($this->get_filters_dir() . '/*') as $dir) {
-        if (is_dir($dir)) {
-          if (basename($dir) == preg_replace('#[^a-z0-9_-]#', '', strtolower(basename($dir)))) {
-            foreach (glob($dir . '/*') as $file) {
-              if (preg_match('#^(.*)\.(inc|php)$#', basename($file), $matches) > 0) {
-                $available_filters[] = basename($dir);
+    $search_path = array(
+      realpath(dirname(__FILE__) . '/../transcript-filters'),
+      $this->get_filters_dir()
+    );
+
+    foreach ($search_path as $target) {
+      if (is_dir($target)) {
+        foreach (glob($target . '/*') as $dir) {
+          if (is_dir($dir)) {
+            if (basename($dir) == preg_replace('#[^a-z0-9_-]#', '', strtolower(basename($dir)))) {
+              foreach (glob($dir . '/*') as $file) {
+                if (preg_match('#^(.*)\.(inc|php)$#', basename($file), $matches) > 0) {
+                  $available_filters[basename($dir)] = $dir;
+                }
               }
             }
           }
         }
       }
     }
+    
     return $available_filters;
   }
 

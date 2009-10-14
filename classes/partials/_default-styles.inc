@@ -69,14 +69,17 @@
           <?php _e('Use the selected transcript filter set:', 'what-did-they-say') ?>
           <select id="wdts-filters-to-use" name="wdts[filters_to_use]">
             <option value="__default__"><?php _e('(default)', 'what-did-they-say') ?></option>
-            <?php foreach ($available_filters as $filter_name) { ?>
+            <?php foreach (array_keys($available_filters) as $filter_name) { ?>
               <option value="<?php echo $filter_name ?>"<?php echo ($options['filters_to_use'] == $filter_name) ? ' selected="selected"' : '' ?>><?php echo $filter_name ?></option>
             <?php } ?>
           </select>
+          <a href="#" id="refresh-filter-preview"><img src="<?php echo plugin_dir_url(dirname(__FILE__) . '/../../../') . 'graphics/view-refresh.png' ?>" /></a>
         </label>
       <?php } ?>
 
       <div id="wdts-sample-transcript-holder"></div>
+
+      <p><em><?php _e('(Hint: Use the above to preview your filters and style while you work on them! The previewer always includes the default stylesheet.)', 'what-did-they-say') ?></em></p>
       
       <input class="button" type="submit" value="<?php _e('Change default styles', 'what-did-they-say') ?>" />
     </form>

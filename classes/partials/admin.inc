@@ -107,6 +107,10 @@
   };
 
   $('wdts-filters-to-use').observe('change', load_sample_transcript);
+  $('refresh-filter-preview').observe('click', function(e) {
+    Event.stop(e);
+    load_sample_transcript();
+  });
 
   Event.observe(window, 'load', load_sample_transcript);
 
