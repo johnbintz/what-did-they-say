@@ -202,42 +202,53 @@ function the_media_transcript_queue_editor() {
     $nonce = wp_create_nonce('what-did-they-say');
     $new_transcript_id = md5(rand());
 
-    ?>
-    <div style="display:none">
-      <span id="wdts-opener-<?php echo $id = md5(rand()) ?>">[ <a href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]</span>
-    </div>
-    <noscript>
-      <p>JavaScript is required to edit transcripts.</p>
-    </noscript>
-    <div id="wdts-<?php echo $id ?>" style="display:none">
-      <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
-    </div>
-    <script type="text/javascript">
-      $($('wdts-opener-<?php echo $id ?>').parentNode).show();
-      
-      $('wdts-opener-<?php echo $id ?>').select('a').pop().observe('click', function(e) {
-        Event.stop(e);
-
-        var target = $('wdts-<?php echo $id ?>');
-        if (target.visible()) {
-          new Effect.BlindUp(target, { duration: 0.25 });
-        } else {
-          new Effect.BlindDown(target, { duration: 0.25 });
-        }
-      });
-
-      <?php
-        if (isset($_SESSION['what-did-they-say'])) {
-          if (isset($_SESSION['what-did-they-say']['post_id'])) {
-            if ($post->ID == $_SESSION['what-did-they-say']['post_id']) { ?>
-              $('wdts-<?php echo $id ?>').show();
-              $('wdts-<?php echo $id ?>').scrollIntoView();
-            <?php }
-          }
-        }
+    $show_editor = false;
+    if (current_user_can('submit_transcriptions')) {
+      if (current_user_can('approve_transcriptions')) {
+        $show_editor = true;
+      } else {
+        $show_editor = $transcript_options->are_new_transcripts_allowed();
+      }
+    }
+    
+    if ($show_editor) {
       ?>
-    </script>
-  <?php }
+      <div style="display:none">
+        <span id="wdts-opener-<?php echo $id = md5(rand()) ?>">[ <a href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]</span>
+      </div>
+      <noscript>
+        <p>JavaScript is required to edit transcripts.</p>
+      </noscript>
+      <div id="wdts-<?php echo $id ?>" style="display:none">
+        <?php include(dirname(__FILE__) . '/classes/partials/meta-box.inc') ?>
+      </div>
+      <script type="text/javascript">
+        $($('wdts-opener-<?php echo $id ?>').parentNode).show();
+
+        $('wdts-opener-<?php echo $id ?>').select('a').pop().observe('click', function(e) {
+          Event.stop(e);
+
+          var target = $('wdts-<?php echo $id ?>');
+          if (target.visible()) {
+            new Effect.BlindUp(target, { duration: 0.25 });
+          } else {
+            new Effect.BlindDown(target, { duration: 0.25 });
+          }
+        });
+
+        <?php
+          if (isset($_SESSION['what-did-they-say'])) {
+            if (isset($_SESSION['what-did-they-say']['post_id'])) {
+              if ($post->ID == $_SESSION['what-did-they-say']['post_id']) { ?>
+                $('wdts-<?php echo $id ?>').show();
+                $('wdts-<?php echo $id ?>').scrollIntoView();
+              <?php }
+            }
+          }
+        ?>
+      </script>
+    <?php }
+  }
 }
 
 function wdts_header_wrapper($text) {
