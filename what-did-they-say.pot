@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-13 19:00-0400\n"
+"POT-Creation-Date: 2009-10-13 23:03-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -225,100 +225,106 @@ msgstr ""
 msgid "(default)"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:79
-msgid "Change default styles"
-msgstr ""
-
 #: classes/partials/_default-styles.inc:82
-msgid "Transcript Line Breaks"
+msgid ""
+"(Hint: Use the above to preview your filters and style while you work on "
+"them! The previewer always includes the default stylesheet.)"
 msgstr ""
 
 #: classes/partials/_default-styles.inc:84
+msgid "Change default styles"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:87
+msgid "Transcript Line Breaks"
+msgstr ""
+
+#: classes/partials/_default-styles.inc:89
 msgid ""
 "If you're using short codes or HTML to construct your transcripts, you don't "
 "need to enable transcript line breaks."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:86
+#: classes/partials/_default-styles.inc:91
 msgid "Default CSS Selectors Information"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:88
+#: classes/partials/_default-styles.inc:93
 msgid ""
 "By default, the following CSS selectors are used by <strong>What Did They "
 "Say?!?</strong>:"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:91
+#: classes/partials/_default-styles.inc:96
 msgid "The container for the transcript"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:93
+#: classes/partials/_default-styles.inc:98
 msgid "Character dialog"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:95
+#: classes/partials/_default-styles.inc:100
 msgid "The character's name"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:97
+#: classes/partials/_default-styles.inc:102
 msgid ""
 "The direction the characters is speaking in/from (off-stage, to another "
 "character)"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:99
+#: classes/partials/_default-styles.inc:104
 msgid "A scene heading"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:101
+#: classes/partials/_default-styles.inc:106
 msgid "Action within a scene"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:104
+#: classes/partials/_default-styles.inc:109
 msgid "Overriding Filters"
 msgstr ""
 
-#: classes/partials/_default-styles.inc:107
+#: classes/partials/_default-styles.inc:112
 msgid ""
 "If you want to override how transcript HTML is structured, create hooks in "
 "your theme that implement the following filters."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:108
+#: classes/partials/_default-styles.inc:113
 msgid ""
 "All of them return the same parameters that are passed in as an array(), "
 "with the return <code>$content</code> containing the filter output."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:113
+#: classes/partials/_default-styles.inc:118
 msgid "Output <code>$content</code> contains the HTML for dialog blocks."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:116
+#: classes/partials/_default-styles.inc:121
 msgid "Output <code>$content</code> contains the HTML for scene action blocks."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:119
+#: classes/partials/_default-styles.inc:124
 msgid ""
 "Ouptut <code>$content</code> contains the HTML for scene heading blocks."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:122
+#: classes/partials/_default-styles.inc:127
 msgid "Output <code>$content</code> contains the HTML for a single transcript."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:125
+#: classes/partials/_default-styles.inc:130
 msgid "Output <code>$content</code> contains the HTML for a language name."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:128
+#: classes/partials/_default-styles.inc:133
 msgid ""
 "Output <code>$content</code> contains the HTML for all the provided <code>"
 "$transcripts</code> that match <code>$search_string</code>."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:131
+#: classes/partials/_default-styles.inc:136
 #, php-format
 msgid ""
 "Output <code>$content</code> contains the sprintf() format string for how "
@@ -326,14 +332,14 @@ msgid ""
 "code>."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:134
+#: classes/partials/_default-styles.inc:139
 msgid ""
 "Output <code>$content</code> contains three elements: a container (.wdts-"
 "transcript-opener), and an opener &amp; closer in the container (.wdts-"
 "opener and .wdts-container)."
 msgstr ""
 
-#: classes/partials/_default-styles.inc:138
+#: classes/partials/_default-styles.inc:143
 msgid ""
 "A filter in your theme that would change the display of langauge names would "
 "look like the following:"
@@ -497,7 +503,7 @@ msgid "Misc. Options"
 msgstr ""
 
 #: classes/partials/admin.inc:15 classes/partials/admin.inc:51
-#: classes/WhatDidTheySayAdmin.inc:276 classes/WhatDidTheySayAdmin.inc:277
+#: classes/WhatDidTheySayAdmin.inc:306 classes/WhatDidTheySayAdmin.inc:307
 msgid "What Did They Say?!?"
 msgstr ""
 
@@ -644,120 +650,120 @@ msgstr ""
 msgid "Change capabilities"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:4
+#: classes/partials/_sample-transcript.inc:4
 msgid "[scene-heading]Ext. The Old Man's House[/scene-heading]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:5
+#: classes/partials/_sample-transcript.inc:5
 msgid ""
 "[scene-action]John is walking down to the car parked in the driveway.[/scene-"
 "action]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:6
+#: classes/partials/_sample-transcript.inc:6
 msgid ""
 "[dialog name=\"John\" direction=\"(towards the house)\"]Hey, where are the "
 "keys?[/dialog]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:10
+#: classes/partials/_shortcodes-info.inc:7
 msgid "Shortcodes Info"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:13
+#: classes/partials/_shortcodes-info.inc:10
 msgid ""
 "you can easily use these shortcodes with the appropriate buttons above all "
 "transcript editors"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:16
+#: classes/partials/_shortcodes-info.inc:13
 msgid "Sample Transcript"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:23
+#: classes/partials/_shortcodes-info.inc:20
 msgid "Shortcode Details"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:25
+#: classes/partials/_shortcodes-info.inc:22
 msgid ""
 "Transcripts can be entered either using straight HTML or by using shortcodes "
 "built for <strong>What Did They Say?!?</strong>"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:26
+#: classes/partials/_shortcodes-info.inc:23
 msgid "Using shortcodes will make your transcripts easier to style."
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:27
+#: classes/partials/_shortcodes-info.inc:24
 msgid ""
 "The default styles that come with <strong>What Did They Say?!?</strong> make "
 "your transcripts look like a screenplay."
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:29
+#: classes/partials/_shortcodes-info.inc:26
 msgid "Available Shortcodes"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:31
+#: classes/partials/_shortcodes-info.inc:28
 msgid "[scene-heading]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:32
+#: classes/partials/_shortcodes-info.inc:29
 msgid "The text that indicates a new scene:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:34
+#: classes/partials/_shortcodes-info.inc:31
 msgid ""
 "<code>[scene-heading]Ext. The Old Man's House[/scene-heading]</code> becomes:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:35
+#: classes/partials/_shortcodes-info.inc:32
 msgid "Ext. The Old Man's House"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:38
+#: classes/partials/_shortcodes-info.inc:35
 msgid "[scene-action]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:39
+#: classes/partials/_shortcodes-info.inc:36
 msgid ""
 "The text that indicates action taking place in a scene. One usually occurs "
 "underneath of a scene heading:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:41
+#: classes/partials/_shortcodes-info.inc:38
 msgid ""
 "<code>[scene-action]John is walking down to the car parked in the driveway.[/"
 "scene-action]</code> becomes:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:42
+#: classes/partials/_shortcodes-info.inc:39
 msgid "John is walking down to the car parked in the driveway."
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:45
+#: classes/partials/_shortcodes-info.inc:42
 msgid "[dialog]"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:46
+#: classes/partials/_shortcodes-info.inc:43
 msgid "The text for when a character is speaking in a scene:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:48
+#: classes/partials/_shortcodes-info.inc:45
 msgid ""
 "<code>[dialog name=\"John\" direction=\"(towards the house)\"]Hey, where are "
 "the keys?[/dialog]</code> becomes:"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:51
+#: classes/partials/_shortcodes-info.inc:48
 msgid "John"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:52
+#: classes/partials/_shortcodes-info.inc:49
 msgid "(towards the house)"
 msgstr ""
 
-#: classes/partials/_shortcodes-info.inc:53
+#: classes/partials/_shortcodes-info.inc:50
 msgid "Hey, where are the keys?"
 msgstr ""
 
@@ -773,21 +779,21 @@ msgstr ""
 msgid "Change the available languages"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:160
+#: classes/WhatDidTheySayAdmin.inc:172
 msgid "What Did They Say?!? Transcript"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:160
+#: classes/WhatDidTheySayAdmin.inc:172
 msgid "Show the transcript for the current post."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:291
+#: classes/WhatDidTheySayAdmin.inc:321
 msgid ""
 "Welcome to <strong>What Did They Say?!?</strong> To get started, read the "
 "<strong>Introduction</strong>, and then <strong>How It Works</strong>."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:293
+#: classes/WhatDidTheySayAdmin.inc:323
 msgid ""
 "Is <strong>What Did They Say?!?</strong> working out for you? Let John know "
 "via email (<a href=\"mailto:john@coswellproductions.com"
@@ -795,75 +801,75 @@ msgid ""
 "JohnBintz\">@JohnBintz</a>)."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:306
+#: classes/WhatDidTheySayAdmin.inc:336
 msgid "Manage Transcripts"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:516
+#: classes/WhatDidTheySayAdmin.inc:546
 msgid "Transcript added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:518
+#: classes/WhatDidTheySayAdmin.inc:548
 msgid "Transcript not added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:594
+#: classes/WhatDidTheySayAdmin.inc:624
 msgid "Transcripts updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:663
+#: classes/WhatDidTheySayAdmin.inc:693
 msgid "Default styles option updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:679
+#: classes/WhatDidTheySayAdmin.inc:709
 msgid "Insertion level updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:697
+#: classes/WhatDidTheySayAdmin.inc:727
 #, php-format
 msgid "%s deleted."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:699
+#: classes/WhatDidTheySayAdmin.inc:729
 msgid "Language not deleted!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:706
+#: classes/WhatDidTheySayAdmin.inc:736
 #, php-format
 msgid "%s added."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:708
+#: classes/WhatDidTheySayAdmin.inc:738
 msgid "Language not added!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:714
+#: classes/WhatDidTheySayAdmin.inc:744
 #, php-format
 msgid "%s set as default."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:716
+#: classes/WhatDidTheySayAdmin.inc:746
 msgid "Language not set as default!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:722
+#: classes/WhatDidTheySayAdmin.inc:752
 #, php-format
 msgid "%1$s renamed to %2$s."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:724
+#: classes/WhatDidTheySayAdmin.inc:754
 msgid "Language not renamed!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:747
+#: classes/WhatDidTheySayAdmin.inc:777
 msgid "User capabilities updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:766
+#: classes/WhatDidTheySayAdmin.inc:796
 msgid "<strong>What Did They Say?!?</strong> options reset."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:785
+#: classes/WhatDidTheySayAdmin.inc:815
 msgid "<strong>What Did They Say?!?</strong> core options changed."
 msgstr ""
 

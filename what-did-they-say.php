@@ -215,7 +215,7 @@ function the_media_transcript_queue_editor() {
     <script type="text/javascript">
       $($('wdts-opener-<?php echo $id ?>').parentNode).show();
       
-      $('wdts-opener-<?php echo $id ?>').observe('click', function(e) {
+      $('wdts-opener-<?php echo $id ?>').select('a').pop().observe('click', function(e) {
         Event.stop(e);
 
         var target = $('wdts-<?php echo $id ?>');

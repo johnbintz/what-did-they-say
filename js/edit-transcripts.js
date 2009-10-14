@@ -154,9 +154,12 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
  * Set up action buttons for queued transcripts.
  */
 WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_editor_container) {
-  if (container && approved_editor_container) {
+  if (container) {
     container = $(container);
-    approved_editor_container = $(approved_editor_container);
+
+    if (approved_editor_container) {
+      approved_editor_container = $(approved_editor_container);
+    }
 
     var actions_holder = container.select('.queued-transcript-actions').pop();
 
@@ -313,10 +316,14 @@ WhatDidTheySay.setup_transcript_action_buttons = function(container, approved_ed
           }
         ]
       ].each(function(info) {
-        var button = new Element("button").update(WhatDidTheySay.button_labels[info[0]]);
-        button.observe('click', info[1]);
+        var ok = true;
+        if (info[0] == 'approve') { ok = approved_editor_container; }
+        if (ok) {
+          var button = new Element("button").update(WhatDidTheySay.button_labels[info[0]]);
+          button.observe('click', info[1]);
 
-        actions_holder.insert(button);
+          actions_holder.insert(button);
+        }
       });
     }
   }

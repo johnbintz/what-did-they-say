@@ -9,7 +9,7 @@
   <?php _e('Allow new transcripts to be submitted for this post', 'what-did-they-say') ?>
 <?php } ?>
 
-<?php $approved_editor_id = md5(rand()) ?>
+<?php $approved_editor_id = md5(rand()); ?>
 
 <script type="text/javascript">
   var queued_editors_to_attach = [];
@@ -20,7 +20,7 @@
 <?php } ?>
 
 <?php if (current_user_can('approve_transcriptions')) { ?>
-  <?php if (is_array($queued_transcripts) && !empty($queued_transcripts)) { ?>
+  <?php if (is_array($queued_transcripts) && !empty($queued_transcripts) && is_admin()) { ?>
     <?php wdts_header_wrapper(__('Manage Queued Transcripts:', 'what-did-they-say')) ?>
     <?php
       foreach ($queued_transcripts as $transcript) {
@@ -61,19 +61,25 @@
 
 <script type="text/javascript">
   queued_editors_to_attach.each(function(q) {
-    WhatDidTheySay.setup_transcript_action_buttons(q, 'wdts-<?php echo $approved_editor_id ?>')
+    <?php
+      $params = array('q');
+      if (current_user_can('approve_transcriptions')) { $params[] = 'wdts-' . $approved_editor_id; }
+    ?>
+    WhatDidTheySay.setup_transcript_action_buttons(<?php echo implode(',', $params) ?>);
   });
+  
+  <?php if (current_user_can('approve_transcriptions')) { ?>
+    WhatDidTheySay.setup_transcript_editor('wdts-<?php echo $approved_editor_id ?>');
+    <?php if (!is_admin()) { ?>
+      <?php
+        $allow_new_transcripts_parameters = array("'wdts-${checkbox_id}'");
+        if (isset($new_transcript_id)) {
+          $allow_new_transcripts_parameters[] = "'wdts-${new_transcript_id}'";
+        }
+      ?>
+      WhatDidTheySay.setup_allow_new_transcripts(<?php echo implode(",", $allow_new_transcripts_parameters) ?>);
+    <?php } ?>
+  <?php } ?>
 
   $$('.wdts-embed-warning').invoke('hide');
-
-  WhatDidTheySay.setup_transcript_editor('wdts-<?php echo $approved_editor_id ?>');
-  <?php if (!is_admin()) { ?>
-    <?php
-      $allow_new_transcripts_parameters = array("'wdts-${checkbox_id}'");
-      if (isset($new_transcript_id)) {
-        $allow_new_transcripts_parameters[] = "'wdts-${new_transcript_id}'";
-      }
-    ?>
-    WhatDidTheySay.setup_allow_new_transcripts(<?php echo implode(",", $allow_new_transcripts_parameters) ?>);
-  <?php } ?>
 </script>
