@@ -106,13 +106,15 @@
     $('wdts-sample-transcript-holder').insert(iframe);
   };
 
-  $('wdts-filters-to-use').observe('change', load_sample_transcript);
-  $('refresh-filter-preview').observe('click', function(e) {
-    Event.stop(e);
-    load_sample_transcript();
-  });
+  if ($('wdts-filters-to-user')) {
+    $('wdts-filters-to-use').observe('change', load_sample_transcript);
+    $('refresh-filter-preview').observe('click', function(e) {
+      Event.stop(e);
+      load_sample_transcript();
+    });
 
-  Event.observe(window, 'load', load_sample_transcript);
+    Event.observe(window, 'load', load_sample_transcript);
+  }
 
   <?php if (isset($_POST['wdts']['return_page'])) { ?>
     make_active($('<?php echo str_replace('-page-', '-tab-', $_POST['wdts']['return_page']) ?>'));
