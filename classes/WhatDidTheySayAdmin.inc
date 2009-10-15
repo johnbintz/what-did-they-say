@@ -335,6 +335,14 @@ class WhatDidTheySayAdmin {
     }
 
     if (current_user_can('approve_transcriptions')) {
+      // edit posts notification
+      add_filter('manage_posts_columns', array(&$this, 'manage_posts_columns'));
+      add_action('manage_posts_custom_column', array(&$this, 'manage_posts_custom_column'), 10, 2);
+
+      // dashboard widget
+      //wp_add_dashboard_widget('dashboard_transcripts', __('Recent Queued Transcripts', 'what-did-they-say'), array(&$this, 'dashboard_transcripts'));
+      //add_action('wp_dashboard_setup', array(&$this, 'add_dashboard_transcripts'));
+
       if (strpos($pagenow, "post") === 0) {
         add_meta_box(
           'manage-transcriptions',
@@ -371,6 +379,34 @@ class WhatDidTheySayAdmin {
     return $content . ob_get_clean();
   }
 
+  /**
+   * The edit posts column header.
+   */
+  function manage_posts_columns($columns) {
+    $keys = array_keys($columns);
+    $values = array_values($columns);
+    
+    $index = array_search('comments', $keys);
+    if ($index === false) { $index = count($keys); }
+
+    array_splice($keys, $index, 0, array('transcripts'));
+    array_splice($values, $index, 0, __('Trans'));
+
+    return array_combine($keys, $values);
+  }
+
+  /**
+   * The edit posts column. Needs a pretty icon.
+   */
+  function manage_posts_custom_column($name, $post_id) {
+    if ($name === "transcripts") {
+      $queued_transcript_object = new WDTSQueuedTranscript($post_id);
+
+      if (($queued_count = $queued_transcript_object->count()) > 0) {
+        printf(__('%s queued', 'what-did-they-say'), $queued_count);
+      }
+    }
+  }
 
   /** Transcript Search Filters **/
 

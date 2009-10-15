@@ -172,6 +172,10 @@ class WDTSTranscriptManager {
     }
     return array_keys($languages);
   }
+
+  function count() {
+    return count($this->get_transcripts());
+  }
 }
 
 ?>

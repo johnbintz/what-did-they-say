@@ -4,7 +4,7 @@ Donate link: http://www.coswellproductions.com/wordpress/wordpress-plugins
 Tags: admin, comics, webcomics, transcript, video, audio
 Requires at least: 2.8
 Tested up to: 2.8.4
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 
 What Did They Say?!? lets your users provide multilingual transcriptions to your media, in their language, quickly and securely.
 
@@ -65,7 +65,10 @@ Transcripts can be in one of two states: **queued** and **approved**. Users can 
 * Users who can approve transcripts can also directly edit the approved transcripts.
 * If a user submits a transcript to the queue, they can delete it before it's approved.
 
-Permissions are handed out based on role and is set under the *Capabilities* tab.
+Permissions are handed out in two ways and are set under the *Capabilities* tab.
+
+* Based on role (Subscriber, Administrator, etc.)
+* Per user
 
 = How do short codes work? =
 
@@ -88,6 +91,10 @@ Thanks to @mindfaucet, @Frumph, and @ChibiJen for early testing and bug reportin
 
 == Changelog ==
 
+= 0.9.2 =
+* JavaScript bugfixes.
+* Per-user permissions.
+* Visual feedback for number of queued transcripts per post.
 = 0.9.1 =
 * Bugfixes for transcript submission and theme editor global variable name collision.
 * Improved transcript submission feedback.
