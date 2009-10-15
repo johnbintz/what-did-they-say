@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-14 08:16-0400\n"
+"POT-Creation-Date: 2009-10-14 20:49-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -648,6 +648,19 @@ msgstr ""
 
 #: classes/partials/_capabilities.inc:27
 msgid "Change capabilities"
+msgstr ""
+
+#: classes/partials/_capabilities.inc:33
+msgid "Per-user Permissions"
+msgstr ""
+
+#: classes/partials/_capabilities.inc:35
+msgid ""
+"Give specified users permissions above and beyond their role permissions."
+msgstr ""
+
+#: classes/partials/_capabilities.inc:64
+msgid "Update per-user permissions"
 msgstr ""
 
 #: classes/partials/_sample-transcript.inc:4

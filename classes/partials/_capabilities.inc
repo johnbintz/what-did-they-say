@@ -47,11 +47,18 @@
         if (!is_array($user_capabilities)) { $user_capabilities = array(); }
         ?>
         <tr> 
-          <th scope="row"><?php echo $user->user_login ?></th>
+          <th scope="row">
+            <?php echo get_avatar($user->ID, 20) ?>
+            <?php echo $user->user_login ?>
+          </th>
           <?php foreach ($this->capabilities as $key => $label) { ?>
             <td>
               <label style="white-space: nowrap">
-                <input type="checkbox" name="wdts[user_capabilities][<?php echo $user->ID ?>][<?php echo $key ?>]" value="yes" />
+                <input type="checkbox"
+                       name="wdts[user_capabilities][<?php echo $user->ID ?>][<?php echo $key ?>]"
+                       value="yes"
+                       <?php echo (isset($user_capabilities[$key])) ? 'checked="checked"' : '' ?>
+                       />
                 <?php echo $label ?>
               </label>
             </td>
@@ -61,7 +68,7 @@
       <tr>
         <td>&nbsp;</td>
         <td colspan="3">
-          <input type="submit" value="<?php _e('Update per-user permissions', 'what-did-they-say') ?>" />
+          <input class="button" type="submit" value="<?php _e('Update per-user permissions', 'what-did-they-say') ?>" />
         </td>
       </tr>
     </table>

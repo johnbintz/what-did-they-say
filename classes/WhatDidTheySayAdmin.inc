@@ -452,7 +452,9 @@ class WhatDidTheySayAdmin {
    * @param object $capability_name
    * @return array The list of capabilities this user now has.
    */
-  function user_has_cap($capabilities, $requested_capabilities, $capability_name) {
+  function user_has_cap($capabilities, $requested_capabilities, $args) {
+    list($capability_name, $user_id) = $args;
+    
     $options = get_option('what-did-they-say-options');
     if (is_array($options)) {
       $role_cascade = array('subscriber', 'contributor', 'author', 'editor', 'administrator');
@@ -466,6 +468,16 @@ class WhatDidTheySayAdmin {
 
       foreach ($requested_capabilities as $requested_capability) {
         if (in_array($options['capabilities'][$requested_capability], $allowed_roles)) {
+          $capabilities[$requested_capability] = true;
+        }
+      }
+    }
+
+    $user_capabilities = get_usermeta($user_id, 'transcript_capabilities');
+
+    if (is_array($user_capabilities)) {
+      foreach ($requested_capabilities as $requested_capability) {
+        if (isset($user_capabilities[$requested_capability])) {
           $capabilities[$requested_capability] = true;
         }
       }
@@ -784,6 +796,39 @@ class WhatDidTheySayAdmin {
       if ($updated !== false) {
         update_option('what-did-they-say-options', $options);
       }
+    }
+    return $updated;
+  }
+
+  /**
+   * Update per-user capabilities.
+   */
+  function handle_update_user_capabilities($info) {
+    global $wpdb;
+
+    $updated = false;
+    if (current_user_can('edit_users')) {
+      $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
+
+      foreach ((array)$users as $user) {
+        $user_capabilities = array();
+
+        foreach (array_keys($this->capabilities) as $key) {
+          if (isset($info['user_capabilities'][$user->ID])) {
+            if (isset($info['user_capabilities'][$user->ID][$key])) {
+              $user_capabilities[$key] = true;
+            }
+          }
+        }
+
+        if (!empty($user_capabilities)) {
+          update_usermeta($user->ID, 'transcript_capabilities', $user_capabilities);
+        } else {
+          delete_usermeta($user->ID, 'transcript_capabilities');
+        }
+      }
+      
+      $updated = __('Per-user permissions updated.', 'what-did-they-say');
     }
     return $updated;
   }
