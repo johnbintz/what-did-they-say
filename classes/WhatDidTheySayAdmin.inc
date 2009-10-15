@@ -908,6 +908,8 @@ class WhatDidTheySayAdmin {
     $available_filters = $this->_get_available_override_filters();
     $suggested_amount = 20 + ($this->transcript_count * 0.1);
 
+    $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
+
     include('partials/admin.inc');
   }
 

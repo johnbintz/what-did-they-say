@@ -61,10 +61,6 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
       'change_languages' => 'reader'
     ), $result['capabilities']);
   }
-
-  function testHandleUpdateLanguages() {
-    $this->markTestIncomplete();
-  }
 }
 
 ?>
