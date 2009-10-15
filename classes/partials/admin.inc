@@ -106,7 +106,7 @@
     $('wdts-sample-transcript-holder').insert(iframe);
   };
 
-  if ($('wdts-filters-to-user')) {
+  if ($('wdts-filters-to-use')) {
     $('wdts-filters-to-use').observe('change', load_sample_transcript);
     $('refresh-filter-preview').observe('click', function(e) {
       Event.stop(e);
