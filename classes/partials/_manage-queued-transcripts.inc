@@ -19,9 +19,7 @@
   <?php if (!empty($transcripts_to_show)) { ?>
     <h3 style="margin-top: 0.5em"><?php echo $title ?></h3>
     <?php
-      foreach ($transcripts_to_show as $transcript) {
-        include('_display-queued-transcript.inc');
-      }
+      foreach ($transcripts_to_show as $transcript) { include('_display-queued-transcript.inc'); }
     ?>
   <?php } ?>
 

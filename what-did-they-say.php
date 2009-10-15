@@ -214,7 +214,15 @@ function the_media_transcript_queue_editor() {
     if ($show_editor) {
       ?>
       <div style="display:none">
-        <span id="wdts-opener-<?php echo $id = md5(rand()) ?>">[ <a href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a> ]</span>
+        <span id="wdts-opener-<?php echo $id = md5(rand()) ?>">[
+          <a href="#"><?php _e('Edit/Add Transcripts', 'what-did-they-say') ?></a>
+          <?php if (current_user_can('approve_transcriptions')) {
+            $queued_count = count($queued_transcript_object->get_transcripts());
+            if ($queued_count > 0) { ?>
+              (<strong><?php printf(__('%d queued', 'what-did-they-say'), $queued_count) ?></strong>)
+            <?php } 
+          } ?>
+        ]</span>
       </div>
       <noscript>
         <p>JavaScript is required to edit transcripts.</p>

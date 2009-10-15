@@ -2,9 +2,11 @@
 <input type="hidden" name="wdts[language]" value="<?php echo $transcript['language'] ?>" />
 <input type="hidden" name="wdts[post_id]" value="<?php echo $post->ID ?>" />
 <input type="hidden" name="wdts[key]" value="<?php echo $transcript['key'] ?>" />
-<p><?php
+<p>
+  <?php
+  echo get_avatar($transcript['user_id'], 20);
   printf(
-    __('From <strong>%s</strong> in <strong>%s</strong>:', 'what-did-they-say'),
+    __('<strong>%s</strong> in <strong>%s</strong>:', 'what-did-they-say'),
     $transcript_user->display_name,
     $language_options->get_language_name($transcript['language'])
   )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-14 20:49-0400\n"
+"POT-Creation-Date: 2009-10-14 21:08-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -659,7 +659,7 @@ msgid ""
 "Give specified users permissions above and beyond their role permissions."
 msgstr ""
 
-#: classes/partials/_capabilities.inc:64
+#: classes/partials/_capabilities.inc:71
 msgid "Update per-user permissions"
 msgstr ""
 
@@ -818,71 +818,75 @@ msgstr ""
 msgid "Manage Transcripts"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:551
+#: classes/WhatDidTheySayAdmin.inc:563
 msgid "Transcript added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:553
+#: classes/WhatDidTheySayAdmin.inc:565
 msgid "Transcript not added to queue."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:629
+#: classes/WhatDidTheySayAdmin.inc:641
 msgid "Transcripts updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:698
+#: classes/WhatDidTheySayAdmin.inc:710
 msgid "Default styles option updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:714
+#: classes/WhatDidTheySayAdmin.inc:726
 msgid "Insertion level updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:732
+#: classes/WhatDidTheySayAdmin.inc:744
 #, php-format
 msgid "%s deleted."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:734
+#: classes/WhatDidTheySayAdmin.inc:746
 msgid "Language not deleted!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:741
+#: classes/WhatDidTheySayAdmin.inc:753
 #, php-format
 msgid "%s added."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:743
+#: classes/WhatDidTheySayAdmin.inc:755
 msgid "Language not added!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:749
+#: classes/WhatDidTheySayAdmin.inc:761
 #, php-format
 msgid "%s set as default."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:751
+#: classes/WhatDidTheySayAdmin.inc:763
 msgid "Language not set as default!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:757
+#: classes/WhatDidTheySayAdmin.inc:769
 #, php-format
 msgid "%1$s renamed to %2$s."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:759
+#: classes/WhatDidTheySayAdmin.inc:771
 msgid "Language not renamed!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:782
+#: classes/WhatDidTheySayAdmin.inc:794
 msgid "User capabilities updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:801
+#: classes/WhatDidTheySayAdmin.inc:831
+msgid "Per-user permissions updated."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:846
 msgid "<strong>What Did They Say?!?</strong> options reset."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:820
+#: classes/WhatDidTheySayAdmin.inc:865
 msgid "<strong>What Did They Say?!?</strong> core options changed."
 msgstr ""
 
