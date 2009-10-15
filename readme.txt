@@ -3,7 +3,7 @@ Contributors: johncoswell
 Donate link: http://www.coswellproductions.com/wordpress/wordpress-plugins
 Tags: admin, comics, webcomics, transcript, video, audio
 Requires at least: 2.8
-Tested up to: 2.8.4
+Tested up to: 2.9
 Stable tag: 0.9.2
 
 What Did They Say?!? lets your users provide multilingual transcriptions to your media, in their language, quickly and securely.
@@ -23,7 +23,8 @@ to provide transcripts. Backups are also easy, as transcript data is stored with
 Download and unzip the latest version of **What Did They Say?!?** to your `wp-content/plugins` directory. If you plan on using custom transcript
 filters, create the directory `wp-content/transcript-filters`.
 
-**What Did They Say?!?** puts a menu item under Options. It also adds a meta box to post editing.
+**What Did They Say?!?** puts a menu item under Options. It also adds a meta box to post editing and a new column in the Edit Posts lists which
+indicates how many transcripts are awaiting approval.
 
 == Frequently Asked Questions ==
 
