@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>TestJavaScriptWorking</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestJavaScriptWorking</td></tr>
+</thead><tbody>
+<!--WDTS? Main Page-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=exact:What Did They Say?!?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>wdts-page-introduction</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//a[@id=&quot;wdts-tab-how-it-works&quot; and contains(@class,&quot;inactive&quot;)]</td>
+	<td></td>
+</tr>
+<!--Edit Approved Transcripts-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add New</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//div[@class=&quot;wdts-embed-warning&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//button[text()=&quot;Scene Heading&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>fireEvent</td>
+	<td>//div[@class=&quot;wdts-button-holder&quot;]//button[position()=1]</td>
+	<td>click</td>
+</tr>
+<tr>
+	<td>answerOnNextPrompt</td>
+	<td>Test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertPrompt</td>
+	<td>Enter the scene heading:</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>TestInlineEditor</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestInlineEditor</td></tr>
+</thead><tbody>
+<!--In case we're testing w/ a funky theme...-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=exact:What Did They Say?!?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>wdts-tab-misc-options</td>
+	<td></td>
+</tr>
+<tr>
+	<td>check</td>
+	<td>wdts[high_insertion_level]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Change Insertion Level']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Insertion level updated.</td>
+	<td></td>
+</tr>
+<!--Start testing-->
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//tr[contains(@id,&quot;-${post_id}&quot;)]//div[@class=&quot;row-actions&quot;]/span[@class=&quot;view&quot;]/a</td>
+	<td></td>
+</tr>
+<!--Initial Sanity Checks-->
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@class=&quot;wdts-transcript-container&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//a[text()=&quot;Edit/Add Transcripts&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//input[@name=&quot;wdts[post_id]&quot;]/../</td>
+	<td></td>
+</tr>
+<!--Start Editing-->
+<tr>
+	<td>click</td>
+	<td>//a[text()=&quot;Edit/Add Transcripts&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//input[@name=&quot;wdts[post_id]&quot;]/../</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//h3[contains(text(),&quot;Edit Approved Transcripts:&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]</td>
+	<td></td>
+</tr>
+<!--Enable Queued Transcripts-->
+<tr>
+	<td>click</td>
+	<td>//input[@name=&quot;wdts[allow_on_post]&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]/following-sibling::form//select</td>
+	<td>label=English</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>wdts[transcript]</td>
+	<td>This is a test queued transcript.</td>
+</tr>
+<!--Submit a Transcript-->
+<tr>
+	<td>clickAndWait</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]/following-sibling::form//input[@type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@class=&quot;wdts-updated&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@class=&quot;queued-transcript-holder&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[contains(@class,&quot;queued-transcript&quot;) and contains(@class,&quot;wdts-transcript&quot;)]</td>
+	<td>This is a test queued transcript.</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>(1 queued)</td>
+	<td></td>
+</tr>
+<!--Approve the Transcript-->
+<tr>
+	<td>click</td>
+	<td>//div[@class=&quot;queued-transcript-actions&quot;]/button[text()=&quot;Approve&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//h3[contains(text(),&quot;Edit Approved Transcripts:&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>//div[@class=&quot;queued-transcript-actions&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//textarea[@name=&quot;wdts[transcripts][en]&quot;]</td>
+	<td>This is a test queued transcript.</td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>This will overwrite the current transcript. Are you sure?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>refreshAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>(1 queued)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[contains(@class,&quot;transcript-holder&quot;) and contains(@class,&quot;en&quot;)]</td>
+	<td>This is a test queued transcript.</td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//input[@name=&quot;wdts[post_id]&quot;]/../</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>//h3[contains(text(),&quot;Submit a New Transcript:&quot;)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/wp-admin/</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
