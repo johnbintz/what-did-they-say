@@ -61,6 +61,23 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
       'change_languages' => 'reader'
     ), $result['capabilities']);
   }
+  
+  function testUpdateUserPerms() {
+    $admin = new WhatDidTheySayAdmin();
+    $admin->_set_up_capabilities();
+
+    update_usermeta(1, 'transcript_capabilities', array(
+      'submit_transcriptions' => true
+    ));
+
+    $admin->_update_user_perms(1, array(
+      'approve_transcriptions' => 'yes'
+    ));
+    
+    $this->assertEquals(array(
+      'approve_transcriptions' => true
+    ), get_usermeta(1, 'transcript_capabilities'));
+  }
 }
 
 ?>

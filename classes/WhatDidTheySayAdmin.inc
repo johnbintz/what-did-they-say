@@ -55,19 +55,23 @@ class WhatDidTheySayAdmin {
     return $result;
   }
   
-  /**
-   * Initialize the object.
-   */
-  function init() {
-		global $wpdb;
-		
+  function _set_up_capabilities() {
     // set up capabilities
     $this->capabilities = array(
       'submit_transcriptions'  => __('Submit transcriptions to a post', 'what-did-they-say'),
       'approve_transcriptions' => __('Approve transcriptions to a post', 'what-did-they-say'),
       'change_languages'      => __('Change the available languages', 'what-did-they-say')
     );
-
+  }
+  
+  /**
+   * Initialize the object.
+   */
+  function init() {
+    global $wpdb;
+    
+    $this->_set_up_capabilities();
+    
     // does this copy of wdts?!? reference new options?
     $options = get_option('what-did-they-say-options');
     if (!is_array($options)) {
@@ -173,8 +177,8 @@ class WhatDidTheySayAdmin {
       add_action('wp_footer', array(&$this, 'wp_footer'));
     }
 
-		// sidebar widget
-	  wp_register_sidebar_widget('what-did-they-say', __('What Did They Say?!? Transcript', 'what-did-they-say'), array(&$this, 'transcript_sidebar_widget'), array('description' => __('Show the transcript for the current post.', 'what-did-they-say')));
+    // sidebar widget
+    wp_register_sidebar_widget('what-did-they-say', __('What Did They Say?!? Transcript', 'what-did-they-say'), array(&$this, 'transcript_sidebar_widget'), array('description' => __('Show the transcript for the current post.', 'what-did-they-say')));
 
     // handle form submission
     if (isset($_REQUEST['wdts'])) {
@@ -203,9 +207,9 @@ class WhatDidTheySayAdmin {
 
       if (isset($_REQUEST['wdts']['_nonce'])) {
         if (wp_verify_nonce($_REQUEST['wdts']['_nonce'], 'what-did-they-say')) {
-					if (($_REQUEST['wdts']['post_id'] <= 0) && ($_POST['post_ID'] > 0)) {
-						$_REQUEST['wdts']['post_id'] = $_POST['post_ID'];
-					}
+          if (($_REQUEST['wdts']['post_id'] <= 0) && ($_POST['post_ID'] > 0)) {
+            $_REQUEST['wdts']['post_id'] = $_POST['post_ID'];
+          }
 
           $this->handle_update($_REQUEST['wdts']);
           
@@ -217,13 +221,13 @@ class WhatDidTheySayAdmin {
     if (is_admin()) {
       $this->transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'approved_transcripts'"));
     }
-	}
+  }
 
-	/** Widget **/
+  /** Widget **/
 
-	function transcript_sidebar_widget() {
-		transcripts_display();
-	}
+  function transcript_sidebar_widget() {
+    transcripts_display();
+  }
 
   /** Actions **/
 
@@ -322,11 +326,11 @@ class WhatDidTheySayAdmin {
 
         $this->plugin_data = get_plugin_data($this->_parent_file);
 
-				if ($this->transcript_count == 0) {
-					$this->notices[] = __('Welcome to <strong>What Did They Say?!?</strong> To get started, read the <strong>Introduction</strong>, and then <strong>How It Works</strong>.', 'what-did-they-say');
-				} elseif ($this->transcript_count < 10) {
-					$this->notices[] = __('Is <strong>What Did They Say?!?</strong> working out for you? Let John know via email (<a href="mailto:john@coswellproductions.com">john@coswellproductions.com</a>) or Twitter (<a href="http://twitter.com/JohnBintz">@JohnBintz</a>).', 'what-did-they-say');
-				}
+        if ($this->transcript_count == 0) {
+          $this->notices[] = __('Welcome to <strong>What Did They Say?!?</strong> To get started, read the <strong>Introduction</strong>, and then <strong>How It Works</strong>.', 'what-did-they-say');
+        } elseif ($this->transcript_count < 10) {
+          $this->notices[] = __('Is <strong>What Did They Say?!?</strong> working out for you? Let John know via email (<a href="mailto:john@coswellproductions.com">john@coswellproductions.com</a>) or Twitter (<a href="http://twitter.com/JohnBintz">@JohnBintz</a>).', 'what-did-they-say');
+        }
       }
 
       wp_enqueue_script('scriptaculous-effects');
@@ -362,8 +366,8 @@ class WhatDidTheySayAdmin {
         wp_enqueue_script('scriptaculous-effects');
         wp_enqueue_script('edit-transcripts', plugin_dir_url(dirname(__FILE__)) . 'js/edit-transcripts.js', array('scriptaculous-effects', 'wdts-script'));
 
-	      add_action('wp_head', array(&$this, 'include_editor_javascript'));
-			}
+        add_action('wp_head', array(&$this, 'include_editor_javascript'));
+      }
     }
   }
 
@@ -847,26 +851,28 @@ class WhatDidTheySayAdmin {
       $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
 
       foreach ((array)$users as $user) {
-        $user_capabilities = array();
-
-        foreach (array_keys($this->capabilities) as $key) {
-          if (isset($info['user_capabilities'][$user->ID])) {
-            if (isset($info['user_capabilities'][$user->ID][$key])) {
-              $user_capabilities[$key] = true;
-            }
-          }
-        }
-
-        if (!empty($user_capabilities)) {
-          update_usermeta($user->ID, 'transcript_capabilities', $user_capabilities);
-        } else {
-          delete_usermeta($user->ID, 'transcript_capabilities');
+        if (isset($info['user_capabilities'][$user->ID])) {
+          $this->_update_user_perms($user->ID, $info['user_capabilities'][$user->ID]);
         }
       }
       
       $updated = __('Per-user permissions updated.', 'what-did-they-say');
     }
     return $updated;
+  }
+  
+  function _update_user_perms($user_id, $perms) {
+    $user_capabilities = array();
+
+    foreach (array_keys($this->capabilities) as $key) {
+      if (isset($perms[$key])) { $user_capabilities[$key] = true; }
+    }
+    
+    if (!empty($user_capabilities)) {
+      update_usermeta($user_id, 'transcript_capabilities', $user_capabilities);
+    } else {
+      delete_usermeta($user_id, 'transcript_capabilities');
+    }
   }
 
   /**
