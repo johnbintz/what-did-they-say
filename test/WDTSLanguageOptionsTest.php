@@ -2,7 +2,7 @@
 
 require_once('PHPUnit/Framework.php');
 require_once(dirname(__FILE__) . '/../classes/WDTSLanguageOptions.inc');
-require_once(dirname(__FILE__) . '/../../mockpress/mockpress.php');
+require_once('MockPress/mockpress.php');
 
 class WDTSLanguageOptionsTest extends PHPUnit_Framework_TestCase {
   function setUp() {
