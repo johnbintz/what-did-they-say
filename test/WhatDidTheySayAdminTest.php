@@ -128,6 +128,56 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
 
     $this->assertEquals(false, $admin->import_transcripts('en'));
   }
+
+  function providerTestCleanChild() {
+    return array(
+      array(
+        array(
+          'script' => '<script>remove</script>test',
+          'style' => '<style>remove</style>test',
+          'link' => '<link>remove</link>test',
+          'keep' => '<b>remove</b>test'
+        ),
+        array(
+          'allow_html' => true
+        ),
+        array(
+          'script' => 'test',
+          'style' => 'test',
+          'link' => 'test',
+          'keep' => '<b>remove</b>test'
+        ),
+      ),
+      array(
+        array(
+          'remove' => '<b>remove</b>test',
+          'children' => array(
+            'alsoremove' => '<i>remove</i>test'
+          )
+        ),
+        array(
+          'allow_html' => false
+        ),
+        array(
+          'remove' => 'removetest',
+          'children' => array(
+            'alsoremove' => 'removetest',
+          )
+        ),
+      ),
+    );
+  }
+
+  /**
+   * @dataProvider providerTestCleanChild
+   */
+  function testCleanChild($nodes, $options, $expected_result) {
+    $admin = new WhatDidTheySayAdmin();
+    
+    update_option('what-did-they-say-options', $options);
+
+    $this->assertEquals($expected_result, $admin->_clean_child($nodes));
+  }
 }
 
 ?>
