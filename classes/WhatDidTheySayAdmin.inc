@@ -577,21 +577,10 @@ class WhatDidTheySayAdmin {
   /** Handle data updates **/
 
   /**
-   * Handle an update to options.
-   * @param array $info The part of the $_POST array for What Did They Say?!?
+   * Filter input for harmful things.
+   * @param string|array $node Either a string or an array of strings to process.
+   * @return string|array Either a processed string or an array of processed strings.
    */
-  function handle_update($info) {
-    if (isset($info['module'])) {
-      $method_name = "handle_update_" . str_replace("-", "_", $info['module']);
-      if (method_exists($this, $method_name)) {
-        $info = $this->_clean_child($info);
-      
-        $result = $this->{$method_name}($info);
-        if (!empty($result)) { $this->notices[] = $result; }
-      }
-    }
-  }
-
   function _clean_child($node) {
     if (is_array($node)) {
       $new_nodes = array();
@@ -605,8 +594,24 @@ class WhatDidTheySayAdmin {
       $node = (string)$node;
       foreach (array('script', 'style', 'link') as $tag) { $node = preg_replace("#<${tag}.*/${tag}>#", '', $node); }
       if (!$options['allow_html']) { $node = strip_tags($node); }
-      
+
       return $node;
+    }
+  }
+
+  /**
+   * Handle an update to options.
+   * @param array $info The part of the $_POST array for What Did They Say?!?
+   */
+  function handle_update($info) {
+    if (isset($info['module'])) {
+      $method_name = "handle_update_" . str_replace("-", "_", $info['module']);
+      if (method_exists($this, $method_name)) {
+        $info = $this->_clean_child($info);
+      
+        $result = $this->{$method_name}($info);
+        if (!empty($result)) { $this->notices[] = $result; }
+      }
     }
   }
 
