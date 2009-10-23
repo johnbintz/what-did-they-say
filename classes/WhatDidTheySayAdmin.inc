@@ -38,6 +38,8 @@ class WhatDidTheySayAdmin {
 
   var $is_ajax = false;
 
+  var $_import_chunk_size = 50;
+
   /**
    * Initialize the admin interface.
    * @param WhatDidTheySay $what_did_they_say The WhatDidTheySay object to use for all transcript transactions.
@@ -549,6 +551,28 @@ class WhatDidTheySayAdmin {
     return $ok;
   }
 
+  function import_transcripts($language_code) {
+    $modified = false;
+    $posts = get_posts(array('posts_per_page' => $this->_import_chunk_size, 'meta_key' => 'transcript'));
+    if (!empty($posts)) {
+      $modified = 0;
+      foreach ($posts as $post) {
+        if ($transcript = get_post_meta($post->ID, 'transcript', true)) {
+          $approved_transcript_manager = new WDTSApprovedTranscript($post->ID);
+          $approved_transcript_manager->save_transcript(array(
+            'language' => $language_code,
+            'transcript' => $transcript
+          ));
+
+          delete_post_meta($post->ID, 'transcript');
+
+          $modified++;
+        }
+      }
+      if ($modified == 0) { $modified = false; }
+    }
+    return $modified;
+  }
 
   /** Handle data updates **/
 

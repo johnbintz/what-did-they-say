@@ -2,7 +2,9 @@
 
 require_once('PHPUnit/Framework.php');
 require_once('MockPress/mockpress.php');
+
 require_once(dirname(__FILE__) . '/../classes/WhatDidTheySayAdmin.inc');
+require_once(dirname(__FILE__) . '/../classes/WDTSTranscriptClasses.inc');
 
 class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
   function setUp() {
@@ -77,6 +79,54 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(array(
       'approve_transcriptions' => true
     ), get_usermeta(1, 'transcript_capabilities'));
+  }
+
+  /**
+   * Integration.
+   */
+  function testPerformImport() {
+    $admin = new WhatDidTheySayAdmin();
+    $admin->_import_chunk_size = 1;
+
+    wp_insert_user(array('ID' => 1));
+    wp_set_current_user(1);
+
+    _set_user_capabilities('approve_transcriptions');
+
+    for ($i = 1; $i <= 2; ++$i) {
+      wp_insert_post(array('ID' => $i));
+      update_post_meta($i, "transcript", "this is my transcript");
+    }
+
+    _set_up_get_posts_response(array(
+      'posts_per_page' => 1,
+      'meta_key' => 'transcript'
+    ), array(
+      get_post(1)
+    ));
+
+    $this->assertEquals(1, $admin->import_transcripts('en'));
+
+    $this->assertEquals('', get_post_meta(1, "transcript", true));
+    $this->assertEquals('this is my transcript', get_post_meta(2, "transcript", true));
+
+    $this->assertEquals(array(
+      array(
+        'language' => 'en',
+        'transcript' => 'this is my transcript',
+        'user_id' => 1,
+        'key' => 0
+      )
+    ), get_post_meta(1, 'approved_transcripts', true));
+
+    delete_post_meta(2, 'transcript');
+
+    _set_up_get_posts_response(array(
+      'posts_per_page' => 1,
+      'meta_key' => 'transcript'
+    ), array());
+
+    $this->assertEquals(false, $admin->import_transcripts('en'));
   }
 }
 
