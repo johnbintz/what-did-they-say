@@ -14,8 +14,8 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
 
       if (language_selector) {
         var switch_transcripts = function() {
-          container.select('.edit-transcript').each(function(t) {
-            (t.name == 'wdts[transcripts][' + $F(language_selector) + ']') ? t.show() : t.hide();
+          container.select('.edit-transcript').each(function(h) {
+            h.hasClassName('edit-transcript-' + $F(language_selector)) ? h.show() : h.hide();
           });
         };
 

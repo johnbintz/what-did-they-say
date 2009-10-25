@@ -34,10 +34,14 @@ class WDTSTranscriptManager {
    * @return bool True if the transcript was saved, false otherwise.
    */
   function save_transcript($transcript_info) {
-    $user = wp_get_current_user();
-    if (!empty($user)) {
-      $transcript_info = (array)$transcript_info;
-      $transcript_info['user_id'] = $user->ID;
+    $transcript_info = (array)$transcript_info;
+    if (!isset($transcript_info['user_id'])) {
+      $user = wp_get_current_user();
+      if (!empty($user)) {
+        $transcript_info['user_id'] = $user->ID;
+      }
+    }
+    if (isset($transcript_info['user_id'])) {
       unset($transcript_info['key']);
 
       foreach (array_keys($transcript_info) as $key) {

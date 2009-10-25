@@ -48,7 +48,16 @@
         foreach ($approved_transcripts as $transcript) {
           if ($transcript['language'] == $code) { $approved_transcript_text = $transcript['transcript']; break; }
         } ?>
-        <textarea class="edit-transcript" name="wdts[transcripts][<?php echo $code ?>]" style="display: none; width: 99%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
+        <div class="edit-transcript-<?php echo $code ?> edit-transcript" style="display: none">
+          <textarea name="wdts[transcripts][<?php echo $code ?>][transcript]" style="width: 99%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
+          <?php _e('User to credit: ', 'what-did-they-say') ?>
+          <select name="wdts[transcripts][<?php echo $code ?>][user_id]">
+          
+          </select>
+          <?php
+          
+          ?>
+        </div>
       <?php } ?>
       <?php if (!is_admin()) { ?>
         <input type="button" class="wdts-modify-transcript button" value="<?php _e('Update All Transcripts', 'what-did-they-say') ?>" />

@@ -41,7 +41,8 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
 
     $this->w->save_transcript(array(
       'language' => 'en',
-      'transcript' => 'this is another transcript'
+      'transcript' => 'this is another transcript',
+      'user_id' => 2
     ));
 
     $this->assertEquals(
@@ -49,7 +50,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         array(
           'language' => 'en',
           'transcript' => 'this is another transcript',
-          'user_id' => 1,
+          'user_id' => 2,
           'key' => 0
         ) 
       ),
@@ -68,7 +69,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         array(
           'language' => 'en',
           'transcript' => 'this is another transcript',
-          'user_id' => 1,
+          'user_id' => 2,
           'key' => 0
         ), 
         array(
@@ -95,7 +96,7 @@ class WDTSTranscriptTest extends PHPUnit_Framework_TestCase {
         array(
           'language' => 'en',
           'transcript' => 'this is another transcript',
-          'user_id' => 1,
+          'user_id' => 2,
           'key' => 0
         ), 
         array(

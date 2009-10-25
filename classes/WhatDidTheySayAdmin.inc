@@ -709,10 +709,11 @@ class WhatDidTheySayAdmin {
     if (current_user_can('approve_transcriptions')) {
       $approved_transcript_manager = new WDTSApprovedTranscript($info['post_id']);
 
-      foreach ($info['transcripts'] as $language => $transcript) {
+      foreach ($info['transcripts'] as $language => $transcript_info) {
         $approved_transcript_manager->save_transcript(array(
-          'language' => $language,
-          'transcript' => $transcript
+          'language'   => $language,
+          'transcript' => $transcript_info['transcript'],
+          'user_id'    => $transcript_info['user_id']
         ));
       }
 
@@ -1075,6 +1076,8 @@ class WhatDidTheySayAdmin {
     $queued_transcripts = new WDTSQueuedTranscript($post->ID);
 
     $language_options = new WDTSLanguageOptions();
+
+    $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
 
     $nonce = wp_create_nonce('what-did-they-say');
     include('partials/meta-box.inc');

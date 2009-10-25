@@ -193,6 +193,8 @@ function the_media_transcript_queue_editor() {
 
     $options = get_option('what-did-they-say-options');
 
+    $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
+
     foreach (array('Approved', 'Queued') as $name) {
       $var_name = strtolower($name);
       $class_name = "WDTS${name}Transcript";
