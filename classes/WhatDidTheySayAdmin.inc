@@ -38,7 +38,7 @@ class WhatDidTheySayAdmin {
 
   var $is_ajax = false;
 
-  var $_import_chunk_size = 50;
+  var $_import_chunk_size = 20;
 
   /**
    * Initialize the admin interface.
@@ -321,6 +321,17 @@ class WhatDidTheySayAdmin {
         array(&$this, 'manage_admin')
       );
 
+      if (current_user_can('approve_transcriptions')) {
+        add_submenu_page(
+          'tools.php',
+          __('Import Transcripts', 'what-did-they-say'),
+          __('Import Transcripts', 'what-did-they-say'),
+          'approve_transcriptions',
+          'import-transcripts',
+          array(&$this, 'manage_import_transcripts')
+        );
+      }
+
       if ($plugin_page == "manage-wdts") {
         $this->read_language_file();
         wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
@@ -551,25 +562,31 @@ class WhatDidTheySayAdmin {
     return $ok;
   }
 
+  function _get_transcript_posts() {
+    global $wpdb;
+    
+    return $wpdb->get_col("SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'transcript'");
+  }
+
   function import_transcripts($language_code) {
-    $modified = false;
-    $posts = get_posts(array('posts_per_page' => $this->_import_chunk_size, 'meta_key' => 'transcript'));
-    if (!empty($posts)) {
+    $modified = 0;
+    $post_ids = $this->_get_transcript_posts();
+    if (!empty($post_ids)) {
       $modified = 0;
-      foreach ($posts as $post) {
-        if ($transcript = get_post_meta($post->ID, 'transcript', true)) {
-          $approved_transcript_manager = new WDTSApprovedTranscript($post->ID);
+      foreach ($post_ids as $post_id) {
+        if ($transcript = get_post_meta($post_id, 'transcript', true)) {
+          $approved_transcript_manager = new WDTSApprovedTranscript($post_id);
           $approved_transcript_manager->save_transcript(array(
             'language' => $language_code,
             'transcript' => $transcript
           ));
-
-          delete_post_meta($post->ID, 'transcript');
-
-          $modified++;
         }
+        delete_post_meta($post_id, 'transcript');
+
+        $modified++;
+        
+        if ($modified >= $this->_import_chunk_size) { break; }
       }
-      if ($modified == 0) { $modified = false; }
     }
     return $modified;
   }
@@ -647,6 +664,16 @@ class WhatDidTheySayAdmin {
     } else {
       return $updated;
     }
+  }
+
+  function handle_update_import_legacy($info) {
+    $this->is_ajax = true;
+
+    $result = $this->import_transcripts($info['language']);
+    if ($result === false) { $result = 'false'; }
+
+    header("X-JSON: '${result}'");
+    exit(0);
   }
 
   function handle_update_update_queued_transcript($info) {
@@ -1051,6 +1078,17 @@ class WhatDidTheySayAdmin {
 
     $nonce = wp_create_nonce('what-did-they-say');
     include('partials/meta-box.inc');
+  }
+  
+  function manage_import_transcripts() {
+    global $wpdb;
+    
+    $options = get_option('what-did-they-say-options');
+    
+    $legacy_transcript_count = (int)$wpdb->get_var($wpdb->prepare("SELECT count($wpdb->postmeta.meta_key) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_key = 'transcript'"));
+    $nonce = wp_create_nonce('what-did-they-say');
+
+    include('partials/import-transcripts.inc');
   }
 }
 

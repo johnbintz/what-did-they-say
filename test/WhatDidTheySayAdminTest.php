@@ -85,7 +85,7 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
    * Integration.
    */
   function testPerformImport() {
-    $admin = new WhatDidTheySayAdmin();
+    $admin = $this->getMock('WhatDidTheySayAdmin', array('_get_transcript_posts'));
     $admin->_import_chunk_size = 1;
 
     wp_insert_user(array('ID' => 1));
@@ -98,13 +98,7 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
       update_post_meta($i, "transcript", "this is my transcript");
     }
 
-    _set_up_get_posts_response(array(
-      'posts_per_page' => 1,
-      'meta_key' => 'transcript'
-    ), array(
-      get_post(1)
-    ));
-
+    $admin->expects($this->once())->method('_get_transcript_posts')->will($this->returnValue(array(1,2)));
     $this->assertEquals(1, $admin->import_transcripts('en'));
 
     $this->assertEquals('', get_post_meta(1, "transcript", true));
@@ -121,12 +115,12 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
 
     delete_post_meta(2, 'transcript');
 
-    _set_up_get_posts_response(array(
-      'posts_per_page' => 1,
-      'meta_key' => 'transcript'
-    ), array());
+    $admin = $this->getMock('WhatDidTheySayAdmin', array('_get_transcript_posts'));
+    $admin->_import_chunk_size = 1;
+    
+    $admin->expects($this->once())->method('_get_transcript_posts')->will($this->returnValue(array()));
 
-    $this->assertEquals(false, $admin->import_transcripts('en'));
+    $this->assertEquals(0, $admin->import_transcripts('en'));
   }
 
   function providerTestCleanChild() {
