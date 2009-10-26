@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: what-did-they-say 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-25 23:07-0400\n"
+"POT-Creation-Date: 2009-10-26 19:40-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -921,63 +921,63 @@ msgstr ""
 msgid "Transcripts updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:822
+#: classes/WhatDidTheySayAdmin.inc:831
 msgid "Default styles option updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:838
+#: classes/WhatDidTheySayAdmin.inc:847
 msgid "Insertion level updated."
-msgstr ""
-
-#: classes/WhatDidTheySayAdmin.inc:856
-#, php-format
-msgid "%s deleted."
-msgstr ""
-
-#: classes/WhatDidTheySayAdmin.inc:858
-msgid "Language not deleted!"
 msgstr ""
 
 #: classes/WhatDidTheySayAdmin.inc:865
 #, php-format
-msgid "%s added."
+msgid "%s deleted."
 msgstr ""
 
 #: classes/WhatDidTheySayAdmin.inc:867
+msgid "Language not deleted!"
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:874
+#, php-format
+msgid "%s added."
+msgstr ""
+
+#: classes/WhatDidTheySayAdmin.inc:876
 msgid "Language not added!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:873
+#: classes/WhatDidTheySayAdmin.inc:882
 #, php-format
 msgid "%s set as default."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:875
+#: classes/WhatDidTheySayAdmin.inc:884
 msgid "Language not set as default!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:881
+#: classes/WhatDidTheySayAdmin.inc:890
 #, php-format
 msgid "%1$s renamed to %2$s."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:883
+#: classes/WhatDidTheySayAdmin.inc:892
 msgid "Language not renamed!"
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:906
+#: classes/WhatDidTheySayAdmin.inc:915
 msgid "User capabilities updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:931
+#: classes/WhatDidTheySayAdmin.inc:940
 msgid "Per-user permissions updated."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:960
+#: classes/WhatDidTheySayAdmin.inc:969
 msgid "<strong>What Did They Say?!?</strong> options reset."
 msgstr ""
 
-#: classes/WhatDidTheySayAdmin.inc:979
+#: classes/WhatDidTheySayAdmin.inc:988
 msgid "<strong>What Did They Say?!?</strong> core options changed."
 msgstr ""
 
