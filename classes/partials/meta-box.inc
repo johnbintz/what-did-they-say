@@ -52,7 +52,10 @@
           <textarea name="wdts[transcripts][<?php echo $code ?>][transcript]" style="width: 99%; height: 200px"><?php echo $approved_transcript_text ?></textarea>
           <?php _e('User to credit: ', 'what-did-they-say') ?>
           <select name="wdts[transcripts][<?php echo $code ?>][user_id]">
-          
+            <?php foreach ($users as $user) { ?>
+              <option value="<?php echo $user->ID ?>"
+                      <?php echo ($user->ID == $transcript['user_id']) ? 'selected="selected"' : '' ?>><?php echo $user->user_login ?></option>
+            <?php } ?>
           </select>
           <?php
           

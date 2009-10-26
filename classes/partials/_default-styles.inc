@@ -38,6 +38,14 @@
 
       <label>
         <input type="checkbox"
+               name="wdts[show_approved_credit]"
+               value="yes"
+               <?php echo ($options['show_approved_credit'] ? 'checked="checked"' : '') ?> />
+        <?php _e('Give credit to the transcriber on approved transcripts.', 'what-did-they-say') ?>
+      </label>
+      
+      <label>
+        <input type="checkbox"
                name="wdts[allow_html]"
                value="yes"
                <?php echo ($options['allow_html'] ? 'checked="checked"' : '') ?> />

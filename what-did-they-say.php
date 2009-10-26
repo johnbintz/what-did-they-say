@@ -136,10 +136,9 @@ function transcripts_display($language_format = null, $show_transcripts_string =
 
   if (!empty($post_transcripts)) {
     foreach ($post_transcripts as $transcript) {
-      extract($transcript, EXTR_PREFIX_ALL, "transcript");
-      $transcript_transcript = trim($transcript_transcript);
-      if (!empty($transcript_transcript)) {
-        $transcripts[$transcript_language] = $transcript_transcript;
+      $transcript_text = trim($transcript['transcript']);
+      if (!empty($transcript_text)) {
+        $transcripts[$transcript_language] = $transcript;
       }
     }
 
@@ -164,11 +163,11 @@ function transcripts_display($language_format = null, $show_transcripts_string =
         $output[] = '<div class="wdts-transcript-bundle' . ($do_hide ? ' wdts-hide-transcript' : '') . '">';
 
         foreach ($transcripts as $code => $transcript) {
-          $transcript = end(apply_filters('the_media_transcript', $transcript));
+          $transcript_text = end(apply_filters('the_media_transcript', $transcript, ''));
 
           $output[] = end(apply_filters('the_transcript_language_name', $language_format, $code, ''));
 
-          $output[] = '<div class="transcript-holder ' . $code . '">' . $transcript . '</div>';
+          $output[] = '<div class="transcript-holder ' . $code . '">' . $transcript_text . '</div>';
         }
         $output[] = '</div>';
       $output[] = '</div>';

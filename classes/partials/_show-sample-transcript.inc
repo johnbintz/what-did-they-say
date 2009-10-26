@@ -5,6 +5,6 @@
     <?php } ?>
   </head>
   <body>
-    <?php echo end(apply_filters('the_media_transcript', implode("\n", $sample_transcript), '')) ?>
+    <?php echo end(apply_filters('the_media_transcript', array('transcript' => implode("\n", $sample_transcript), 'user_id' => 1), '')) ?>
   </body>
 </html>

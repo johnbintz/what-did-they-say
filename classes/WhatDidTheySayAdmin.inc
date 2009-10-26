@@ -19,6 +19,7 @@ class WhatDidTheySayAdmin {
     'search_integration' => true,
     'excerpt_distance' => 30,
     'use_nl2br' => false,
+    'show_approved_credit' => true,
     'high_insertion_level' => false,
     'hide_transcript' => array(
       'home' => true,
@@ -140,6 +141,7 @@ class WhatDidTheySayAdmin {
     foreach (array(
       array('the_media_transcript', 2),
       array('the_language_name', 2),
+      array('the_approved_credit', 2),
       array('the_matching_transcript_excerpts', 3),
       array('the_transcript_language_name', 3),
       array('the_transcript_format_string', 1),
@@ -806,7 +808,7 @@ class WhatDidTheySayAdmin {
     if (current_user_can('edit_themes')) {
       $options = get_option('what-did-they-say-options');
 
-      foreach (array('load_default_styles', 'use_nl2br', 'transcript_effects', 'allow_html') as $field) { $options[$field] = isset($info[$field]);  }
+      foreach (array('load_default_styles', 'use_nl2br', 'transcript_effects', 'allow_html', 'show_approved_credit') as $field) { $options[$field] = isset($info[$field]);  }
       $options['excerpt_distance'] = !empty($info['excerpt_distance']) ? $info['excerpt_distance'] : 30;
       foreach (array_keys($options['hide_transcript']) as $type) {
         $options['hide_transcript'][$type] = isset($info['hide_transcript'][$type]);

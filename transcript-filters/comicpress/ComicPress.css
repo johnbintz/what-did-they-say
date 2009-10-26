@@ -1,0 +1,50 @@
+div.wdts-transcript {
+  border: solid #555555 1px;
+  padding: 0 5px;
+  margin: 15px 0;
+  background-color: #FFFFFF;
+}
+
+div.wdts-transcript div, div.wdts-transcript span {
+  font-size: 11px
+}
+
+div.wdts-transcript-inner {
+  border-left: dotted #333 4px;
+  border-right: dotted #333 4px;
+  padding: 10px;
+}
+
+div.wdts-transcript div.wdts-scene-heading {
+  text-transform: uppercase;
+  text-align: inherit;
+}
+
+div.wdts-transcript div.wdts-dialog {
+  text-align: inherit
+}
+
+div.wdts-transcript div.wdts-dialog span {
+  display: inline
+}
+
+div.wdts-transcript div.wdts-dialog span.wdts-name {
+  text-transform: inherit;
+  font-weight: bold
+}
+
+div.wdts-transcript div.wdts-dialog span.wdts-speech {
+  margin: 0
+}
+
+div.wdts-transcript div.wdts-dialog span.wdts-direction {
+  font-style: italic
+}
+
+.wdts-transcript-opener {
+  margin: 0.5em 0;
+}
+
+.wdts-transcript-opener a {
+  font-family: georgia, 'times new roman';
+}

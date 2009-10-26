@@ -19,10 +19,27 @@ class WDTSDisplayFilters {
    * @return string The processed transcription text.
    */
   function the_media_transcript($transcript, $content = "") {
-    $content = do_shortcode($transcript);
+    $content = $this->_process_transcript_content($transcript);
+    return array($transcript, '<div class="wdts-transcript">' . $content . '</div>');
+  }
+
+  function the_approved_credit($user, $content = '') {
+    return '<div class="wdts-approved-credit">' . sprintf(__('Written by %1$s <strong>%2$s</strong>', 'what-did-they-say'), get_avatar($user->ID, 20), $user->user_nicename) . '</div>';
+  }
+
+  function _process_transcript_content($transcript) {
+    $content = do_shortcode($transcript['transcript']);
     $options = get_option('what-did-they-say-options');
     if ($options['use_nl2br']) { $content = nl2br($content); }
-    return array($transcript, '<div class="wdts-transcript">' . $content . '</div>');
+
+    if ($options['show_approved_credit']) {
+      $user = get_userdata($transcript['user_id']);
+      if (!empty($user)) {
+        $content .= apply_filters('the_approved_credit', $user, '');
+      }
+    }
+
+    return $content;
   }
 
   /**

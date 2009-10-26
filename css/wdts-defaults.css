@@ -39,3 +39,9 @@ div.wdts-transcript div.wdts-dialog span.wdts-speech {
 .wdts-transcript-opener {
   margin: 0.5em 0;
 }
+
+.wdts-approved-credit {
+  padding-top: 3px;
+  margin-top: 3px;
+  border-top: dotted #666 1px
+}

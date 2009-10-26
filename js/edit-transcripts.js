@@ -119,7 +119,7 @@ WhatDidTheySay.setup_transcript_editor = function(container) {
           'wdts[post_id]': post_id
         };
 
-        container.select('textarea').each(function(t) {
+        container.select('textarea, select').each(function(t) {
           parameters[t.name] = t.value;
         });
 
