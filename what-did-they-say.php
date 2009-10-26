@@ -182,7 +182,7 @@ function transcripts_display($language_format = null, $show_transcripts_string =
  * If you're allowing users to submit transcripts to the post transcript queue, use this tag in your Loop.
  */
 function the_media_transcript_queue_editor() {
-  global $post;
+  global $post, $wpdb;
 
   if (current_user_can('submit_transcriptions')) {
     $queued_transcript_object = new WDTSQueuedTranscript($post->ID);

@@ -1074,7 +1074,7 @@ class WhatDidTheySayAdmin {
    * Show the Manage Transcriptions meta box.
    */
   function manage_transcriptions_meta_box() {
-    global $post;
+    global $post, $wpdb;
 
     $options = get_option('what-did-they-say-options');
 

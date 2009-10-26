@@ -5,8 +5,6 @@
     <?php } ?>
   </head>
   <body>
-    <div class="wdts-transcript">
-      <?php echo do_shortcode(implode("\n", $sample_transcript)) ?>
-    </div>
+    <?php echo end(apply_filters('the_media_transcript', implode("\n", $sample_transcript), '')) ?>
   </body>
 </html>
