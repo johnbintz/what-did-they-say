@@ -763,20 +763,29 @@ class WhatDidTheySayAdmin {
   }
 
   /**
+   * Approve a transcript.
+   */
+  function _approve_transcript($post_id, $key) {
+    $approved_transcript_manager = new WDTSApprovedTranscript($post_id);
+    $queued_transcript_manager   = new WDTSQueuedTranscript($post_id);
+
+    if (($transcript = $queued_transcript_manager->delete_transcript_by_key($key)) !== false) {
+      $approved_transcript_manager->save_transcript($transcript);
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Handle transcript approval.
    */
   function handle_update_approve_transcript($info) {
     $this->is_ajax = true;
 
     if (current_user_can('approve_transcriptions')) {
-      $approved_transcript_manager = new WDTSApprovedTranscript($info['post_id']);
-      $queued_transcript_manager  = new WDTSQueuedTranscript($info['post_id']);
-      
-      if (($transcript = $queued_transcript_manager->delete_transcript_by_key($info['key'])) !== false) {
-        $approved_transcript_manager->save_transcript($transcript);
-        return;
+      if (!$this->_approve_transcript($info['post_id'], $info['key'])) {
+        header('HTTP/1.1 500 Internal Server Error');
       }
-      header('HTTP/1.1 500 Internal Server Error');
       return;
     }
     header('HTTP/1.1 401 Unauthorized');

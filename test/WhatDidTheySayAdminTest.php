@@ -172,6 +172,38 @@ class WhatDidTheySayAdminTest extends PHPUnit_Framework_TestCase {
 
     $this->assertEquals($expected_result, $admin->_clean_child($nodes));
   }
+
+  function testApproveTranscript() {
+    wp_insert_post(array('ID' => 1));
+    update_post_meta(1, "queued_transcripts", array(
+      array(
+        'language' => 'en',
+        'transcript' => 'This is a test transcript',
+        'user_id' => 5,
+        'key' => 1
+      )
+    ));
+
+    $admin = new WhatDidTheySayAdmin();
+
+    $this->assertTrue($admin->_approve_transcript(1, 1));
+
+    $this->assertEquals(
+      array(
+        array(
+          'language' => 'en',
+          'transcript' => 'This is a test transcript',
+          'user_id' => 5,
+          'key' => 0
+        )
+      ),
+      get_post_meta(1, "approved_transcripts", true)
+    );
+
+    $this->assertEquals(
+      array(), get_post_meta(1, "queued_transcripts", true)
+    );
+  }
 }
 
 ?>
