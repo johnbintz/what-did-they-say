@@ -24,7 +24,7 @@ class WDTSDisplayFilters {
   }
 
   function the_approved_credit($user, $content = '') {
-    return '<div class="wdts-approved-credit">' . sprintf(__('Written by %1$s <strong>%2$s</strong>', 'what-did-they-say'), get_avatar($user->ID, 20), $user->user_nicename) . '</div>';
+    return '<div class="wdts-approved-credit">' . sprintf(__('Written by %1$s <strong>%2$s</strong>', 'what-did-they-say'), get_avatar($user->ID, 20), $user->display_name) . '</div>';
   }
 
   function _process_transcript_content($transcript) {

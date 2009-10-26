@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
+<link rel="selenium.base" href="http://comicpress.local/" />
 <title>TestMetaboxApprovedTranscriptEditing</title>
 </head>
 <body>
@@ -33,6 +33,11 @@
 </tr>
 <tr>
 	<td>select</td>
+	<td>//select[@name=&quot;wdts[transcripts][en][user_id]&quot;]</td>
+	<td>index=1</td>
+</tr>
+<tr>
+	<td>select</td>
 	<td>//select[@name=&quot;wdts[language]&quot;]</td>
 	<td>label=German</td>
 </tr>
@@ -50,6 +55,11 @@
 	<td>type</td>
 	<td>//textarea[@name=&quot;wdts[transcripts][de][transcript]&quot;]</td>
 	<td>Dies ist ein Test transcript.</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//select[@name=&quot;wdts[transcripts][de][user_id]&quot;]</td>
+	<td>index=2</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -70,6 +80,16 @@
 	<td>assertValue</td>
 	<td>//textarea[@name=&quot;wdts[transcripts][de][transcript]&quot;]</td>
 	<td>Dies ist ein Test transcript.</td>
+</tr>
+<tr>
+	<td>assertSelectedIndex</td>
+	<td>//select[@name=&quot;wdts[transcripts][en][user_id]&quot;]</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertSelectedIndex</td>
+	<td>//select[@name=&quot;wdts[transcripts][de][user_id]&quot;]</td>
+	<td>2</td>
 </tr>
 
 </tbody></table>

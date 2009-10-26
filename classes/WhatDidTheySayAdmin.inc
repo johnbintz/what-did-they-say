@@ -1076,7 +1076,7 @@ class WhatDidTheySayAdmin {
     $available_filters = $this->_get_available_override_filters();
     $suggested_amount = 20 + ($this->transcript_count * 0.1);
 
-    $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
+    $users = $wpdb->get_results("SELECT ID, user_login, display_name from $wpdb->users ORDER BY user_login");
 
     include('partials/admin.inc');
   }
@@ -1101,7 +1101,7 @@ class WhatDidTheySayAdmin {
 
     $language_options = new WDTSLanguageOptions();
 
-    $users = $wpdb->get_results("SELECT ID, user_login from $wpdb->users ORDER BY user_login");
+    $users = $wpdb->get_results("SELECT ID, user_login, display_name from $wpdb->users ORDER BY user_login");
 
     $nonce = wp_create_nonce('what-did-they-say');
     include('partials/meta-box.inc');
