@@ -346,6 +346,10 @@ class WhatDidTheySayAdmin {
         }
       }
 
+      if (strpos($pagenow, 'edit') === 0) {
+        wp_enqueue_style('wdts-admin', plugin_dir_url(dirname(__FILE__)) . 'css/wdts-admin.css');
+      }
+
       wp_enqueue_script('scriptaculous-effects');
 
       add_action('wp_head', array(&$this, 'include_editor_javascript'));
@@ -407,7 +411,7 @@ class WhatDidTheySayAdmin {
     if ($index === false) { $index = count($keys); }
 
     array_splice($keys, $index, 0, array('transcripts'));
-    array_splice($values, $index, 0, __('Trans'));
+    array_splice($values, $index, 0, __('<span class="wdts-posts-queued-icon">&nbsp;</span> <span class="wdts-posts-approved-icon">&nbsp;</span>'));
 
     return array_combine($keys, $values);
   }
@@ -417,10 +421,19 @@ class WhatDidTheySayAdmin {
    */
   function manage_posts_custom_column($name, $post_id) {
     if ($name === "transcripts") {
-      $queued_transcript_object = new WDTSQueuedTranscript($post_id);
+      foreach (array('Queued' => __('Queued', 'what-did-they-say'), 'Approved' => __('Approved', 'what-did-they-say')) as $type => $label) {
+        $class = "WDTS${type}Transcript";
+        $transcript_object = new $class($post_id);
+        $style = strtolower($type);
 
-      if (($queued_count = $queued_transcript_object->count()) > 0) {
-        printf(__('%s queued', 'what-did-they-say'), $queued_count);
+        $count = 0;
+        foreach ($transcript_object->get_transcripts() as $language => $transcript_info) {
+          if (!empty($transcript_info['transcript'])) { $count++; }
+        }
+
+        if ($count > 0) {
+          echo "<span title=\"${label}\" class=\"wdts-posts-${style}-icon\">" . $count . '</span>&nbsp;';
+        }
       }
     }
   }

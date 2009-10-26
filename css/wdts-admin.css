@@ -105,6 +105,24 @@ h3.wdts {
   padding: 0.75em;
 }
 
+.widefat .column-transcripts {
+  padding-top: 8px;
+}
+
+.wdts-posts-queued-icon, .wdts-posts-approved-icon {
+  background: url(../graphics/transcript-icon-background.png) 1px 1px no-repeat;
+  font-size: 9px;
+  padding: 2px 6px;
+  color: white
+}
+.wdts-posts-queued-icon {
+  background-color: #c99
+}
+
+.wdts-posts-approved-icon {
+  background-color: #aaa
+}
+
 body {
   overflow-x: hidden
 }
