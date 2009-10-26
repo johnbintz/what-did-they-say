@@ -138,7 +138,7 @@ function transcripts_display($language_format = null, $show_transcripts_string =
     foreach ($post_transcripts as $transcript) {
       $transcript_text = trim($transcript['transcript']);
       if (!empty($transcript_text)) {
-        $transcripts[$transcript_language] = $transcript;
+        $transcripts[$transcript['language']] = $transcript;
       }
     }
 
