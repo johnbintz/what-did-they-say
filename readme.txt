@@ -24,7 +24,7 @@ Download and unzip the latest version of **What Did They Say?!?** to your `wp-co
 filters, create the directory `wp-content/transcript-filters`.
 
 **What Did They Say?!?** puts a menu item under Options. It also adds a meta box to post editing and a new column in the Edit Posts lists which
-indicates how many transcripts are awaiting approval.
+indicates how many transcripts are awaiting approval. The Import Transcripts option appears under Tools.
 
 == Frequently Asked Questions ==
 
@@ -71,6 +71,7 @@ Transcripts can be in one of two states: **queued** and **approved**. Users can 
 * Once a transcript is approved, it can only be edited by users who can approve transcripts.
 * Users who can approve transcripts can also directly edit the approved transcripts.
 * If a user submits a transcript to the queue, they can delete it before it's approved.
+* When approved, the original submitter will be given credit for each approved transcript that's displayed.
 
 Permissions are handed out in two ways and are set under the *Capabilities* tab.
 
