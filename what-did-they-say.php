@@ -57,7 +57,11 @@ function get_the_media_transcript($language = null) {
     $transcripts = $approved_transcripts->get_transcripts();
 
     if (!empty($transcripts)) {
-      if (isset($transcripts[$language])) { $transcript = $transcripts[$language]; }
+    	foreach ($transcripts as $transcript) {
+    		if ($transcript['language'] == $language) {
+    			return $transcript['transcript'];
+    		}
+    	}
     }
     return $transcript;
   }
@@ -107,7 +111,7 @@ function the_matching_transcript_excerpts($search_string = '') {
 function get_the_language_name($language = null) {
   $language_options = new WDTSLanguageOptions();
 
-  if (is_null($language)) { $language = $language_options->get_default_language(); }  
+  if (is_null($language)) { $language = $language_options->get_default_language(); }
   return $language_options->get_language_name($language);
 }
 
@@ -126,9 +130,9 @@ function the_language_name($language = null) {
  */
 function transcripts_display($language_format = null, $show_transcripts_string = null, $hide_transcripts_string = null) {
   global $post;
-  
+
   $output = array();
-  
+
   $transcripts = array();
 
   $approved_transcripts = new WDTSApprovedTranscript($post->ID);
@@ -188,7 +192,7 @@ function the_media_transcript_queue_editor() {
 
     $language_options = new WDTSLanguageOptions();
 
-    $transcript_options = new WDTSTranscriptOptions($post->ID);    
+    $transcript_options = new WDTSTranscriptOptions($post->ID);
 
     $options = get_option('what-did-they-say-options');
 
@@ -200,7 +204,7 @@ function the_media_transcript_queue_editor() {
       ${"${var_name}_transcript_manager"} = new $class_name($post->ID);
       ${"${var_name}_transcripts"} = ${"${var_name}_transcript_manager"}->get_transcripts();
     }
-    
+
     $nonce = wp_create_nonce('what-did-they-say');
     $new_transcript_id = md5(rand());
 
@@ -212,7 +216,7 @@ function the_media_transcript_queue_editor() {
         $show_editor = $transcript_options->are_new_transcripts_allowed();
       }
     }
-    
+
     if ($show_editor) {
       ?>
       <div style="display:none">
@@ -221,7 +225,7 @@ function the_media_transcript_queue_editor() {
           <?php if (current_user_can('approve_transcriptions')) {
             if (($queued_count = $queued_transcript_object->count()) > 0) { ?>
               (<strong><?php printf(__('%d queued', 'what-did-they-say'), $queued_count) ?></strong>)
-            <?php } 
+            <?php }
           } ?>
         ]</span>
       </div>
