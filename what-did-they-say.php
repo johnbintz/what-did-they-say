@@ -272,4 +272,3 @@ function wdts_header_wrapper($text) {
   }
 }
 
-?>
