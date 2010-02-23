@@ -1,2 +1,6 @@
 *~
+coverage/
+.buildpath
+.project
+.settings/
 
